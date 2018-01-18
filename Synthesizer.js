@@ -48,6 +48,8 @@ class Synthesizer
   }
 
   start(x, y) {
+      var self = this;
+
       if (x > 340) return;
       if (y > 340) return;
 
@@ -57,7 +59,9 @@ class Synthesizer
         this.volume.gain.value = 0.001;
         this.osc.start();
         this.playing = true;
-        setTimeout(() => { this.volume.gain.value = 1;}, 100);
+        setTimeout(function() {
+          self.volume.gain.value = 1;
+        }, 100);
       } else {
         this.volume.gain.value = 1;        
       }
@@ -90,51 +94,53 @@ class Synthesizer
 
   set_event()
   {
-    this.element.addEventListener('mousemove', ev => {
-      var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - this.ox;
-      var y = ev.clientY - rect.top - this.oy;
-      this.move(x, y);      
-    });
-
-    this.element.addEventListener('mousedown', ev =>
+    var self = this;
+    this.element.addEventListener('mousemove', function(ev)
     {
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - this.ox;
-      var y = ev.clientY - rect.top - this.oy;
-      this.start(x, y);
+      var x = ev.clientX - rect.left - self.ox;
+      var y = ev.clientY - rect.top - self.oy;
+      self.move(x, y);      
     });
 
-    this.element.addEventListener('mouseup', ev =>
-    {
-      this.stop();
-    });
-
-    this.element.addEventListener('touchmove', ev =>
+    this.element.addEventListener('mousedown', function(ev)
     {
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.changedTouches[0].clientX - rect.left - this.ox;
-      var y = ev.changedTouches[0].clientY - rect.top - this.oy;
-      this.move(x, y);
+      var x = ev.clientX - rect.left - self.ox;
+      var y = ev.clientY - rect.top - self.oy;
+      self.start(x, y);
     });
 
-    this.element.addEventListener('touchstart', ev =>
+    this.element.addEventListener('mouseup', function(ev)
+    {
+      self.stop();
+    });
+
+    this.element.addEventListener('touchmove', function(ev)
     {
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.changedTouches[0].clientX - rect.left - this.ox;
-      var y = ev.changedTouches[0].clientY - rect.top - this.oy;
-      this.start(x, y);
+      var x = ev.changedTouches[0].clientX - rect.left - self.ox;
+      var y = ev.changedTouches[0].clientY - rect.top - self.oy;
+      self.move(x, y);
     });
 
-    this.element.addEventListener('touchend', ev =>
+    this.element.addEventListener('touchstart', function(ev)
     {
-      this.stop();
+      var rect = ev.target.getBoundingClientRect();
+      var x = ev.changedTouches[0].clientX - rect.left - self.ox;
+      var y = ev.changedTouches[0].clientY - rect.top - self.oy;
+      self.start(x, y);
+    });
+
+    this.element.addEventListener('touchend', function(ev)
+    {
+      self.stop();
     });
   }
 
 }
 
-window.addEventListener("load", () =>
+window.addEventListener("load", function()
 {
   var element1 = document.getElementById('canvas1');
   var element2 = document.getElementById('canvas2');

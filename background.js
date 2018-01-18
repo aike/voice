@@ -2,6 +2,8 @@ class Background {
 	
 	constructor(element)
 	{
+		console.log('Background constructor');
+
 		this.ox = 80;
 		this.oy = 30;
 
@@ -11,6 +13,8 @@ class Background {
 
 
 	draw() {
+		console.log('Background draw');
+
 	    ///////////////////////////////////////////////////////////////////
 	    // 縦軸
 	    this.context.beginPath();
