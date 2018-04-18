@@ -37,37 +37,22 @@ class Synthesizer
     this.volume.connect(this.F2);
     this.F2.connect(audioctx.destination);
 
-    //this.osc.start();
+    this.switch = false;
 
     this.index = 0;
     this.lastindex = 0;
     this.last_f1 = 0;
     this.last_f2 = 0;
-
-    this.playing = false;
   }
 
-  start(x, y) {
-      var self = this;
-
-      if (x > 340) return;
-      if (y > 340) return;
-
-      this.move(x, y);
-
-      if (!this.playing) {
-        this.volume.gain.value = 0.001;
-        this.osc.start();
-        this.playing = true;
-        setTimeout(function() {
-          self.volume.gain.value = 1;
-        }, 100);
-      } else {
-        this.volume.gain.value = 1;        
-      }
-  }
-
-  move(x, y) {
+  set_event()
+  {
+    this.element.addEventListener('mousemove', ev =>
+    {
+      ev.preventDefault(); // Prevent Default Actions
+      var rect = ev.target.getBoundingClientRect();
+      var x = ev.clientX - rect.left - this.ox;
+      var y = ev.clientY - rect.top - this.oy;
       if (x < 0)
       {
         x = 0;
@@ -85,64 +70,106 @@ class Synthesizer
         y = 300;
       }
       this.F1.frequency.value = x / 300 * 1000;
-      this.F2.frequency.value = (300 - y) / 300 * 3000;    
-  }
+      this.F2.frequency.value = (300 - y) / 300 * 3000;
+    });
 
-  stop() {
-      this.volume.gain.value = 0.0001;
-  }
-
-  set_event()
-  {
-    var self = this;
-    this.element.addEventListener('mousemove', function(ev)
+    this.element.addEventListener('mousedown', ev =>
     {
+      ev.preventDefault(); // Prevent Default Actions
+        if (!this.switch) {
+          this.osc.start();
+          this.switch = true;
+        }
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - self.ox;
-      var y = ev.clientY - rect.top - self.oy;
-      self.move(x, y);      
+      var x = ev.clientX - rect.left - this.ox;
+      var y = ev.clientY - rect.top - this.oy;
+      if (x > 340) return;
+      if (y > 340) return;
+
+      setTimeout(() => { this.volume.gain.value = 1;}, 100);
     });
 
-    this.element.addEventListener('mousedown', function(ev)
+    this.element.addEventListener('mouseup', ev =>
     {
+      ev.preventDefault(); // Prevent Default Actions
+      setTimeout(() => { this.volume.gain.value = 0.0001;}, 100);
+    });
+
+    this.element.addEventListener('touchmove', ev =>
+    {
+      ev.preventDefault(); // Prevent Default Actions
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - self.ox;
-      var y = ev.clientY - rect.top - self.oy;
-      self.start(x, y);
+      var x = ev.changedTouches[0].clientX - rect.left - this.ox;
+      var y = ev.changedTouches[0].clientY - rect.top - this.oy;
+      if (x < 0)
+      {
+        x = 0;
+      }
+      else if (x > 300)
+      {
+        x = 300;
+      }
+      if (y < 0)
+      {
+        y = 0;
+      }
+      else if (y > 300)
+      {
+        y = 300;
+      }
+      this.F1.frequency.value = x / 300 * 1000;
+      this.F2.frequency.value = (300 - y) / 300 * 3000;
     });
 
-    this.element.addEventListener('mouseup', function(ev)
+    this.element.addEventListener('touchstart', ev =>
     {
-      self.stop();
+      ev.preventDefault(); // Prevent Default Actions
+        if (!this.switch) {
+          this.osc.start();
+          this.switch = true;
+        }
+      let rect = ev.target.getBoundingClientRect();
+      let x = ev.changedTouches[0].clientX - rect.left - this.ox;
+      let y = ev.changedTouches[0].clientY - rect.top - this.oy;
+      if (x > 340) return;
+      if (y > 340) return;
+
+      if (x < 0)
+      {
+        x = 0;
+      }
+      else if (x > 300)
+      {
+        x = 300;
+      }
+      if (y < 0)
+      {
+        y = 0;
+      }
+      else if (y > 300)
+      {
+        y = 300;
+      }
+      this.F1.frequency.value = x / 300 * 1000;
+      this.F2.frequency.value = (300 - y) / 300 * 3000;
+
+      this.volume.gain.value = 0.001;
+      const self = this;
+      setTimeout(() => { self.volume.gain.value = 1;}, 100);
     });
 
-    this.element.addEventListener('touchmove', function(ev)
+    this.element.addEventListener('touchend', ev =>
     {
-      var rect = ev.target.getBoundingClientRect();
-      var x = ev.changedTouches[0].clientX - rect.left - self.ox;
-      var y = ev.changedTouches[0].clientY - rect.top - self.oy;
-      self.move(x, y);
-    });
-
-    this.element.addEventListener('touchstart', function(ev)
-    {
-      var rect = ev.target.getBoundingClientRect();
-      var x = ev.changedTouches[0].clientX - rect.left - self.ox;
-      var y = ev.changedTouches[0].clientY - rect.top - self.oy;
-      self.start(x, y);
-    });
-
-    this.element.addEventListener('touchend', function(ev)
-    {
-      self.stop();
+      ev.preventDefault(); // Prevent Default Actions
+      setTimeout(() => { this.volume.gain.value = 0.0001;}, 100);
     });
   }
 
 }
 
-window.addEventListener("load", function()
+window.addEventListener("load", () =>
 {
-  var element1 = document.getElementById('canvas1');
+  var element1 = document.getElementById('canvas1'); // $('#canvas1');
   var element2 = document.getElementById('canvas2');
 
   synthesizer = new Synthesizer(element1);

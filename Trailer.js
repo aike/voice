@@ -147,7 +147,6 @@ class Trailer {
 
 
   loop(timestamp) {
-      var self = this;
 
       this.clear();
 
@@ -165,10 +164,10 @@ class Trailer {
         this.elapsedTime = 0;
         this.currentDataTime = 0;
         this.reset_history(0);
-        setTimeout(function() {
-          window.requestAnimationFrame(function(ts) {
-            self.lastTime = ts;
-            self.loop(ts)
+        setTimeout(() => { 
+          window.requestAnimationFrame((ts) => {
+            this.lastTime = ts;
+            this.loop(ts)
           });
         }, 1000);
         return;
@@ -239,15 +238,14 @@ class Trailer {
         }
 
       }
-      window.requestAnimationFrame(function(ts) {self.loop(ts)});    
+      window.requestAnimationFrame((ts) => this.loop(ts));    
   }
 
   playAnimation() {
     this.playing = true;
-    var self = this;
-    window.requestAnimationFrame(function(ts) {
-      self.lastTime = ts;
-      self.loop(ts)
+    window.requestAnimationFrame((ts) => {
+      this.lastTime = ts;
+      this.loop(ts)
     });
   }
 
