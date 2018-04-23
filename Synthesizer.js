@@ -2,14 +2,14 @@ window.AudioContext = window.webkitAudioContext || window.AudioContext;
 var audioctx = new AudioContext();
 var synthesizer;
 var trailer;
+var background;
+var canvas1;
+var canvas2;
 
 class Synthesizer
 {
   constructor(element)
   {
-    this.ox = 80;
-    this.oy = 30;
-
     this.element = element;
 
     var f0 = 125;
@@ -45,6 +45,16 @@ class Synthesizer
     this.last_f2 = 0;
   }
 
+  setScale(scale)
+  {
+    this.scale = scale;
+
+    this.ox = 250 * this.scale;
+    this.oy = 80 * this.scale;
+    this.size = 300 * this.scale;
+    this.size2 = 340 * this.scale;
+  }
+
   set_event()
   {
     this.element.addEventListener('mousemove', ev =>
@@ -57,20 +67,20 @@ class Synthesizer
       {
         x = 0;
       }
-      else if (x > 300)
+      else if (x > this.size)
       {
-        x = 300;
+        x = this.size;
       }
       if (y < 0)
       {
         y = 0;
       }
-      else if (y > 300)
+      else if (y > this.size)
       {
-        y = 300;
+        y = this.size;
       }
-      this.F1.frequency.value = x / 300 * 1000;
-      this.F2.frequency.value = (300 - y) / 300 * 3000;
+      this.F1.frequency.value = x / this.size * 1000;
+      this.F2.frequency.value = (this.size - y) / this.size * 3000;
     });
 
     this.element.addEventListener('mousedown', ev =>
@@ -83,8 +93,8 @@ class Synthesizer
       var rect = ev.target.getBoundingClientRect();
       var x = ev.clientX - rect.left - this.ox;
       var y = ev.clientY - rect.top - this.oy;
-      if (x > 340) return;
-      if (y > 340) return;
+      if (x > this.size2) return;
+      if (y > this.size2) return;
 
       setTimeout(() => { this.volume.gain.value = 1;}, 100);
     });
@@ -105,20 +115,20 @@ class Synthesizer
       {
         x = 0;
       }
-      else if (x > 300)
+      else if (x > this.size)
       {
-        x = 300;
+        x = this.size;
       }
       if (y < 0)
       {
         y = 0;
       }
-      else if (y > 300)
+      else if (y > this.size)
       {
-        y = 300;
+        y = this.size;
       }
-      this.F1.frequency.value = x / 300 * 1000;
-      this.F2.frequency.value = (300 - y) / 300 * 3000;
+      this.F1.frequency.value = x / this.size * 1000;
+      this.F2.frequency.value = (this.size - y) / this.size * 3000;
     });
 
     this.element.addEventListener('touchstart', ev =>
@@ -131,27 +141,27 @@ class Synthesizer
       let rect = ev.target.getBoundingClientRect();
       let x = ev.changedTouches[0].clientX - rect.left - this.ox;
       let y = ev.changedTouches[0].clientY - rect.top - this.oy;
-      if (x > 340) return;
-      if (y > 340) return;
+      if (x > this.size2) return;
+      if (y > this.size2) return;
 
       if (x < 0)
       {
         x = 0;
       }
-      else if (x > 300)
+      else if (x > this.size)
       {
-        x = 300;
+        x = this.size;
       }
       if (y < 0)
       {
         y = 0;
       }
-      else if (y > 300)
+      else if (y > this.size)
       {
-        y = 300;
+        y = this.size;
       }
-      this.F1.frequency.value = x / 300 * 1000;
-      this.F2.frequency.value = (300 - y) / 300 * 3000;
+      this.F1.frequency.value = x / this.size * 1000;
+      this.F2.frequency.value = (this.size - y) / this.size * 3000;
 
       this.volume.gain.value = 0.001;
       const self = this;
@@ -167,16 +177,55 @@ class Synthesizer
 
 }
 
+
 window.addEventListener("load", () =>
 {
-  var element1 = document.getElementById('canvas1'); // $('#canvas1');
-  var element2 = document.getElementById('canvas2');
+  canvas1 = document.getElementById('canvas1'); // $('#canvas1');
+  canvas2 = document.getElementById('canvas2');
 
-  synthesizer = new Synthesizer(element1);
+  var scaleX = window.innerWidth / 800;
+  var scaleY = window.innerHeight / 500;
+  var scale = Math.min(scaleX, scaleY);
+
+  synthesizer = new Synthesizer(canvas1);
+  synthesizer.setScale(scale);
   synthesizer.set_event();
 
-  var background = new Background(element1);
+  background = new Background(canvas1);
+  background.setScale(scale)
   background.draw();
 
-  trailer = new Trailer(element2, 20);
+  trailer = new Trailer(canvas2, 20);
+  trailer.setScale(scale);
 });
+
+var timer;
+window.onresize = () =>
+{
+  if (timer > 0) {
+    clearTimeout(timer);
+  }
+
+  timer = setTimeout(() =>
+  {
+    console.log('window resized'); //ここに処理の内容が入る
+    var scaleX = window.innerWidth / 800;
+    var scaleY = window.innerHeight / 500;
+    var scale = Math.min(scaleX, scaleY);
+
+    canvas1.setAttribute("width", window.innerWidth.toString());
+    canvas1.setAttribute("height", window.innerHeight.toString());
+    canvas2.setAttribute("width", window.innerWidth.toString());
+    canvas2.setAttribute("height", window.innerHeight.toString());
+
+    synthesizer.setScale(scale);
+    background.setScale(scale);
+    trailer.setScale(scale);
+
+    if (background != null)
+    {
+      background.draw();
+    }
+  }, 200);
+};
+

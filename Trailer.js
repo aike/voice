@@ -12,6 +12,7 @@ class TrailObject {
     this.oy = 0;
     this.x = 0;
     this.y = 0;
+    this.scale = 1;
   }
 
   calc_xy(f1_to, f2_to, ratio) {
@@ -25,7 +26,7 @@ class TrailObject {
   draw() {
     this.context.fillStyle = 'rgba(70, 200, 255, ' + this.alpha + ')';
     this.context.beginPath();
-    this.context.arc(this.x, this.y, 8, 0, 2 * Math.PI);
+    this.context.arc(this.x * this.scale, this.y * this.scale, 8 * this.scale, 0, 2 * Math.PI);
     this.context.fill();
   }
 
@@ -34,9 +35,14 @@ class TrailObject {
 class Trailer {
   constructor(element, trailSize) {
     this.context = element.getContext('2d');
+    this.trail = new Array(trailSize);
+  }
 
-    this.ox = 80;
-    this.oy = 30;
+  setScale(scale) {
+    this.scale = scale;
+
+    this.ox = 250;
+    this.oy = 80;
 
     this.playing = false;
 
@@ -52,8 +58,7 @@ class Trailer {
     this.lastTime = -99999;
     this.currentDataTime = 0;
 
-    this.trail = new Array(trailSize);
-    for (var i = 0; i < this.trail.length; i++) {      
+    for (var i = 0; i < this.trail.length; i++) {
       this.trail[i] = new TrailObject();
       this.trail[i].context = this.context;
       this.trail[i].alpha = 1.0 * (this.trail.length - i) / this.trail.length;
@@ -65,10 +70,9 @@ class Trailer {
       }
       this.trail[i].ox = this.ox;
       this.trail[i].oy = this.oy;
+      this.trail[i].scale = this.scale;
       this.trail[i].wait = i * 1;
     }
-
-
   }
 
   change_data(num) {
@@ -142,7 +146,7 @@ class Trailer {
 
   clear() {
       // 前の描画を消す。
-      this.context.clearRect(0, 0, 600, 500);    
+      this.context.clearRect(0, 0, 1200, 1000);
   }
 
 
