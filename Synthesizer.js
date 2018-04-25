@@ -6,6 +6,41 @@ var background;
 var canvas1;
 var canvas2;
 
+class Noise 
+{
+  constructor(ctx)
+  {
+    this.ctx = ctx;
+
+    this.buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    var data = this.buf.getChannelData(0);
+    for (var i = 0; i < this.buf.length; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    this.osc = ctx.createBufferSource();
+    this.osc.buffer = this.buf;
+    this.osc.loop = true;
+    this.gain = ctx.createGain();
+    this.osc.connect(this.gain);
+    this.gain.gain.value  = 0;
+
+    this.init = false;
+  }
+
+  play(time)
+  {
+    if (!this.init) {
+      this.osc.start(0);
+      this.init = true;
+    }
+    this.gain.gain.value = 0.5;
+    setTimeout(() => { this.gain.gain.value = 0; }, time);
+  }
+
+};
+
+
 class Synthesizer
 {
   constructor(element)
@@ -37,6 +72,10 @@ class Synthesizer
     this.volume.connect(this.F2);
     this.F2.connect(audioctx.destination);
 
+    this.noise = new Noise(audioctx);
+    this.noise.gain.connect(this.F1);
+    this.noise.gain.connect(this.F2);
+
     this.switch = false;
 
     this.index = 0;
@@ -49,7 +88,7 @@ class Synthesizer
   {
     this.scale = scale;
 
-    this.ox = 250 * this.scale;
+    this.ox = 350 * this.scale;
     this.oy = 80 * this.scale;
     this.size = 300 * this.scale;
     this.size2 = 340 * this.scale;
@@ -96,7 +135,8 @@ class Synthesizer
       if (x > this.size2) return;
       if (y > this.size2) return;
 
-      setTimeout(() => { this.volume.gain.value = 1;}, 100);
+      setTimeout(() => { this.noise.play(100);}, 100);
+      setTimeout(() => { this.volume.gain.value = 1;}, 200);
     });
 
     this.element.addEventListener('mouseup', ev =>
@@ -165,7 +205,8 @@ class Synthesizer
 
       this.volume.gain.value = 0.001;
       const self = this;
-      setTimeout(() => { self.volume.gain.value = 1;}, 100);
+      setTimeout(() => { this.noise.play(100);}, 100);
+      setTimeout(() => { this.volume.gain.value = 1;}, 200);
     });
 
     this.element.addEventListener('touchend', ev =>

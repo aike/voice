@@ -15,7 +15,7 @@ class Background {
 
 	draw() {
 
-		this.ox = 350 * this.scale;
+		this.ox = 250 * this.scale;
 		this.oy = 80 * this.scale;
 		this.gridx = 60 * this.scale;
 		this.gridy = 50 * this.scale;
@@ -38,73 +38,38 @@ class Background {
 		this.context.clearRect(0, 0, this.element.width, this.element.height);
 		this.context.fillStyle = 'rgb(0, 0, 0)';
 
-		var leftX = 30 * this.scale;
-
-	    this.context.font = "24px 'Times New Roman'";
-
-	    var rsize = 30 * this.scale;
-	    this.context.fillText("T/D", leftX + (30-15) * this.scale,  220 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 30 * this.scale, 220 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
-
-	    this.context.fillText("K/G", leftX + (80-15) * this.scale,  150 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 80 * this.scale, 150 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
-
-	    this.context.fillText("P/B", leftX + (155-15) * this.scale,  200 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 155 * this.scale, 200 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
-
-	    this.context.fillText("S/Z", leftX + (200-15) * this.scale,  270 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 200 * this.scale, 270 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
-
-	    this.context.fillText("Unvoice", leftX + (80-30) * this.scale,  330 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 80 * this.scale, 330 * this.scale + this.oy, 60 * this.scale, 0, 2 * Math.PI);
-	    this.context.stroke();
-
-
 	    ///////////////////////////////////////////////////////////////////
 	    // スライダ
 
+	    this.context.font = "16px 'Times New Roman'";
+	    this.context.fillText("Pitch", 35 * this.scale,  -10 * this.scale + this.oy);
+	    this.context.fillText("Level", 100 * this.scale,  -10 * this.scale + this.oy);
 
+	    var leftX = 30 * this.scale;
+	    var sliderWidth = 35 * this.scale;
+	    var sliderGap = 30 * this.scale;
+	    this.context.beginPath();
+	    this.context.moveTo(leftX, this.y0 + this.oy);
+	    this.context.lineTo(leftX + sliderWidth, this.y0 + this.oy);
+	    this.context.lineTo(leftX + sliderWidth, this.y6 + this.oy);
+	    this.context.lineTo(leftX, this.y6 + this.oy);
+	    this.context.lineTo(leftX, this.y0 + this.oy);
+	    this.context.stroke();
+		this.context.fillStyle = 'rgb(128, 128, 128)';
+	    this.context.fillRect(leftX + 1, this.y3 + this.oy, sliderWidth - 2, 10 * this.scale);
+		this.context.fillStyle = 'rgb(0, 0, 0)';
 
-	 //    this.context.font = "16px 'Times New Roman'";
-	 //    this.context.fillText("Pitch", 35 * this.scale,  -10 * this.scale + this.oy);
-	 //    this.context.fillText("Level", 100 * this.scale,  -10 * this.scale + this.oy);
-
-	 //    var leftX = 30 * this.scale;
-	 //    var sliderWidth = 35 * this.scale;
-	 //    var sliderGap = 30 * this.scale;
-	 //    this.context.beginPath();
-	 //    this.context.moveTo(leftX, this.y0 + this.oy);
-	 //    this.context.lineTo(leftX + sliderWidth, this.y0 + this.oy);
-	 //    this.context.lineTo(leftX + sliderWidth, this.y6 + this.oy);
-	 //    this.context.lineTo(leftX, this.y6 + this.oy);
-	 //    this.context.lineTo(leftX, this.y0 + this.oy);
-	 //    this.context.stroke();
-		// this.context.fillStyle = 'rgb(128, 128, 128)';
-	 //    this.context.fillRect(leftX + 1, this.y3 + this.oy, sliderWidth - 2, 10 * this.scale);
-		// this.context.fillStyle = 'rgb(0, 0, 0)';
-
-	 //    leftX += sliderWidth + sliderGap;
-	 //    this.context.beginPath();
-	 //    this.context.moveTo(leftX, this.y0 + this.oy);
-	 //    this.context.lineTo(leftX + sliderWidth, this.y0 + this.oy);
-	 //    this.context.lineTo(leftX + sliderWidth, this.y6 + this.oy);
-	 //    this.context.lineTo(leftX, this.y6 + this.oy);
-	 //    this.context.lineTo(leftX, this.y0 + this.oy);
-	 //    this.context.stroke();
-		// this.context.fillStyle = 'rgb(128, 128, 128)';
-	 //    this.context.fillRect(leftX + 1, this.y3 + this.oy, sliderWidth - 2, 10 * this.scale);
-		// this.context.fillStyle = 'rgb(0, 0, 0)';
-
-
+	    leftX += sliderWidth + sliderGap;
+	    this.context.beginPath();
+	    this.context.moveTo(leftX, this.y0 + this.oy);
+	    this.context.lineTo(leftX + sliderWidth, this.y0 + this.oy);
+	    this.context.lineTo(leftX + sliderWidth, this.y6 + this.oy);
+	    this.context.lineTo(leftX, this.y6 + this.oy);
+	    this.context.lineTo(leftX, this.y0 + this.oy);
+	    this.context.stroke();
+		this.context.fillStyle = 'rgb(128, 128, 128)';
+	    this.context.fillRect(leftX + 1, this.y3 + this.oy, sliderWidth - 2, 10 * this.scale);
+		this.context.fillStyle = 'rgb(0, 0, 0)';
 	    // 縦軸
 	    this.context.beginPath();
 	    this.context.moveTo(this.x0 + this.ox, this.y0 + this.oy);
@@ -193,19 +158,19 @@ class Background {
 	    var l3 = document.getElementById("l3");
 	    var r1 = document.getElementById("r1");
 	    var s1 = document.getElementById("s1");
-	    l1.style.left  = Math.floor(this.ox + 385 * this.scale) + "px";
+	    l1.style.left  = Math.floor(this.ox + 405 * this.scale) + "px";
 	    l1.style.top   = Math.floor(this.oy + 275 * this.scale) + "px";
 	    l1.style.width = Math.floor(100 * this.scale) + "px";
-	    l2.style.left  = Math.floor(this.ox + 350 * this.scale) + "px";
+	    l2.style.left  = Math.floor(this.ox + 370 * this.scale) + "px";
 	    l2.style.top   = Math.floor(this.oy + 290 * this.scale) + "px";
 	    l2.style.width = Math.floor(100 * this.scale) + "px";
-	    l3.style.left  = Math.floor(this.ox + 440 * this.scale) + "px";
+	    l3.style.left  = Math.floor(this.ox + 460 * this.scale) + "px";
 	    l3.style.top   = Math.floor(this.oy + 290 * this.scale) + "px";
 	    l3.style.width = Math.floor(100 * this.scale) + "px";
-	    r1.style.left  = Math.floor(this.ox + 350 * this.scale) + "px";
+	    r1.style.left  = Math.floor(this.ox + 370 * this.scale) + "px";
 	    r1.style.top   = Math.floor(this.oy + 310 * this.scale) + "px";
 	    r1.style.width = Math.floor(100 * this.scale) + "px";
-	    s1.style.left  = Math.floor(this.ox + 350 * this.scale) + "px";
+	    s1.style.left  = Math.floor(this.ox + 370 * this.scale) + "px";
 	    s1.style.top   = Math.floor(this.oy +   0 * this.scale) + "px";
 	    s1.style.width = Math.floor(130 * this.scale) + "px";
 	}
