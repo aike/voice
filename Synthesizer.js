@@ -21,11 +21,21 @@ class Noise
     this.osc = ctx.createBufferSource();
     this.osc.buffer = this.buf;
     this.osc.loop = true;
-    this.gain = ctx.createGain();
-    this.osc.connect(this.gain);
-    this.gain.gain.value  = 0;
 
     this.init = false;
+  }
+
+  connect(dest)
+  {
+    this.osc.connect(dest);
+  }
+
+  start()
+  {
+    if (!this.init) {
+      this.osc.start(0);
+      this.init = true;
+    }
   }
 
   play(time)
@@ -34,8 +44,8 @@ class Noise
       this.osc.start(0);
       this.init = true;
     }
-    this.gain.gain.value = 0.5;
-    setTimeout(() => { this.gain.gain.value = 0; }, time);
+    //this.gain.gain.value = 0.5;
+    //setTimeout(() => { this.gain.gain.value = 0; }, time);
   }
 
 };
@@ -48,12 +58,18 @@ class Synthesizer
     this.element = element;
 
     var f0 = 125;
+
     this.osc = audioctx.createOscillator();
     this.osc.frequency.value = f0;
     this.osc.type = "sawtooth";
 
-    this.volume = audioctx.createGain();
-    this.volume.gain.value = 0.0001;
+    this.noise = new Noise(audioctx);
+
+    this.voicedGain = audioctx.createGain();
+    this.voicedGain.gain.value = 0.0001;
+
+    this.h_Gain = audioctx.createGain();
+    this.h_Gain.gain.value = 0.0001;
 
     this.F1 = audioctx.createBiquadFilter();
     this.F1.type = "bandpass";
@@ -65,24 +81,89 @@ class Synthesizer
     this.F2.frequency.value = 1500;
     this.F2.Q.value = 10;
 
-    this.osc.connect(this.volume);
-    this.volume.connect(this.F1);
-    this.F1.connect(audioctx.destination);
+    this.s_Filter = audioctx.createBiquadFilter();
+    this.s_Filter.type = "bandpass";
+    this.s_Filter.frequency.value = 8000;
+    this.s_Filter.Q.value = 8;
 
-    this.volume.connect(this.F2);
-    this.F2.connect(audioctx.destination);
+    this.sh_Filter = audioctx.createBiquadFilter();
+    this.sh_Filter.type = "bandpass";
+    this.sh_Filter.frequency.value = 4000;
+    this.sh_Filter.Q.value = 12;
 
-    this.noise = new Noise(audioctx);
-    this.noise.gain.connect(this.F1);
-    this.noise.gain.connect(this.F2);
+    this.s_Gain = audioctx.createGain();
+    this.s_Gain.gain.value = 0.0001;
+
+    this.sh_Gain = audioctx.createGain();
+    this.sh_Gain.gain.value = 0.0001;
+
+    //////////////////////////////////////////////////
+
+    this.noise.connect(this.s_Filter);
+    this.noise.connect(this.sh_Filter);
+    this.noise.connect(this.h_Gain);
+
+    this.s_Filter.connect(this.s_Gain);
+    this.sh_Filter.connect(this.sh_Gain);
+
+    this.s_Gain.connect(audioctx.destination);
+    this.sh_Gain.connect(audioctx.destination);
+
+    this.h_Gain.connect(this.F1);
+    this.h_Gain.connect(this.F2);
+
+    this.osc.connect(this.F1);
+    this.osc.connect(this.F2);
+
+    this.F1.connect(this.voicedGain);
+    this.F2.connect(this.voicedGain);
+
+    this.voicedGain.connect(audioctx.destination);
 
     this.switch = false;
-
     this.index = 0;
     this.lastindex = 0;
     this.last_f1 = 0;
     this.last_f2 = 0;
+
   }
+
+  play_s()
+  {
+    var t0 = audioctx.currentTime;
+
+    // sを発音したいとき
+    this.s_Gain.gain.setValueAtTime(0, t0);
+                            //   value, starttime, duration
+    this.s_Gain.gain.setTargetAtTime(0.8, t0 + 0.000, 0.050);
+    this.s_Gain.gain.setTargetAtTime(0.0, t0 + 0.105, 0.005);
+
+    this.voicedGain.gain.setValueAtTime(0.0001, t0);
+    this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.110, 0.02);
+  }
+
+  play_sh()
+  {
+    var t0 = audioctx.currentTime;
+
+    // sを発音したいとき
+    this.sh_Gain.gain.setValueAtTime(0, t0);
+                            //   value, starttime, duration
+    this.sh_Gain.gain.setTargetAtTime(0.8, t0 + 0.000, 0.050);
+    this.sh_Gain.gain.setTargetAtTime(0.0, t0 + 0.105, 0.005);
+
+    this.voicedGain.gain.setValueAtTime(0.0001, t0);
+    this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.110, 0.02);
+  }
+
+  testClose()
+  {
+      this.s_Gain.gain.value = 0.0001;
+      this.sh_Gain.gain.value = 0.0001;
+      this.voicedGain.gain.value = 0.0001;
+  }
+
+
 
   setScale(scale)
   {
@@ -127,6 +208,7 @@ class Synthesizer
       ev.preventDefault(); // Prevent Default Actions
         if (!this.switch) {
           this.osc.start();
+          this.noise.start();
           this.switch = true;
         }
       var rect = ev.target.getBoundingClientRect();
@@ -135,14 +217,15 @@ class Synthesizer
       if (x > this.size2) return;
       if (y > this.size2) return;
 
-      setTimeout(() => { this.noise.play(100);}, 100);
-      setTimeout(() => { this.volume.gain.value = 1;}, 200);
+      setTimeout(() => { this.play_s(); }, 100);
+      //setTimeout(() => { this.voicedGain.gain.value = 1;}, 200);
     });
 
     this.element.addEventListener('mouseup', ev =>
     {
       ev.preventDefault(); // Prevent Default Actions
-      setTimeout(() => { this.volume.gain.value = 0.0001;}, 100);
+      this.testClose();
+//      setTimeout(() => { this.voicedGain.gain.value = 0.0001;}, 100);
     });
 
     this.element.addEventListener('touchmove', ev =>
@@ -203,16 +286,16 @@ class Synthesizer
       this.F1.frequency.value = x / this.size * 1000;
       this.F2.frequency.value = (this.size - y) / this.size * 3000;
 
-      this.volume.gain.value = 0.001;
+      this.voicedGain.gain.value = 0.001;
       const self = this;
       setTimeout(() => { this.noise.play(100);}, 100);
-      setTimeout(() => { this.volume.gain.value = 1;}, 200);
+      setTimeout(() => { this.voicedGain.gain.value = 1;}, 200);
     });
 
     this.element.addEventListener('touchend', ev =>
     {
       ev.preventDefault(); // Prevent Default Actions
-      setTimeout(() => { this.volume.gain.value = 0.0001;}, 100);
+      setTimeout(() => { this.voicedGain.gain.value = 0.0001;}, 100);
     });
   }
 
