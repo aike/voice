@@ -6,7 +6,7 @@ var background;
 var canvas1;
 var canvas2;
 
-class Noise 
+class Noise
 {
   constructor(ctx)
   {
@@ -50,6 +50,10 @@ class Noise
 
 };
 
+
+const XYpad = 0;
+const Button = 1;
+const OtherUI = 2;
 
 class Synthesizer
 {
@@ -169,6 +173,17 @@ class Synthesizer
   {
     this.scale = scale;
 
+    //                    |
+    //     ox             | oy
+    //<----------->□□□□□□
+    //          |  □□□□□□
+    //     size |  □□□□□□
+    //          |  □□□□□□
+    //          |  □□□□□□
+    //             <-------> --> UI
+    //               size   size2
+    //
+
     this.ox = 350 * this.scale;
     this.oy = 80 * this.scale;
     this.size = 300 * this.scale;
@@ -230,6 +245,8 @@ class Synthesizer
 
     this.element.addEventListener('touchmove', ev =>
     {
+      var pos = checkFinger(XYpad);
+
       ev.preventDefault(); // Prevent Default Actions
       var rect = ev.target.getBoundingClientRect();
       var x = ev.changedTouches[0].clientX - rect.left - this.ox;
@@ -299,6 +316,72 @@ class Synthesizer
     });
   }
 
+  checkFinger(eventType, ev)
+  {
+    // [{ type:Button, x:0, y0}, {type:XYpad, x:0, y:0}] を返すようにする
+
+    // https://www.html5rocks.com/ja/mobile/touch/
+    ev.preventDefault(); // Prevent Default Actions
+    let rect = ev.target.getBoundingClientRect();
+
+    swtch (eventType)
+    {
+      case XYpad:
+        for (var i = 0; i < ev.changedTouches.length; i++)
+        {
+          let x = ev.changedTouches[i].clientX - rect.left - this.ox;
+          let y = ev.changedTouches[i].clientY - rect.top - this.oy;
+          if ((x >= 0) && (x <= this.size2) && (y >= 0) && (y <= this.size2))
+          {
+             return { result:true, x:x, y:y };
+          }
+        }
+        return { result:false, x:0, y:0 };
+        break;
+
+      case Button:
+        for (var i = 0; i < ev.changedTouches.length; i++)
+        {
+          let x = ev.changedTouches[i].clientX - rect.left;
+          let y = ev.changedTouches[i].clientY - rect.top;
+          if (x < this.ox)
+          {
+             return { result:true, x:x, y:y };
+          }
+        }
+        return { result:false, x:0, y:0 };
+        break;
+
+      case OtherUI:
+        break;
+    }
+
+
+    for (var i = 0; i < ev.changedTouches.length; i++)
+    {
+      let x = ev.changedTouches[i].clientX - rect.left - this.ox;
+      let y = ev.changedTouches[i].clientY - rect.top - this.oy;
+      // button?
+      if (x < this.ox)
+      {
+
+      }
+      // XYpad?
+      else if ((x >= this.ox) && (x <= this.ox + this.size2)
+       && (y >= this.oy) && (y <= this.oy + this.size2))
+      {
+
+      }
+      // other?
+      else
+      {
+
+      }
+
+    }
+
+    return { result:false, x:0, y:0 };
+  }
 }
 
 

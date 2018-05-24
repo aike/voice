@@ -14,7 +14,6 @@ class Background {
 	}
 
 	draw() {
-
 		this.ox = 350 * this.scale;
 		this.oy = 80 * this.scale;
 		this.gridx = 60 * this.scale;
@@ -36,37 +35,37 @@ class Background {
 		this.y6 = this.gridy * 6;
 
 		this.context.clearRect(0, 0, this.element.width, this.element.height);
-		this.context.fillStyle = 'rgb(0, 0, 0)';
+		// this.context.fillStyle = 'rgb(0, 0, 0)';
 
-		var leftX = 30 * this.scale;
+		// var leftX = 30 * this.scale;
 
-	    this.context.font = "24px 'Times New Roman'";
+	 //    this.context.font = "24px 'Times New Roman'";
 
-	    var rsize = 30 * this.scale;
-	    this.context.fillText("T/D", leftX + (30-15) * this.scale,  220 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 30 * this.scale, 220 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
+	 //    var rsize = 30 * this.scale;
+	 //    this.context.fillText("T/D", leftX + (30-15) * this.scale,  220 * this.scale + this.oy);
+	 //    this.context.beginPath();
+	 //    this.context.arc(leftX + 30 * this.scale, 220 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
+	 //    this.context.stroke();
 
-	    this.context.fillText("K/G", leftX + (80-15) * this.scale,  150 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 80 * this.scale, 150 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
+	 //    this.context.fillText("K/G", leftX + (80-15) * this.scale,  150 * this.scale + this.oy);
+	 //    this.context.beginPath();
+	 //    this.context.arc(leftX + 80 * this.scale, 150 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
+	 //    this.context.stroke();
 
-	    this.context.fillText("P/B", leftX + (155-15) * this.scale,  200 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 155 * this.scale, 200 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
+	 //    this.context.fillText("P/B", leftX + (155-15) * this.scale,  200 * this.scale + this.oy);
+	 //    this.context.beginPath();
+	 //    this.context.arc(leftX + 155 * this.scale, 200 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
+	 //    this.context.stroke();
 
-	    this.context.fillText("S/Z", leftX + (200-15) * this.scale,  270 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 200 * this.scale, 270 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
-	    this.context.stroke();
+	 //    this.context.fillText("S/Z", leftX + (200-15) * this.scale,  270 * this.scale + this.oy);
+	 //    this.context.beginPath();
+	 //    this.context.arc(leftX + 200 * this.scale, 270 * this.scale + this.oy, rsize, 0, 2 * Math.PI);
+	 //    this.context.stroke();
 
-	    this.context.fillText("Unvoice", leftX + (80-30) * this.scale,  330 * this.scale + this.oy);
-	    this.context.beginPath();
-	    this.context.arc(leftX + 80 * this.scale, 330 * this.scale + this.oy, 60 * this.scale, 0, 2 * Math.PI);
-	    this.context.stroke();
+	 //    this.context.fillText("Unvoice", leftX + (80-30) * this.scale,  330 * this.scale + this.oy);
+	 //    this.context.beginPath();
+	 //    this.context.arc(leftX + 80 * this.scale, 330 * this.scale + this.oy, 60 * this.scale, 0, 2 * Math.PI);
+	 //    this.context.stroke();
 
 
 	    ///////////////////////////////////////////////////////////////////
@@ -208,5 +207,23 @@ class Background {
 	    s1.style.left  = Math.floor(this.ox + 350 * this.scale) + "px";
 	    s1.style.top   = Math.floor(this.oy +   0 * this.scale) + "px";
 	    s1.style.width = Math.floor(130 * this.scale) + "px";
+
+		background.addButton(30, 220, " s");
+		background.addButton(130, 240, "sh");
+	}
+
+	addButton(x, y, char)
+	{
+		this.context.fillStyle = 'rgb(0, 0, 0)';
+
+		var leftX = 30 * this.scale;
+
+	    this.context.font = "24px 'Times New Roman'";
+
+	    var rsize = 30 * this.scale;
+	    this.context.fillText(char, leftX + (x - 10) * this.scale,  (y + 5) * this.scale + this.oy);
+	    this.context.beginPath();
+	    this.context.arc(leftX + x * this.scale, y * this.scale + this.oy, rsize, 0, 2 * Math.PI);
+	    this.context.stroke();
 	}
 }
