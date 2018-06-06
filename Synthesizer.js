@@ -324,7 +324,7 @@ class Synthesizer
     ev.preventDefault(); // Prevent Default Actions
     let rect = ev.target.getBoundingClientRect();
 
-    swtch (eventType)
+    switch (eventType)
     {
       case XYpad:
         for (var i = 0; i < ev.changedTouches.length; i++)
