@@ -101,18 +101,34 @@ class Synthesizer
     this.sh_Gain = audioctx.createGain();
     this.sh_Gain.gain.value = 0.0001;
 
+
+    this.t_Filter = audioctx.createBiquadFilter();
+    this.t_Filter.type = "bandpass";
+    this.t_Filter.frequency.value = 3000;
+    this.t_Filter.Q.value = 8;
+
+    this.t_Gain = audioctx.createGain();
+    this.t_Gain.gain.value = 0.0001;
+
+
+
     //////////////////////////////////////////////////
 
     this.noise.connect(this.s_Filter);
-    this.noise.connect(this.sh_Filter);
-    this.noise.connect(this.h_Gain);
-
     this.s_Filter.connect(this.s_Gain);
-    this.sh_Filter.connect(this.sh_Gain);
-
     this.s_Gain.connect(audioctx.destination);
+
+    this.noise.connect(this.sh_Filter);
+    this.sh_Filter.connect(this.sh_Gain);
     this.sh_Gain.connect(audioctx.destination);
 
+    this.noise.connect(this.t_Filter);
+    this.t_Filter.connect(this.t_Gain);
+    this.t_Gain.connect(audioctx.destination);
+
+
+
+    this.noise.connect(this.h_Gain);
     this.h_Gain.connect(this.F1);
     this.h_Gain.connect(this.F2);
 
@@ -130,34 +146,53 @@ class Synthesizer
     this.last_f1 = 0;
     this.last_f2 = 0;
 
+    this.reserved_consonant = "";
+  }
+
+  play_vowel()
+  {
+    var t0 = audioctx.currentTime;
+
+//    if (this.reserved_consonant == "t") {
+    if (true) {
+      this.t_Gain.gain.setValueAtTime(0, t0);
+      this.t_Gain.gain.setTargetAtTime(1.0, t0 + 0.001, 0.0001);
+      this.t_Gain.gain.setTargetAtTime(0.0, t0 + 0.01, 0.0001);
+      this.voicedGain.gain.setValueAtTime(0, t0);
+      this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.02, 0.02);
+
+    } else {
+      this.voicedGain.gain.setValueAtTime(0, t0);
+      this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.001, 0.02);      
+    }
+
+  }
+
+  stop_vowel()
+  {
+    var t0 = audioctx.currentTime;
+    this.voicedGain.gain.setTargetAtTime(0.0, t0 + 0.001, 0.02);    
+  }
+
+  stop_consonant()
+  {
+    var t0 = audioctx.currentTime;
+    this.s_Gain.gain.setTargetAtTime (0.0, t0 + 0.001, 0.05);
+    this.sh_Gain.gain.setTargetAtTime(0.0, t0 + 0.001, 0.05);
   }
 
   play_s()
   {
     var t0 = audioctx.currentTime;
-
-    // sを発音したいとき
-    this.s_Gain.gain.setValueAtTime(0, t0);
-                            //   value, starttime, duration
-    this.s_Gain.gain.setTargetAtTime(0.8, t0 + 0.000, 0.050);
-    this.s_Gain.gain.setTargetAtTime(0.0, t0 + 0.105, 0.005);
-
-    this.voicedGain.gain.setValueAtTime(0.0001, t0);
-    this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.110, 0.02);
+    this.s_Gain.gain.setValueAtTime(0, t0);                            //   value, starttime, duration
+    this.s_Gain.gain.setTargetAtTime(0.8, t0 + 0.001, 0.05);
   }
 
   play_sh()
   {
     var t0 = audioctx.currentTime;
-
-    // sを発音したいとき
-    this.sh_Gain.gain.setValueAtTime(0, t0);
-                            //   value, starttime, duration
-    this.sh_Gain.gain.setTargetAtTime(0.8, t0 + 0.000, 0.050);
-    this.sh_Gain.gain.setTargetAtTime(0.0, t0 + 0.105, 0.005);
-
-    this.voicedGain.gain.setValueAtTime(0.0001, t0);
-    this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.110, 0.02);
+    this.sh_Gain.gain.setValueAtTime(0, t0);                            //   value, starttime, duration
+    this.sh_Gain.gain.setTargetAtTime(0.8, t0 + 0.001, 0.05);
   }
 
   testClose()
@@ -221,25 +256,44 @@ class Synthesizer
     this.element.addEventListener('mousedown', ev =>
     {
       ev.preventDefault(); // Prevent Default Actions
-        if (!this.switch) {
-          this.osc.start();
-          this.noise.start();
-          this.switch = true;
-        }
+
+      var ch = background.checkButton(ev.clientX, ev.clientY)
+      console.log("pushed:[" + ch + "]");
+      if (ch == " s") {
+          this.play_s();
+          return;
+      }
+      if (ch == "sh") {
+          this.play_sh();
+          return;
+      }
+
+      if (!this.switch) {
+        this.osc.start();
+        this.noise.start();
+        this.switch = true;
+      }
       var rect = ev.target.getBoundingClientRect();
       var x = ev.clientX - rect.left - this.ox;
       var y = ev.clientY - rect.top - this.oy;
+      if (x < 0) return;
+      if (y < 0) return;
       if (x > this.size2) return;
       if (y > this.size2) return;
 
-      setTimeout(() => { this.play_s(); }, 100);
+
+      setTimeout(() => {
+        this.stop_consonant();
+        this.play_vowel();
+      }, 100);
       //setTimeout(() => { this.voicedGain.gain.value = 1;}, 200);
     });
 
     this.element.addEventListener('mouseup', ev =>
     {
       ev.preventDefault(); // Prevent Default Actions
-      this.testClose();
+      this.stop_vowel();
+//      this.testClose();
 //      setTimeout(() => { this.voicedGain.gain.value = 0.0001;}, 100);
     });
 

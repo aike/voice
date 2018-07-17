@@ -6,6 +6,7 @@ class Background {
 
 		this.element = element;
 		this.context = element.getContext('2d');
+
 	}
 
 	setScale(scale)
@@ -13,7 +14,10 @@ class Background {
 		this.scale = scale;
 	}
 
-	draw() {
+	draw()
+	{
+		this.buttons = [];
+
 		this.ox = 350 * this.scale;
 		this.oy = 80 * this.scale;
 		this.gridx = 60 * this.scale;
@@ -212,6 +216,23 @@ class Background {
 		background.addButton(130, 240, "sh");
 	}
 
+	checkButton(x, y)
+	{
+	    var rsize = 30 * this.scale;
+		for (var i in this.buttons)
+		{
+			console.log(i);
+			console.log(x + " " + this.buttons[i].x + " " + rsize);
+			console.log(y + " " + this.buttons[i].y + " " + rsize);
+
+			if ((x > this.buttons[i].x - rsize) && (x < this.buttons[i].x + rsize)
+			 && (y > this.buttons[i].y - rsize) && (y < this.buttons[i].y + rsize)) {
+				return this.buttons[i].char;
+			}
+		}
+		return "";
+	}
+
 	addButton(x, y, char)
 	{
 		this.context.fillStyle = 'rgb(0, 0, 0)';
@@ -225,5 +246,9 @@ class Background {
 	    this.context.beginPath();
 	    this.context.arc(leftX + x * this.scale, y * this.scale + this.oy, rsize, 0, 2 * Math.PI);
 	    this.context.stroke();
+
+	    this.buttons.push({x:leftX + x * this.scale, y:this.oy + (y-10) * this.scale, char:char});
+	    console.log(this.buttons);
 	}
+
 }
