@@ -1,15 +1,15 @@
-
 class Filter
 {
-	constructor(element)
+	constructor()
 	{
 		this.conso = null;
 		this.str = null;
-
+		this.ctx = null;
 	}
 
 	CreateFilter(ctx, str, conso_out, vowel_out)
 	{
+		this.ctx = ctx;
 		this.str = str;
 		switch (str)
 		{
@@ -83,6 +83,26 @@ class Filter
 		}
 	}
 
+	play_s()
+	{
+		var t0 = this.ctx.currentTime;
+		for (let i = 0; i < this.cons_vca_t.length - 1; i++) {
+			this.s_Gain.gain.setTargetAtTime(
+				this.conso_vca_a[i],
+				t0 + this.conso_vca_t[i],
+				this.conso_vca_t[i + 1] - this.conso_vca_t[i]);
+		}
+
+		for (let i = 0; i < this.cons_vca_t.length - 1; i++) {
+			this.s_Gain.gain.setTargetAtTime(
+				this.vowel_vca_a[i],
+				t0 + this.vowel_vca_t[i],
+				this.vowel_vca_t[i + 1] - this.vowel_vca_t[i]);
+		}
+	}
+
+
+
 	Enable(flag)
 	{
 		if (flag) {
@@ -116,5 +136,54 @@ class Filter
 		this.sw.connect(out_node);
 	}
 
+}
+
+class FilterManager
+{
+	constructor(ctx, conso_out, vowel_out)
+	{
+		this.filters = [];
+
+		this.filter_s = new Filter();
+		this.filter_s.CreateFilter(ctx, "s", conso_out, vowel_out);
+		this.filters.push(this.filters_s);
+
+		this.filter_sy = new Filter();
+		this.filter_sy.CreateFilter(ctx, "sy", conso_out, vowel_out);
+		this.filters.push(this.filters_sy);
+
+		this.filter_h = new Filter();
+		this.filter_h.CreateFilter(ctx, "h", conso_out, vowel_out);
+		this.filters.push(this.filters_h);
+
+		this.filter_p = new Filter();
+		this.filter_p.CreateFilter(ctx, "p", conso_out, vowel_out);
+		this.filters.push(this.filters_p);
+
+		this.selected = null;
+	}
+
+	select(str)
+	{
+		if (this.selected != null) {
+			this.selected.Enable(false);
+			this.selected = null;
+		}
+
+		for (let i = 0; i < this.filters.length; i++) {
+			if (this.filters[i].str == str) {
+				this.selected = this.filters[i];
+				this.selected.Enable(true);
+				break;
+			}
+		}
+	}
+
+	all_off()
+	{
+		for (let i = 0; i < this.filters.length; i++) {
+			this.filters[i].Enable(false);
+		}
+	}
 }
 
