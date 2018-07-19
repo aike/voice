@@ -212,8 +212,8 @@ class Background {
 	    s1.style.top   = Math.floor(this.oy +   0 * this.scale) + "px";
 	    s1.style.width = Math.floor(130 * this.scale) + "px";
 
-		background.addButton(30, 220, " s");
-		background.addButton(130, 240, "sh");
+		background.addButton(30, 220, "s");
+		background.addButton(130, 240, "sy");
 	}
 
 	checkButton(x, y)
