@@ -23,6 +23,8 @@ class Noise
     this.osc.buffer = this.buf;
     this.osc.loop = true;
 
+    this.down = false;
+
     this.init = false;
   }
 
@@ -73,9 +75,6 @@ class Synthesizer
     this.voicedGain = audioctx.createGain();
     this.voicedGain.gain.value = 0.0001;
 
-    // this.h_Gain = audioctx.createGain();
-    // this.h_Gain.gain.value = 0.0001;
-
     this.F1 = audioctx.createBiquadFilter();
     this.F1.type = "bandpass";
     this.F1.frequency.value = 500;
@@ -86,59 +85,8 @@ class Synthesizer
     this.F2.frequency.value = 1500;
     this.F2.Q.value = 10;
 
-    this.consonant = new FilterManager(audioctx, this.noise, this.F1, this.F2, audioctx.destination);
-
-    // this.s_Filter = audioctx.createBiquadFilter();
-    // this.s_Filter.type = "bandpass";
-    // this.s_Filter.frequency.value = 8000;
-    // this.s_Filter.Q.value = 8;
-
-    // this.sh_Filter = audioctx.createBiquadFilter();
-    // this.sh_Filter.type = "bandpass";
-    // this.sh_Filter.frequency.value = 4000;
-    // this.sh_Filter.Q.value = 12;
-
-    // this.s_Gain = audioctx.createGain();
-    // this.s_Gain.gain.value = 0.0001;
-
-    // this.sh_Gain = audioctx.createGain();
-    // this.sh_Gain.gain.value = 0.0001;
-
-
-    // this.t_Filter = audioctx.createBiquadFilter();
-    // this.t_Filter.type = "bandpass";
-    // this.t_Filter.frequency.value = 3000;
-    // this.t_Filter.Q.value = 8;
-
-    // this.t_Gain = audioctx.createGain();
-    // this.t_Gain.gain.value = 0.0001;
-
-
-
-    //////////////////////////////////////////////////
-
-    // this.noise.connect(this.s_Filter);
-    // this.s_Filter.connect(this.s_Gain);
-    // this.s_Gain.connect(audioctx.destination);
-
-    // this.noise.connect(this.sh_Filter);
-    // this.sh_Filter.connect(this.sh_Gain);
-    // this.sh_Gain.connect(audioctx.destination);
-
-    // this.noise.connect(this.t_Filter);
-    // this.t_Filter.connect(this.t_Gain);
-    // this.t_Gain.connect(audioctx.destination);
-
-
-
-    // this.noise.connect(this.h_Gain);
-    // this.h_Gain.connect(this.F1);
-    // this.h_Gain.connect(this.F2);
-
-    this.osc.connect(this.voicedGain);
-
-    this.voicedGain.connect(this.F1);
-    this.voicedGain.connect(this.F2);
+    this.consonant = new FilterManager(audioctx, this.osc, this.noise, this.F1, this.F2, audioctx.destination);
+    this.consonant.select("a");
 
     this.F1.connect(audioctx.destination);
     this.F2.connect(audioctx.destination);
@@ -149,21 +97,19 @@ class Synthesizer
     this.last_f1 = 0;
     this.last_f2 = 0;
 
+    this.ch = "";
+
     this.reserved_consonant = "";
   }
 
   play()
   {
     this.consonant.play();
-    var t0 = audioctx.currentTime;
-    this.voicedGain.gain.setValueAtTime(0, t0);
-    this.voicedGain.gain.setTargetAtTime(0.8, t0 + 0.001, 0.02);
   }
 
-  stop_vowel()
+  stop()
   {
-    var t0 = audioctx.currentTime;
-    this.voicedGain.gain.setTargetAtTime(0.0, t0 + 0.001, 0.02);    
+    this.consonant.stop();
   }
 
 
@@ -188,50 +134,21 @@ class Synthesizer
     this.size2 = 340 * this.scale;
   }
 
-  set_event()
+
+
+
+  downCallback(ev, cx, cy)
   {
-    this.element.addEventListener('mousemove', ev =>
-    {
-      ev.preventDefault(); // Prevent Default Actions
-      var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - this.ox;
-      var y = ev.clientY - rect.top - this.oy;
-      if (x < 0)
-      {
-        x = 0;
-      }
-      else if (x > this.size)
-      {
-        x = this.size;
-      }
-      if (y < 0)
-      {
-        y = 0;
-      }
-      else if (y > this.size)
-      {
-        y = this.size;
-      }
-      this.F1.frequency.value = x / this.size * 1000;
-      this.F2.frequency.value = (this.size - y) / this.size * 3000;
-    });
-
-    this.element.addEventListener('mousedown', ev =>
-    {
       ev.preventDefault(); // Prevent Default Actions
 
-      var ch = background.checkButton(ev.clientX, ev.clientY)
-      console.log("pushed:[" + ch + "]");
-      this.consonant.select(ch);
-
-      // if (ch == " s") {
-      //     this.play_s();
-      //     return;
-      // }
-      // if (ch == "sh") {
-      //     this.play_sh();
-      //     return;
-      // }
+      this.ch = background.checkButton(cx, cy);
+      console.log("pushed:[" + this.ch + "]");
+      this.consonant.select(this.ch);
+      if (this.ch != "") {
+        this.down = true;
+        return
+      }
+      this.down = false;
 
       if (!this.switch) {
         this.osc.start();
@@ -239,168 +156,98 @@ class Synthesizer
         this.switch = true;
       }
       var rect = ev.target.getBoundingClientRect();
-      var x = ev.clientX - rect.left - this.ox;
-      var y = ev.clientY - rect.top - this.oy;
+      var x = cx - rect.left - this.ox;
+      var y = cy - rect.top - this.oy;
       if (x < 0) return;
       if (y < 0) return;
       if (x > this.size2) return;
       if (y > this.size2) return;
 
+      this.F1.frequency.value = x / this.size * 1000;
+      this.F2.frequency.value = (this.size - y) / this.size * 3000;
 
       setTimeout(() => {
-        //this.stop_consonant();
         this.play();
       }, 100);
-      //setTimeout(() => { this.voicedGain.gain.value = 1;}, 200);
-    });
+  }
 
-    this.element.addEventListener('mouseup', ev =>
-    {
+  upCallback(ev)
+  {
       ev.preventDefault(); // Prevent Default Actions
-      this.stop_vowel();
-//      this.testClose();
-//      setTimeout(() => { this.voicedGain.gain.value = 0.0001;}, 100);
+      this.stop();
+      if (this.ch == "") {
+        this.consonant.select("a");
+      }
+  }
+
+  moveCallback(ev, cx, cy)
+  {
+      ev.preventDefault(); // Prevent Default Actions
+
+      if (this.down) return;
+
+      var rect = ev.target.getBoundingClientRect();
+      var x = cx - rect.left - this.ox;
+      var y = cy - rect.top - this.oy;
+      if (x < 0)
+      {
+        x = 0;
+      }
+      else if (x > this.size)
+      {
+        x = this.size;
+      }
+      if (y < 0)
+      {
+        y = 0;
+      }
+      else if (y > this.size)
+      {
+        y = this.size;
+      }
+      this.F1.frequency.value = x / this.size * 1000;
+      this.F2.frequency.value = (this.size - y) / this.size * 3000;
+
+  }
+
+
+  set_event()
+  {
+    this.element.addEventListener('mousemove', ev =>
+    {
+      this.moveCallback(ev, ev.clientX, ev.clientY);
     });
 
     this.element.addEventListener('touchmove', ev =>
     {
-      var pos = checkFinger(XYpad);
+      this.moveCallback(ev, ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
+    });
 
-      ev.preventDefault(); // Prevent Default Actions
-      var rect = ev.target.getBoundingClientRect();
-      var x = ev.changedTouches[0].clientX - rect.left - this.ox;
-      var y = ev.changedTouches[0].clientY - rect.top - this.oy;
-      if (x < 0)
-      {
-        x = 0;
-      }
-      else if (x > this.size)
-      {
-        x = this.size;
-      }
-      if (y < 0)
-      {
-        y = 0;
-      }
-      else if (y > this.size)
-      {
-        y = this.size;
-      }
-      this.F1.frequency.value = x / this.size * 1000;
-      this.F2.frequency.value = (this.size - y) / this.size * 3000;
+
+    this.element.addEventListener('mousedown', ev =>
+    {
+      this.downCallback(ev, ev.clientX, ev.clientY);
     });
 
     this.element.addEventListener('touchstart', ev =>
     {
-      ev.preventDefault(); // Prevent Default Actions
-        if (!this.switch) {
-          this.osc.start();
-          this.switch = true;
-        }
-      let rect = ev.target.getBoundingClientRect();
-      let x = ev.changedTouches[0].clientX - rect.left - this.ox;
-      let y = ev.changedTouches[0].clientY - rect.top - this.oy;
-      if (x > this.size2) return;
-      if (y > this.size2) return;
+      this.downCallback(ev, ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
+    });
 
-      if (x < 0)
-      {
-        x = 0;
-      }
-      else if (x > this.size)
-      {
-        x = this.size;
-      }
-      if (y < 0)
-      {
-        y = 0;
-      }
-      else if (y > this.size)
-      {
-        y = this.size;
-      }
-      this.F1.frequency.value = x / this.size * 1000;
-      this.F2.frequency.value = (this.size - y) / this.size * 3000;
 
-      this.voicedGain.gain.value = 0.001;
-      const self = this;
-      setTimeout(() => { this.noise.play(100);}, 100);
-      setTimeout(() => { this.voicedGain.gain.value = 1;}, 200);
+    this.element.addEventListener('mouseup', ev =>
+    {
+      this.upCallback(ev);
     });
 
     this.element.addEventListener('touchend', ev =>
     {
-      ev.preventDefault(); // Prevent Default Actions
-      setTimeout(() => { this.voicedGain.gain.value = 0.0001;}, 100);
+      this.upCallback(ev);
     });
-  }
-
-  checkFinger(eventType, ev)
-  {
-    // [{ type:Button, x:0, y0}, {type:XYpad, x:0, y:0}] を返すようにする
-
-    // https://www.html5rocks.com/ja/mobile/touch/
-    ev.preventDefault(); // Prevent Default Actions
-    let rect = ev.target.getBoundingClientRect();
-
-    switch (eventType)
-    {
-      case XYpad:
-        for (var i = 0; i < ev.changedTouches.length; i++)
-        {
-          let x = ev.changedTouches[i].clientX - rect.left - this.ox;
-          let y = ev.changedTouches[i].clientY - rect.top - this.oy;
-          if ((x >= 0) && (x <= this.size2) && (y >= 0) && (y <= this.size2))
-          {
-             return { result:true, x:x, y:y };
-          }
-        }
-        return { result:false, x:0, y:0 };
-        break;
-
-      case Button:
-        for (var i = 0; i < ev.changedTouches.length; i++)
-        {
-          let x = ev.changedTouches[i].clientX - rect.left;
-          let y = ev.changedTouches[i].clientY - rect.top;
-          if (x < this.ox)
-          {
-             return { result:true, x:x, y:y };
-          }
-        }
-        return { result:false, x:0, y:0 };
-        break;
-
-      case OtherUI:
-        break;
-    }
 
 
-    for (var i = 0; i < ev.changedTouches.length; i++)
-    {
-      let x = ev.changedTouches[i].clientX - rect.left - this.ox;
-      let y = ev.changedTouches[i].clientY - rect.top - this.oy;
-      // button?
-      if (x < this.ox)
-      {
+   }
 
-      }
-      // XYpad?
-      else if ((x >= this.ox) && (x <= this.ox + this.size2)
-       && (y >= this.oy) && (y <= this.oy + this.size2))
-      {
-
-      }
-      // other?
-      else
-      {
-
-      }
-
-    }
-
-    return { result:false, x:0, y:0 };
-  }
 }
 
 
