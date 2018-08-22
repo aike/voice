@@ -112,10 +112,10 @@ class Filter
 				this.unvoiced_vca_a[i + 1],
 				t0 + this.unvoiced_vca_t[i],
 				(this.unvoiced_vca_t[i + 1] - this.unvoiced_vca_t[i]) / 30);
-			console.log(' >>> ' + 
-				this.unvoiced_vca_a[i] + ' ' +
-				this.unvoiced_vca_t[i] + ' ' +
-				(this.unvoiced_vca_t[i + 1] - this.unvoiced_vca_t[i]));
+			//console.log(' >>> ' + 
+			//	this.unvoiced_vca_a[i] + ' ' +
+			//	this.unvoiced_vca_t[i] + ' ' +
+			//	(this.unvoiced_vca_t[i + 1] - this.unvoiced_vca_t[i]));
 		}
 	}
 
@@ -135,7 +135,9 @@ class Filter
 	play()
 	{
 		if (this.long_unvoiced) {
-			this.stop_unvoiced();
+			setTimeout(() => {
+				this.stop_unvoiced();
+			}, 300);
 		} else {
 			this.play_unvoiced();
 		}
@@ -164,7 +166,7 @@ class Filter
 			this.voiced_vca.gain.value = 0.001;
 			this.unvoiced_sw.gain.value = 1;
 			this.voiced_sw.gain.value = 1;
-			console.log(' select "' + this.str + '"');
+			//console.log(' select "' + this.str + '"');
 			if (this.long_unvoiced) {
 				this.play_unvoiced();
 			}
@@ -172,7 +174,7 @@ class Filter
 		} else {
 			this.unvoiced_sw.gain.value = 0.001;
 			this.voiced_sw.gain.value = 0.001;
-			console.log(' off ' + this.str);
+			//console.log(' off ' + this.str);
 		}
 	}
 
@@ -247,7 +249,7 @@ class FilterManager
 	{
 		for (let i = 0; i < this.filters.length; i++) {
 			if (this.filters[i].str == str) {
-				console.log(this.filters[i].str + ':' + str)
+				//console.log(this.filters[i].str + ':' + str)
 				if (this.selected != null) {
 					this.selected.Enable(false);
 					this.selected = null;

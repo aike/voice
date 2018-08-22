@@ -7,6 +7,11 @@ class Background {
 		this.element = element;
 		this.context = element.getContext('2d');
 
+
+		this.a_type = 0;
+		this.h_type = 1;
+		this.s_type = 2;
+		this.k_type = 3;
 	}
 
 	setScale(scale)
@@ -144,36 +149,50 @@ class Background {
 	    s1.style.top   = Math.floor(this.oy +   0 * this.scale) + "px";
 	    s1.style.width = Math.floor(130 * this.scale) + "px";
 
-		background.addButton(30, 20, "a");
-		background.addButton(70, 80, "h");
-		background.addButton(100, 140, "p");
-		background.addButton(120, 210, "s");
-		background.addButton(130, 280, "sy");
+		background.addButton(30, 20, "a", this.a_type);
+		background.addButton(70, 80, "h", this.h_type);
+		background.addButton(100, 140, "p", this.p_type);
+		background.addButton(120, 210, "s", this.s_type);
+		background.addButton(130, 280, "sy", this.s_type);
 	}
 
 	checkButton(x, y)
 	{
+		var found = -1;
+
 	    var rsize = 30 * this.scale;
 		for (var i in this.buttons)
 		{
-			console.log(i);
-			console.log(x + " " + this.buttons[i].x + " " + rsize);
-			console.log(y + " " + this.buttons[i].y + " " + rsize);
+//			console.log(i);
+//			console.log(x + " " + this.buttons[i].x + " " + rsize);
+//			console.log(y + " " + this.buttons[i].y + " " + rsize);
 
+			console.log('======================');
 			if ((x > this.buttons[i].x - rsize) && (x < this.buttons[i].x + rsize)
 			 && (y > this.buttons[i].y - rsize) && (y < this.buttons[i].y + rsize)) {
-				return this.buttons[i].char;
+			 	if (found >= 0) {
+			 		if (this.buttons[i].x < this.buttons[found].x) {
+				 		found = i;
+				 		console.log('found:' + this.buttons[i].char);
+				 	}
+			 	} else {
+			 		found = i;
+			 		console.log('found:' + this.buttons[i].char);				 		
+				}
+//				return this.buttons[i].char;
 			}
 		}
+		if (found >= 0) {
+			this.buttons[found].char;
+		}
+
 		return "";
 	}
 
-	addButton(x, y, char)
+	addButton(x, y, char, consotype)
 	{
 		this.context.fillStyle = 'rgb(0, 0, 0)';
-
 		var leftX = 30 * this.scale;
-
 	    this.context.font = "24px 'Times New Roman'";
 
 	    var rsize = 30 * this.scale;
@@ -182,7 +201,7 @@ class Background {
 	    this.context.arc(leftX + x * this.scale, y * this.scale + this.oy, rsize, 0, 2 * Math.PI);
 	    this.context.stroke();
 
-	    this.buttons.push({x:leftX + x * this.scale, y:this.oy + (y-10) * this.scale, char:char});
+	    this.buttons.push({x:leftX + x * this.scale, y:this.oy + (y-10) * this.scale, char:char, consotype:consotype});
 	    console.log(this.buttons);
 	}
 

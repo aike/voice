@@ -191,7 +191,8 @@ class Synthesizer
       var y = cy - rect.top - this.oy;
       if (x < 0)
       {
-        x = 0;
+        return;
+        //x = 0;
       }
       else if (x > this.size)
       {
