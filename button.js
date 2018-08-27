@@ -34,4 +34,25 @@ class Button
 
 	}
 
+	onConsoDownInVowel()
+	{
+
+	}
+
+	onConsoUpInVowel()
+	{
+		
+	}
+
+	onVowelDownInConso()
+	{
+
+	}
+
+	onVowelUpInConso()
+	{
+		
+	}
+
+
 }
