@@ -128,6 +128,7 @@ class Background {
 	    this.context.arc((500 / 1000 * 300) * this.scale + this.ox, (300 -  800 / 3000 * 300) * this.scale + this.oy, size, 0, 2 * Math.PI);
 	    this.context.fill();
 
+/*
 	    var l1 = document.getElementById("l1");
 	    var l2 = document.getElementById("l2");
 	    var l3 = document.getElementById("l3");
@@ -148,12 +149,13 @@ class Background {
 	    s1.style.left  = Math.floor(this.ox + 350 * this.scale) + "px";
 	    s1.style.top   = Math.floor(this.oy +   0 * this.scale) + "px";
 	    s1.style.width = Math.floor(130 * this.scale) + "px";
-
-		background.addButton(30, 20, "a", this.a_type);
-		background.addButton(70, 80, "h", this.h_type);
-		background.addButton(100, 140, "p", this.p_type);
-		background.addButton(120, 210, "s", this.s_type);
-		background.addButton(130, 280, "sy", this.s_type);
+*/
+		background.addButton( 110,  20, "k", this.a_type);
+		background.addButton( 110,  90, "s", this.h_type);
+		background.addButton( 180, 90, "sy", this.h_type);
+		background.addButton( 110, 160, "t", this.p_type);
+		background.addButton( 110, 230, "h", this.s_type);
+		background.addButton( 110, 300, "p", this.s_type);
 	}
 
 	checkButton(x, y)
@@ -193,10 +195,13 @@ class Background {
 	{
 		this.context.fillStyle = 'rgb(0, 0, 0)';
 		var leftX = 30 * this.scale;
-	    this.context.font = "24px 'Times New Roman'";
+		var charX = x - char.length * 6;
+
+
+	    this.context.font = (24 * this.scale) + "px 'Times New Roman'";
 
 	    var rsize = 30 * this.scale;
-	    this.context.fillText(char, leftX + (x - 10) * this.scale,  (y + 5) * this.scale + this.oy);
+	    this.context.fillText(char, leftX + charX * this.scale,  (y + 5) * this.scale + this.oy);
 	    this.context.beginPath();
 	    this.context.arc(leftX + x * this.scale, y * this.scale + this.oy, rsize, 0, 2 * Math.PI);
 	    this.context.stroke();
