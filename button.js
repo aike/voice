@@ -2,8 +2,14 @@ class Button
 {
 	constructor(ctx, bg, x, y, char, consotype)
 	{
+		this.h_type = 1;
+		this.s_type = 2;
+		this.k_type = 3;
+		this.conso_type = null;
+
 		this.ctx = ctx;
 		this.bg = bg;
+		this.vowelPlaying = false;
 
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		var leftX = 30 * bg.scale;
@@ -26,10 +32,19 @@ class Button
 
 	onDown()
 	{
-
+		if (this.vowelPlaying) {
+			onConsoDownInVowel();
+		} else {
+			Play();
+		}
 	}
 
 	onUp()
+	{
+
+	}
+
+	Play()
 	{
 
 	}
@@ -54,5 +69,17 @@ class Button
 		
 	}
 
+	onVowelStart()
+	{
+		this.voelPlaying = true;
+	}
+
+	on VowelStop()
+	{
+		this.vowelPlaying = false;
+	}
+
 
 }
+
+
