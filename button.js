@@ -7,6 +7,8 @@ class Button
 		this.k_type = 3;
 		this.conso_type = null;
 
+		this.player = synth.CreateFilter(char);
+
 		this.ctx = ctx;
 		this.bg = bg;
 		this.vowelPlaying = false;
@@ -74,7 +76,7 @@ class Button
 		this.voelPlaying = true;
 	}
 
-	on VowelStop()
+	onVowelStop()
 	{
 		this.vowelPlaying = false;
 	}
