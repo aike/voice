@@ -1,3 +1,153 @@
+var assert = chai.assert;
+
+describe('Conso/Vowel', function() {
+	before(function() {
+		this.v = new Pad();
+		this.h = new Button("h");
+		this.sim = new InputSim();
+	});
+
+	it ('dummy OK', function() {
+		assert.isTrue(true);
+	});
+
+	it ('dummy NG', function() {
+		assert.isTrue(false);
+	});
+
+	it ('dummy button', function(done) {
+		this.sim.CD_CU_VD_VU(this.h, this.v, true, false, false, true, false, true, false, done);
+	});
+
+	after(function() {
+
+	});
+});
+
+
+class InputSim
+{
+	// 子音をDown/Up→母音をDown/Up （子音の影響は受けない）
+	CD_CU_VD_VU(c, v, cdownc, cupc, vdownc, vdownv, vtimec, vtimev, vupv, done) {
+		c.init();
+		v.init();
+		c.down();
+		assert.equal(c.isPlaying(), cdownc);
+		c.up();
+		assert.equal(c.isPlaying(), cupc);
+		v.down(10,10);
+		assert.equal(c.isPlaying(), vdownc);
+		assert.equal(v.isPlaying(), vdownv);
+		setTimeout(()=>{
+			assert.equal(c.isPlaying(), vtimec);
+			assert.equal(v.isPlaying(), vtimev);
+			v.up();
+			assert.equal(v.isPlaying(), vupv);
+			done();
+		}, 300);
+	}
+
+	// 子音Down中に母音をDown→子音Up、母音Up （通常の子音→母音連鎖）
+	function CD_VD_CU_VU(c, v, cdownc, vdownc, vdownv, vtimec, vtimev, cupc, vupv, done) {
+		c.init();
+		v.init();
+
+		c.down();
+		assert.equal(c.isPlaying(), cdownc);
+		v.down(10, 10);
+		assert.equal(c.isPlaying(), vdownc);
+		assert.equal(v.isPlaying(), vdownv);
+		setTimeout(()=>{
+			assert.equal(c.isPlaying(), vtimec);
+			assert.equal(v.isPlaying(), vtimev);
+			c.up();
+			assert.equal(c.isPlaying(), cupc);
+			v.up();
+			assert.equal(v.isNotPlaying(), vupv);
+			done();
+		}, 300);
+	}
+
+	// 母音Down中に子音をDown/Up （オハヨウのハ発音して母音に戻る）
+	function VD_CD_CU_VU(c, v, vdownv, cdownc, cdownv, ctimec, ctimev, cupc, vupv, done) {
+		c.init();
+		v.init();
+
+		v.down();
+		assert.equal(v.isPlaying(), vdownv);
+		c.down(10, 10);
+		assert.equal(c.isPlaying(), cdownc);
+		assert.equal(v.isPlaying(), cdownv);
+		setTimeout(()=>{
+			assert.equal(c.isPlaying(), ctimec);
+			assert.equal(v.isPlaying(), ctimev);
+			c.up();
+			assert.equal(c.isPlaying(), cupc);
+			v.up();
+			assert.equal(v.isNotPlaying(), vupv);
+			done();
+		}, 300);
+	}
+}
+
+class Pad
+{
+	constructor() {
+		this.playing = false;
+		this.posx = 0;
+		this.posy = 0;
+	}
+
+	init() {
+		this.playing = false;
+	}
+
+	down(x, y) {
+		this.playing = true;
+		this.posx = x;
+		this.posy = y;
+	}
+
+	move(x, y) {
+		this.posx = x;
+		this.posy = y;
+	}
+
+	up() {
+		this.playing = false;
+	}
+
+	isPlaying() {
+		return this.playing;
+	}
+
+}
+
+class Button
+{
+	constructor(s) {
+		this.playing = false;
+	}
+
+	init() {
+		this.playing = false;
+	}
+
+	down() {
+		this.playing = true;
+	}
+
+	up() {
+		this.playing = false;
+	}
+
+	isPlaying() {
+		return this.playing;
+	}
+}
+
+
+/*
 class InputSim
 {
 	constructor() {
@@ -89,4 +239,4 @@ class InputSim
 
 
 }
-
+*/
