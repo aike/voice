@@ -1,25 +1,98 @@
 var assert = chai.assert;
 
-describe('Conso/Vowel', function() {
-	before(function() {
-		this.v = new Pad();
-		this.h = new Button("h");
-		this.sim = new InputSim();
+describe('Conso/Vowel', ()=> {
+	var v,h,s,sh,ts,k,p;
+	var sim;
+
+	before(()=> {
+		v = new Pad();
+		h = new Htype_Button("h");
+		v.addConso(h);
+		h.addVowel(v);
+		s = new Stype_Button("s");
+		v.addConso(s);
+		s.addVowel(v);
+		sh = new Stype_Button("sh");
+		v.addConso(sh);
+		sh.addVowel(v);
+		ts = new Ptype_Button("ts");
+		v.addConso(ts);
+		ts.addVowel(v);
+		k = new Ptype_Button("k");
+		v.addConso(k);
+		k.addVowel(v);
+		p = new Ptype_Button("p");
+		v.addConso(p);
+		p.addVowel(v);
+
+		sim = new InputSim();
 	});
 
-	it ('dummy OK', function() {
-		assert.isTrue(true);
+	describe('子音をDown/Up→母音をDown/Up', ()=> {
+		it ('h', (done)=> {
+			sim.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
+		});
+		it ('s', (done)=> {
+			sim.CD_CU_VD_VU(s,  v,  true, false, false, true, false, true, false, done);
+		});
+		it ('sh', (done)=> {
+			sim.CD_CU_VD_VU(sh, v,  true, false, false, true, false, true, false, done);
+		});
+		it ('ts', (done)=> {
+			sim.CD_CU_VD_VU(ts, v, false, false, false, true, false, true, false, done);
+		});
+		it ('k', (done)=> {
+			sim.CD_CU_VD_VU(k,  v, false, false, false, true, false, true, false, done);
+		});
+		it ('p', (done)=> {
+			sim.CD_CU_VD_VU(p,  v, false, false, false, true, false, true, false, done);
+		});
 	});
 
-	it ('dummy NG', function() {
-		assert.isTrue(false);
+	describe('子音Down→母音Down→子音Up→母音Up', ()=> {
+		it ('h', (done)=> {
+			sim.CD_VD_CU_VU(h,  v, false,  true,  true, false, true, false, false, done);
+		});
+		it ('s', (done)=> {
+			sim.CD_VD_CU_VU(s,  v, true,  false,  true, false, true, false, false, done);
+		});
+		it ('sh', (done)=> {
+			sim.CD_VD_CU_VU(sh, v, true,  false,  true, false, true, false, false, done);
+		});
+		it ('ts', (done)=> {
+			sim.CD_VD_CU_VU(ts, v, false,  true,  false, false, true, false, false, done);
+		});
+		it ('k', (done)=> {
+			sim.CD_VD_CU_VU(k, v, false,  true,  false, false, true, false, false, done);
+		});
+		it ('p', (done)=> {
+			sim.CD_VD_CU_VU(p, v, false,  true,  false, false, true, false, false, done);
+		});
 	});
 
-	it ('dummy button', function(done) {
-		this.sim.CD_CU_VD_VU(this.h, this.v, true, false, false, true, false, true, false, done);
+	describe('母音Down→子音Down→子音Up→母音Up', ()=> {
+		it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
+			sim.VD_CD_CU_VU(h,  v, true,  true,  true, false, true, false, false, done);
+		});
+		it ('s', (done)=> {
+			sim.VD_CD_CU_VU(s,  v, true,  true,  true, true, true, false, false, done);
+		});
+		it ('sh', (done)=> {
+			sim.VD_CD_CU_VU(sh, v, true,  true,  true, true, true, false, false, done);
+		});
+		it ('ts', (done)=> {
+			sim.VD_CD_CU_VU(ts, v, true,  true, false, false, true, false, false, done);
+		});
+		it ('k', (done)=> {
+			sim.VD_CD_CU_VU(k,  v, true,  true, false, false, true, false, false, done);
+		});
+		it ('p', (done)=> {
+			sim.VD_CD_CU_VU(p,  v, true,  true, false, false, true, false, false, done);
+		});
 	});
 
-	after(function() {
+
+	after(()=> {
 
 	});
 });
@@ -27,52 +100,59 @@ describe('Conso/Vowel', function() {
 
 class InputSim
 {
+	constructor() {
+		this.timeout = 50;
+	}
+
 	// 子音をDown/Up→母音をDown/Up （子音の影響は受けない）
 	CD_CU_VD_VU(c, v, cdownc, cupc, vdownc, vdownv, vtimec, vtimev, vupv, done) {
+		console.log('CD_CU_VD_VU start ' + c.char);
 		c.init();
 		v.init();
 		c.down();
-		assert.equal(c.isPlaying(), cdownc);
+		assert.equal(cdownc, c.isPlaying());
 		c.up();
-		assert.equal(c.isPlaying(), cupc);
+		assert.equal(cupc, c.isPlaying());
 		v.down(10,10);
-		assert.equal(c.isPlaying(), vdownc);
-		assert.equal(v.isPlaying(), vdownv);
+		assert.equal(vdownc, c.isPlaying());
+		assert.equal(vdownv, v.isPlaying());
 		setTimeout(()=>{
-			assert.equal(c.isPlaying(), vtimec);
-			assert.equal(v.isPlaying(), vtimev);
+			assert.equal(vtimec, c.isPlaying());
+			assert.equal(vtimev, v.isPlaying());
 			v.up();
-			assert.equal(v.isPlaying(), vupv);
+			assert.equal(vupv, v.isPlaying());
+			console.log('CD_CU_VD_VU done ' + c.char);
 			done();
-		}, 300);
+		}, this.timeout);
 	}
 
 	// 子音Down中に母音をDown→子音Up、母音Up （通常の子音→母音連鎖）
-	function CD_VD_CU_VU(c, v, cdownc, vdownc, vdownv, vtimec, vtimev, cupc, vupv, done) {
+	CD_VD_CU_VU(c, v, cdownc, vdownc, vdownv, vtimec, vtimev, cupc, vupv, done) {
+		console.log('CD_VD_CU_VU start ' + c.char);
 		c.init();
 		v.init();
-
 		c.down();
-		assert.equal(c.isPlaying(), cdownc);
+		assert.equal(cdownc, c.isPlaying());
 		v.down(10, 10);
-		assert.equal(c.isPlaying(), vdownc);
-		assert.equal(v.isPlaying(), vdownv);
+		assert.equal(vdownc, c.isPlaying());
+		assert.equal(vdownv, v.isPlaying());
 		setTimeout(()=>{
-			assert.equal(c.isPlaying(), vtimec);
-			assert.equal(v.isPlaying(), vtimev);
+			assert.equal(vtimec, c.isPlaying());
+			assert.equal(vtimev, v.isPlaying());
 			c.up();
-			assert.equal(c.isPlaying(), cupc);
+			assert.equal(cupc, c.isPlaying());
 			v.up();
-			assert.equal(v.isNotPlaying(), vupv);
+			assert.equal(vupv, v.isPlaying());
+			console.log('CD_VD_CU_VU done ' + c.char);
 			done();
-		}, 300);
+		}, this.timeout);
 	}
 
 	// 母音Down中に子音をDown/Up （オハヨウのハ発音して母音に戻る）
-	function VD_CD_CU_VU(c, v, vdownv, cdownc, cdownv, ctimec, ctimev, cupc, vupv, done) {
+	VD_CD_CU_VU(c, v, vdownv, cdownc, cdownv, ctimec, ctimev, cupc, vupv, done) {
+		console.log('VD_CD_CU_VU start ' + c.char);
 		c.init();
 		v.init();
-
 		v.down();
 		assert.equal(v.isPlaying(), vdownv);
 		c.down(10, 10);
@@ -84,28 +164,43 @@ class InputSim
 			c.up();
 			assert.equal(c.isPlaying(), cupc);
 			v.up();
-			assert.equal(v.isNotPlaying(), vupv);
+			assert.equal(v.isPlaying(), vupv);
+			console.log('VD_CD_CU_VU done ' + c.char);
 			done();
-		}, 300);
+		}, this.timeout);
 	}
 }
 
 class Pad
 {
 	constructor() {
+		this.downing = false;
+		this.playing = false;
+		this.posx = 0;
+		this.posy = 0;
+		this.consos = [];
+	}
+
+	init() {
+		this.stop();
+		this.downing = false;
 		this.playing = false;
 		this.posx = 0;
 		this.posy = 0;
 	}
 
-	init() {
-		this.playing = false;
-	}
-
 	down(x, y) {
-		this.playing = true;
+		this.downing = true;
 		this.posx = x;
 		this.posy = y;
+
+		for (var i = 0; i < this.consos.length; i++) {
+			if (this.consos[i].isDown()) {
+				this.consos[i].onVowelDown();
+				return;
+			}
+		}
+		this.play();
 	}
 
 	move(x, y) {
@@ -114,11 +209,28 @@ class Pad
 	}
 
 	up() {
-		this.playing = false;
+		this.downing = false;
+		this.stop();
+	}
+
+	play() {
+		this.playing = true;
+	}
+
+	stop() {
+		this.playing = false;		
+	}
+
+	isDown() {
+		return this.downing;
 	}
 
 	isPlaying() {
 		return this.playing;
+	}
+
+	addConso(c) {
+		this.consos.push(c);
 	}
 
 }
@@ -126,117 +238,130 @@ class Pad
 class Button
 {
 	constructor(s) {
+		this.char = s;
+		this.vowel = null;
+		this.downing = false;
 		this.playing = false;
+		this.consotime = 10;
 	}
 
 	init() {
+		this.downing = false;
 		this.playing = false;
 	}
 
 	down() {
-		this.playing = true;
+		this.downing = true;
 	}
 
 	up() {
-		this.playing = false;
+		this.downing = false;
+	}
+
+	onVowelDown() {
+	}
+
+	play() {
+		this.playing = true;
+	}
+
+	stop() {
+		this.playing = false;		
+	}
+
+	isDown() {
+		return this.downing;
 	}
 
 	isPlaying() {
 		return this.playing;
 	}
+
+	addVowel(v) {
+		this.vowel = v;
+	}
 }
 
-
-/*
-class InputSim
+class Htype_Button extends Button
 {
-	constructor() {
-		this.v = new Pad();
-		this.h = new Button("h");
+	constructor(s) {
+		super(s);
+		this.vowel = null;
 	}
 
-
-
-	function CtoV_h() {
-		this.h.down();
-		assert(this.h.isNotPlaying());
-		this.h.up();
-		assert(this.h.isNotPlaying());
-		this.v.down(10,10);
-		assert(this.h.isPlaying());
-		SetTimeout(()=>{
-			assert(this.h.isNotPlaying());
-			assert(this.v.isPlaying());
-			this.v.up();
-			assert(this.v.isNotPlaying());
-		}, 100);
+	down() {
+		this.downing = true;
+		if (this.vowel.isDown()) {
+			this.play();
+		}
 	}
 
-	function CheckCtov() {
-
-		// 子音をUpしちゃったら母音Down時は母音のみの方がいいか？
-										   //    子Dn   子Up    母Dn子  母Dn母  母D+t子 母D+t母  母Up
-		// hは子Downでは鳴らない、母Downでは母音のみ
-		CD_CU_VD_VU("C->V  h", this.h,  this.v,  false, false, false,  true, false,  true, false);
-		// sは子Down時に子音を鳴らす、子音は子Up時に止まる、母Downでは母音のみ
-		CD_CU_VD_VU("C->V  s", this.s,  this.v,   true, false, false,  true, false,  true, false);
-		CD_CU_VD_VU("C->V sh", this.sh, this.v,   true, false, false,  true, false,  true, false);
-		// tsは子Downでは鳴らない、母Downでは母音のみ
-		CD_CU_VD_VU("C->V ts", this.ts,  this.v, false, false, false,  true, false,  true, false);
-		CD_CU_VD_VU("C->V  k", this.ts,  this.v, false, false, false,  true, false,  true, false);
-		CD_CU_VD_VU("C->V  p", this.ts,  this.v, false, false, false,  true, false,  true, false);
-
-
-										   //   子Dn    母Dn子  母Dn母  母D+t子 母D+t母  子Up   母Up
-		// hは母Down時に子音と母音を鳴らす、子Up時に子音を止める
-		CD_VD_CU_VU("C->V  h", this.h,  this.v, false,  true,  true,  true,  true, false, false);
-		// sは子Down時に子音を鳴らす、母Down時に子音を止めて母音を鳴らす
-		CD_VD_CU_VU("C->V  s", this.s,  this.v,  true, false,  true, false,  true, false,  false);
-		CD_VD_CU_VU("C->V sh", this.sh, this.v,  true, false,  true, false,  true, false,  false);
-		// tsは母Down時に子音を鳴らす、子音は時間で止まる、母音は時間で鳴らす
-		CD_VD_CU_VU("C->V ts", this.ts, this.v, false,  true, false, false,  true, false,  false);
-		CD_VD_CU_VU("C->V  k", this.ts, this.v, false,  true, false, false,  true, false,  false);
-		CD_VD_CU_VU("C->V  p", this.ts, this.v, false,  true, false, false,  true, false,  false);
+	onVowelDown() {
+		this.play();
 	}
 
-
-	function CD_CU_VD_VU(s, c, v, cdown, cup, vdownc, vdownv, vtimec, vtimev, vup) {
-		console.log(s);
-		c.down();
-		assertEqual(c.isPlaying(), cdown);
-		c.up();
-		assertEqual(c.isPlaying(), cup);
-		v.down(10,10);
-		assertEqual(c.isPlaying(), vdownc);
-		assertEqual(v.isPlaying(), vdownv);
-		SetTimeout(()=>{
-			assertEqual(c.isPlaying(), vtimec);
-			assertEqual(v.isPlaying(), vtimev);
-			v.up();
-			assertEqual(v.isNotPlaying(), vup);
-		}, 300);
+	play() {
+		this.playing = true;
+		if (!this.vowel.isPlaying()) {
+			this.vowel.play();
+		}
+		setTimeout(()=> {
+			this.stop();
+		}, this.consotime);
 	}
-
-	function CD_VD_CU_VU(s, c, v, cdown, vdownc, vdownv, vtimec, vtimev, cup, vup) {
-		console.log(s);
-		c.down();
-		assertEqual(c.isPlaying(), cdown);
-		v.down(10, 10);
-		assertEqual(c.isPlaying(), vdownc);
-		assertEqual(v.isPlaying(), vdownv);
-		SetTimeout(()=>{
-			assertEqual(c.isPlaying(), vtimec);
-			assertEqual(v.isPlaying(), vtimev);
-			c.up();
-			assertEqual(c.isPlaying(), cup);
-			v.up();
-			assertEqual(v.isNotPlaying(), vup);
-		}, 300);
-	}
-
-	function VD_CD_CU_VU(s, c, v, vdown, cdownc, cdownv, ctimec, ctimev, cupc, cupv, vup) {
-	}
-
-
 }
-*/
+
+class Ptype_Button extends Button
+{
+	constructor(s) {
+		super(s);
+		this.vowel = null;
+	}
+
+	down() {
+		this.downing = true;
+		if (this.vowel.isDown()) {
+			this.vowel.stop();
+			this.play();
+		}
+	}
+
+	onVowelDown() {
+		this.play();
+	}
+
+	play() {
+		this.playing = true;
+		setTimeout(()=> {
+			this.stop();
+			this.vowel.play();
+		}, this.consotime);
+	}
+}
+
+class Stype_Button extends Button
+{
+	constructor(s) {
+		super(s);
+	}
+
+	down() {
+		this.downing = true;
+		this.play();
+	}
+
+	up() {
+		this.downing = false;
+		this.stop();		
+	}
+
+	onVowelDown() {
+		this.stop();
+		this.vowel.play();
+	}
+
+	play() {
+		this.playing = true;
+	}
+}
+
