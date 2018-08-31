@@ -1,87 +1,206 @@
-class Button
+class Pad
 {
-	constructor(ctx, bg, x, y, char, consotype)
-	{
-		this.h_type = 1;
-		this.s_type = 2;
-		this.k_type = 3;
-		this.conso_type = null;
-
-		this.player = synth.CreateFilter(char);
-
-		this.ctx = ctx;
-		this.bg = bg;
-		this.vowelPlaying = false;
-
-		ctx.fillStyle = 'rgb(0, 0, 0)';
-		var leftX = 30 * bg.scale;
-	    ctx.font = "24px 'Times New Roman'";
-
-	    var rsize = 30 * bg.scale;
-	    ctx.fillText(char, leftX + (x - 10) * bg.scale,  (y + 5) * bg.scale + bg.oy);
-	    ctx.beginPath();
-	    ctx.arc(leftX + x * bg.scale, y * bg.scale + bg.oy, rsize, 0, 2 * Math.PI);
-	    ctx.stroke();
-
-	    //bg.buttons.push({x:leftX + x * bg.scale, y:bg.oy + (y-10) * bg.scale, char:char, consotype:consotype});
-	    bg.buttons.push(this);
-	    console.log(bg.buttons);
+	constructor(voice) {
+		this.voice = voice;
+		this.downing = false;
+		this.playing = false;
+		this.posx = 0;
+		this.posy = 0;
+		this.consos = [];
 	}
 
-	check(x, y)
-	{
+	init() {
+		this.stop();
+		this.downing = false;
+		this.playing = false;
+		this.posx = 0;
+		this.posy = 0;
 	}
 
-	onDown()
-	{
-		if (this.vowelPlaying) {
-			onConsoDownInVowel();
-		} else {
-			Play();
+	down(x, y) {
+		this.downing = true;
+		this.posx = x;
+		this.posy = y;
+
+		for (var i = 0; i < this.consos.length; i++) {
+			if (this.consos[i].isDown()) {
+				this.consos[i].onVowelDown();
+				return;
+			}
 		}
+		this.play();
 	}
 
-	onUp()
-	{
-
+	move(x, y) {
+		this.posx = x;
+		this.posy = y;
 	}
 
-	Play()
-	{
-
+	up() {
+		this.downing = false;
+		this.stop();
 	}
 
-	onConsoDownInVowel()
-	{
-
+	play() {
+		this.playing = true;
+		this.voice.play();
 	}
 
-	onConsoUpInVowel()
-	{
-		
+	stop() {
+		this.playing = false;
+		this.voice.stop();
 	}
 
-	onVowelDownInConso()
-	{
-
+	isDown() {
+		return this.downing;
 	}
 
-	onVowelUpInConso()
-	{
-		
+	isPlaying() {
+		return this.playing;
 	}
 
-	onVowelStart()
-	{
-		this.voelPlaying = true;
+	addConso(c) {
+		this.consos.push(c);
 	}
-
-	onVowelStop()
-	{
-		this.vowelPlaying = false;
-	}
-
 
 }
 
+class Button
+{
+	constructor(s, voice) {
+		this.char = s;
+		this.vowel = null;
+		this.downing = false;
+		this.playing = false;
+		this.consotime = 100;
+		this.voice = voice;
+	}
+
+	init() {
+		this.downing = false;
+		this.playing = false;
+	}
+
+	down() {
+		this.downing = true;
+	}
+
+	up() {
+		this.downing = false;
+	}
+
+	onVowelDown() {
+	}
+
+	play() {
+		this.playing = true;
+		this.voice.play();
+	}
+
+	stop() {
+		this.playing = false;		
+		this.voice.stop();
+	}
+
+	isDown() {
+		return this.downing;
+	}
+
+	isPlaying() {
+		return this.playing;
+	}
+
+	addVowel(v) {
+		this.vowel = v;
+	}
+}
+
+class Htype_Button extends Button
+{
+	constructor(s, voice) {
+		super(s, voice);
+	}
+
+	down() {
+		this.downing = true;
+		if (this.vowel.isDown()) {
+			this.play();
+		}
+	}
+
+	onVowelDown() {
+		this.play();
+	}
+
+	play() {
+		this.playing = true;
+		this.voice.play();
+		if (!this.vowel.isPlaying()) {
+			this.vowel.play();
+		}
+		setTimeout(()=> {
+			this.stop();
+		}, this.consotime);
+	}
+}
+
+class Ptype_Button extends Button
+{
+	constructor(s, voice) {
+		super(s, voice);
+	}
+
+	down() {
+		this.downing = true;
+		if (this.vowel.isDown()) {
+			this.vowel.stop();
+			this.play();
+		}
+	}
+
+	onVowelDown() {
+		this.play();
+	}
+
+	play() {
+		this.playing = true;
+		this.voice.play();
+		setTimeout(()=> {
+			this.stop();
+			this.vowel.play();
+		}, this.consotime);
+	}
+}
+
+class Stype_Button extends Button
+{
+	constructor(s, voice) {
+		super(s, voice);
+	}
+
+	down() {
+		this.downing = true;
+		if (this.vowel.isDown()) {
+			this.vowel.stop();
+		}
+		this.play();
+	}
+
+	up() {
+		this.downing = false;
+		this.stop();		
+	}
+
+	onVowelDown() {
+		this.stop();
+		this.vowel.play();
+		console.log('stop ' + this.char)
+	}
+
+	play() {
+		this.playing = true;
+		this.voice.play();
+		console.log('play ' + this.char)
+	}
+}
 
