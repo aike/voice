@@ -1,6 +1,38 @@
 window.AudioContext = window.webkitAudioContext || window.AudioContext;
 var audioctx = new AudioContext();
 
+class Noise
+{
+  constructor()
+  {
+    this.buf = audioctx.createBuffer(1, audioctx.sampleRate, audioctx.sampleRate);
+    var data = this.buf.getChannelData(0);
+    for (var i = 0; i < this.buf.length; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    this.osc = audioctx.createBufferSource();
+    this.osc.buffer = this.buf;
+    this.osc.loop = true;
+    this.init = false;
+  }
+
+  connect(dest)
+  {
+    this.osc.connect(dest);
+  }
+
+  start(time)
+  {
+    if (!this.init) {
+      this.osc.start(0);
+      this.init = true;
+    }
+  }
+}
+
+var noise = new Noise();
+
+
 class Voice
 {
   constructor(s)
@@ -8,31 +40,31 @@ class Voice
     this.init = false;
 
     var f0 = 125;
-    this.osc = audioctx.createOscillator();
-    this.osc.type = "sawtooth";
 
     switch (s)
     {
       case "a":
+        this.osc = audioctx.createOscillator();
+        this.osc.type = "sawtooth";
         this.osc.frequency.value = f0;
         break;
       case "h":
-        this.osc.frequency.value = 800;
+        this.osc = noise;
         break;
       case "s":
-        this.osc.frequency.value = 1000;
+        this.osc = noise;
         break;
       case "sh":
-        this.osc.frequency.value = 1500;
+        this.osc = noise;
         break;
       case "ts":
-        this.osc.frequency.value = 2000;
+        this.osc = noise;
         break;
       case "k":
-        this.osc.frequency.value = 3000;
+        this.osc = noise;
         break;
       case "p":
-        this.osc.frequency.value = 4000;
+        this.osc = noise;
         break;
     }
 
@@ -61,6 +93,7 @@ class Voice
 
 window.addEventListener("load", () =>
 {
+
   synthesizer = new Synthesizer(canvas1);
   synthesizer.setScale(scale);
 //  synthesizer.set_event();
