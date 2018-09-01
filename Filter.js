@@ -53,7 +53,7 @@ class Filter
 				this.long_unvoiced = true;
 				break;
 
-			case "sy":
+			case "sh":
 				this.CreateObjects(true, false);
 
 				this.unvoiced.type = "bandpass";
@@ -84,7 +84,7 @@ class Filter
 
 				break;
 
-			case "p":
+			case "ts":
 				this.CreateObjects(true, false);
 
 				this.unvoiced.type = "bandpass";
@@ -98,6 +98,33 @@ class Filter
 				this.voiced_vca_a=[0,    0,    1];
 				this.unvoiced_level.gain.value = 0.9;
 
+			case "k":
+				this.CreateObjects(true, false);
+
+				this.unvoiced.type = "bandpass";
+				this.unvoiced.frequency.value = 500;
+				this.unvoiced.Q.value = 2;
+				this.unvoiced_vca_t=[0, 0.01, 0.02];
+				this.unvoiced_vca_a=[0,    1,    0];
+				this.unvoiced_level.gain.value = 1.0;
+
+				this.voiced_vca_t=[0, 0.03, 0.23];
+				this.voiced_vca_a=[0,    0,    1];
+				this.unvoiced_level.gain.value = 0.9;
+
+			case "p":
+				this.CreateObjects(true, false);
+
+				this.unvoiced.type = "bandpass";
+				this.unvoiced.frequency.value = 500;
+				this.unvoiced.Q.value = 2;
+				this.unvoiced_vca_t=[0, 0.01, 0.02];
+				this.unvoiced_vca_a=[0,    1,    0];
+				this.unvoiced_level.gain.value = 1.0;
+
+				this.voiced_vca_t=[0, 0.03, 0.23];
+				this.voiced_vca_a=[0,    0,    1];
+				this.unvoiced_level.gain.value = 0.9;
 				break;
 		}
 	}
@@ -230,9 +257,9 @@ class FilterManager
 		this.filter_s.CreateFilter("s");
 		this.filters.push(this.filter_s);
 
-		this.filter_sy = new Filter(ctx, osc, noise, f1, f2, out);
-		this.filter_sy.CreateFilter("sy");
-		this.filters.push(this.filter_sy);
+		this.filter_sh = new Filter(ctx, osc, noise, f1, f2, out);
+		this.filter_sh.CreateFilter("sh");
+		this.filters.push(this.filter_sh);
 
 		this.filter_h = new Filter(ctx, osc, noise, f1, f2, out);
 		this.filter_h.CreateFilter("h");
