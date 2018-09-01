@@ -94,7 +94,7 @@ class Button
 
 	play() {
 		this.playing = true;
-		this.voice.play();
+		this.voice.play_eg();
 	}
 
 	stop() {
@@ -128,6 +128,11 @@ class Htype_Button extends Button
 		}
 	}
 
+	up() {
+		this.downing = false;
+		this.stop();
+	}
+
 	onVowelDown() {
 		this.play();
 	}
@@ -138,9 +143,6 @@ class Htype_Button extends Button
 		if (!this.vowel.isPlaying()) {
 			this.vowel.play();
 		}
-		setTimeout(()=> {
-			this.stop();
-		}, this.consotime);
 	}
 }
 
@@ -189,6 +191,9 @@ class Stype_Button extends Button
 	up() {
 		this.downing = false;
 		this.stop();		
+		if (this.vowel.isDown()) {
+			this.vowel.play();
+		}
 	}
 
 	onVowelDown() {

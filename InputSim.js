@@ -28,30 +28,31 @@ describe('Conso/Vowel', ()=> {
 		sim = new InputSim();
 	});
 
-	describe('子音をDown/Up→母音をDown/Up', ()=> {
-		it ('h', (done)=> {
-			sim.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
-		});
-		it ('s', (done)=> {
-			sim.CD_CU_VD_VU(s,  v,  true, false, false, true, false, true, false, done);
-		});
-		it ('sh', (done)=> {
-			sim.CD_CU_VD_VU(sh, v,  true, false, false, true, false, true, false, done);
-		});
-		it ('ts', (done)=> {
-			sim.CD_CU_VD_VU(ts, v, false, false, false, true, false, true, false, done);
-		});
-		it ('k', (done)=> {
-			sim.CD_CU_VD_VU(k,  v, false, false, false, true, false, true, false, done);
-		});
-		it ('p', (done)=> {
-			sim.CD_CU_VD_VU(p,  v, false, false, false, true, false, true, false, done);
-		});
-	});
+	// describe('子音をDown/Up→母音をDown/Up', ()=> {
+	// 	it ('h', (done)=> {
+	// 		sim.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
+	// 	});
+	// 	it ('s', (done)=> {
+	// 		sim.CD_CU_VD_VU(s,  v,  true, false, false, true, false, true, false, done);
+	// 	});
+	// 	it ('sh', (done)=> {
+	// 		sim.CD_CU_VD_VU(sh, v,  true, false, false, true, false, true, false, done);
+	// 	});
+	// 	it ('ts', (done)=> {
+	// 		sim.CD_CU_VD_VU(ts, v, false, false, false, true, false, true, false, done);
+	// 	});
+	// 	it ('k', (done)=> {
+	// 		sim.CD_CU_VD_VU(k,  v, false, false, false, true, false, true, false, done);
+	// 	});
+	// 	it ('p', (done)=> {
+	// 		sim.CD_CU_VD_VU(p,  v, false, false, false, true, false, true, false, done);
+	// 	});
+	// });
 
 	describe('子音Down→母音Down→子音Up→母音Up', ()=> {
+		                  //c,  v, cdownc,vdownc,vdownv,vtimec,vtimev,cupc, vupv, done
 		it ('h', (done)=> {
-			sim.CD_VD_CU_VU(h,  v, false,  true,  true, false, true, false, false, done);
+			sim.CD_VD_CU_VU(h,  v, false,  true,  true,  true, true, false, false, done);
 		});
 		it ('s', (done)=> {
 			sim.CD_VD_CU_VU(s,  v, true,  false,  true, false, true, false, false, done);
@@ -70,26 +71,26 @@ describe('Conso/Vowel', ()=> {
 		});
 	});
 
-	describe('母音Down→子音Down→子音Up→母音Up', ()=> {
-		it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
-			sim.VD_CD_CU_VU(h,  v, true,  true,  true, false, true, false, false, done);
-		});
-		it ('s', (done)=> {
-			sim.VD_CD_CU_VU(s,  v, true,  true, false, true, false, false, false, done);
-		});
-		it ('sh', (done)=> {
-			sim.VD_CD_CU_VU(sh, v, true,  true, false, true, false, false, false, done);
-		});
-		it ('ts', (done)=> {
-			sim.VD_CD_CU_VU(ts, v, true,  true, false, false, true, false, false, done);
-		});
-		it ('k', (done)=> {
-			sim.VD_CD_CU_VU(k,  v, true,  true, false, false, true, false, false, done);
-		});
-		it ('p', (done)=> {
-			sim.VD_CD_CU_VU(p,  v, true,  true, false, false, true, false, false, done);
-		});
-	});
+	// describe('母音Down→子音Down→子音Up→母音Up', ()=> {
+	// 	it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
+	// 		sim.VD_CD_CU_VU(h,  v, true,  true,  true, true, true, false, false, done);
+	// 	});
+	// 	it ('s', (done)=> {
+	// 		sim.VD_CD_CU_VU(s,  v, true,  true, false, true, false, false, false, done);
+	// 	});
+	// 	it ('sh', (done)=> {
+	// 		sim.VD_CD_CU_VU(sh, v, true,  true, false, true, false, false, false, done);
+	// 	});
+	// 	it ('ts', (done)=> {
+	// 		sim.VD_CD_CU_VU(ts, v, true,  true, false, false, true, false, false, done);
+	// 	});
+	// 	it ('k', (done)=> {
+	// 		sim.VD_CD_CU_VU(k,  v, true,  true, false, false, true, false, false, done);
+	// 	});
+	// 	it ('p', (done)=> {
+	// 		sim.VD_CD_CU_VU(p,  v, true,  true, false, false, true, false, false, done);
+	// 	});
+	// });
 
 
 	after(()=> {
@@ -101,7 +102,8 @@ describe('Conso/Vowel', ()=> {
 class InputSim
 {
 	constructor() {
-		this.timeout = 200;
+		this.holdTime = 300;
+		this.endInterval = 400;
 	}
 
 	// 子音をDown/Up→母音をDown/Up （子音の影響は受けない）
@@ -122,8 +124,8 @@ class InputSim
 			v.up();
 			assert.equal(vupv, v.isPlaying());
 			console.log('CD_CU_VD_VU done ' + c.char);
-			done();
-		}, this.timeout);
+			setTimeout(()=> {done();}, this.endInterval);
+		}, this.holdTime);
 	}
 
 	// 子音Down中に母音をDown→子音Up、母音Up （通常の子音→母音連鎖）
@@ -146,10 +148,10 @@ class InputSim
 					v.up();
 					assert.equal(vupv, v.isPlaying());
 					console.log('CD_VD_CU_VU done ' + c.char);
-					done();
-				}, this.timeout);
-			}, this.timeout);
-		}, this.timeout);
+					setTimeout(()=> {done();}, this.endInterval);
+				}, this.holdTime);
+			}, this.holdTime);
+		}, this.holdTime);
 	}
 
 	// 母音Down中に子音をDown/Up （オハヨウのハ発音して母音に戻る）
@@ -172,10 +174,10 @@ class InputSim
 					v.up();
 					assert.equal(v.isPlaying(), vupv);
 					console.log('VD_CD_CU_VU done ' + c.char);
-					done();
-				}, this.timeout);
-			}, this.timeout);
-		}, this.timeout);
+					setTimeout(()=> {done();}, this.endInterval);
+				}, this.holdTime);
+			}, this.holdTime);
+		}, this.holdTime);
 	}
 }
 
