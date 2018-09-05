@@ -47,8 +47,11 @@ class App {
 		console.log(ui.ox + " " + ui.oy);
 
 		if (ui.checkPad(x, y)) {
-			console.log((x - ui.x0) / ui.xlen + " " + (y - ui.y0) / ui.ylen);
-			ui.vowel.down((x - ui.x0) / ui.xlen, (y - ui.y0) / ui.ylen);
+			var px = (x - ui.x0) / ui.xlen;
+			var py = 1.0 - (y - ui.y0) / ui.ylen;
+			console.log("pxy");
+			console.log(px + " " + py);
+			ui.vowel.down(px, py);
 			return;
 		}
 
@@ -67,9 +70,10 @@ class App {
 		var rect = ev.target.getBoundingClientRect();
 		var x = cx - rect.left;
 		var y = cy - rect.top;
-
+		var px = (x - ui.x0) / ui.xlen;
+		var py = (y - ui.y0) / ui.ylen;
 		if (ui.checkPad(x, y)) {
-			ui.vowel.up((x - ui.x0) / ui.xlen, (y - ui.y0) / ui.ylen);
+			ui.vowel.up(px, py);
 			return;
 		}
 
@@ -90,9 +94,10 @@ class App {
 		var rect = ev.target.getBoundingClientRect();
 		var x = cx - rect.left;
 		var y = cy - rect.top;
-
+		var px = (x - ui.x0) / ui.xlen;
+		var py = 1.0 - (y - ui.y0) / ui.ylen;
 		if (ui.checkPad(x, y)) {
-			ui.vowel.move((x - ui.x0) / ui.xlen, (y - ui.y0) / ui.ylen);
+			ui.vowel.move(px, py);
 		}
 	}
 
