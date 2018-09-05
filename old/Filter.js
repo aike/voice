@@ -84,7 +84,7 @@ class Filter
 
 				break;
 
-			case "ts":
+			case "t":
 				this.CreateObjects(true, false);
 
 				this.unvoiced.type = "bandpass";

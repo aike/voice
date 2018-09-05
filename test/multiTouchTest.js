@@ -1,8 +1,8 @@
 var assert = chai.assert;
 
-describe('Conso/Vowel', ()=> {
+describe('母音と子音の同時押しテスト', ()=> {
 	var v,h,s,sh,ts,k,p;
-	var sim;
+	var seq;
 
 	before(()=> {
 		v = new Pad(new Voice("a"));
@@ -12,10 +12,10 @@ describe('Conso/Vowel', ()=> {
 		s = new Stype_Button("s", new Voice("s"));
 		v.addConso(s);
 		s.addVowel(v);
-		sh = new Stype_Button("sh", new Voice("sh"));
+		sh = new Stype_Button("sy", new Voice("sy"));
 		v.addConso(sh);
 		sh.addVowel(v);
-		ts = new Ptype_Button("ts", new Voice("ts"));
+		ts = new Ptype_Button("t", new Voice("t"));
 		v.addConso(ts);
 		ts.addVowel(v);
 		k = new Ptype_Button("k", new Voice("k"));
@@ -25,72 +25,72 @@ describe('Conso/Vowel', ()=> {
 		v.addConso(p);
 		p.addVowel(v);
 
-		sim = new InputSim();
+		seq = new InputSequence();
 	});
 
-	// describe('子音をDown/Up→母音をDown/Up', ()=> {
-	// 	it ('h', (done)=> {
-	// 		sim.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
-	// 	});
-	// 	it ('s', (done)=> {
-	// 		sim.CD_CU_VD_VU(s,  v,  true, false, false, true, false, true, false, done);
-	// 	});
-	// 	it ('sh', (done)=> {
-	// 		sim.CD_CU_VD_VU(sh, v,  true, false, false, true, false, true, false, done);
-	// 	});
-	// 	it ('ts', (done)=> {
-	// 		sim.CD_CU_VD_VU(ts, v, false, false, false, true, false, true, false, done);
-	// 	});
-	// 	it ('k', (done)=> {
-	// 		sim.CD_CU_VD_VU(k,  v, false, false, false, true, false, true, false, done);
-	// 	});
-	// 	it ('p', (done)=> {
-	// 		sim.CD_CU_VD_VU(p,  v, false, false, false, true, false, true, false, done);
-	// 	});
-	// });
+	describe('子音をDown/Up→母音をDown/Up', ()=> {
+		it ('h', (done)=> {
+			seq.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
+		});
+		it ('s', (done)=> {
+			seq.CD_CU_VD_VU(s,  v,  true, false, false, true, false, true, false, done);
+		});
+		it ('sh', (done)=> {
+			seq.CD_CU_VD_VU(sh, v,  true, false, false, true, false, true, false, done);
+		});
+		it ('ts', (done)=> {
+			seq.CD_CU_VD_VU(ts, v, false, false, false, true, false, true, false, done);
+		});
+		it ('k', (done)=> {
+			seq.CD_CU_VD_VU(k,  v, false, false, false, true, false, true, false, done);
+		});
+		it ('p', (done)=> {
+			seq.CD_CU_VD_VU(p,  v, false, false, false, true, false, true, false, done);
+		});
+	});
 
 	describe('子音Down→母音Down→子音Up→母音Up', ()=> {
 		                  //c,  v, cdownc,vdownc,vdownv,vtimec,vtimev,cupc, vupv, done
 		it ('h', (done)=> {
-			sim.CD_VD_CU_VU(h,  v, false,  true,  true,  true, true, false, false, done);
+			seq.CD_VD_CU_VU(h,  v, false,  true,  true,  true, true, false, false, done);
 		});
 		it ('s', (done)=> {
-			sim.CD_VD_CU_VU(s,  v, true,  false,  true, false, true, false, false, done);
+			seq.CD_VD_CU_VU(s,  v, true,  false,  true, false, true, false, false, done);
 		});
 		it ('sh', (done)=> {
-			sim.CD_VD_CU_VU(sh, v, true,  false,  true, false, true, false, false, done);
+			seq.CD_VD_CU_VU(sh, v, true,  false,  true, false, true, false, false, done);
 		});
 		it ('ts', (done)=> {
-			sim.CD_VD_CU_VU(ts, v, false,  true,  false, false, true, false, false, done);
+			seq.CD_VD_CU_VU(ts, v, false,  true,  false, false, true, false, false, done);
 		});
 		it ('k', (done)=> {
-			sim.CD_VD_CU_VU(k, v, false,  true,  false, false, true, false, false, done);
+			seq.CD_VD_CU_VU(k, v, false,  true,  false, false, true, false, false, done);
 		});
 		it ('p', (done)=> {
-			sim.CD_VD_CU_VU(p, v, false,  true,  false, false, true, false, false, done);
+			seq.CD_VD_CU_VU(p, v, false,  true,  false, false, true, false, false, done);
 		});
 	});
 
-	// describe('母音Down→子音Down→子音Up→母音Up', ()=> {
-	// 	it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
-	// 		sim.VD_CD_CU_VU(h,  v, true,  true,  true, true, true, false, false, done);
-	// 	});
-	// 	it ('s', (done)=> {
-	// 		sim.VD_CD_CU_VU(s,  v, true,  true, false, true, false, false, false, done);
-	// 	});
-	// 	it ('sh', (done)=> {
-	// 		sim.VD_CD_CU_VU(sh, v, true,  true, false, true, false, false, false, done);
-	// 	});
-	// 	it ('ts', (done)=> {
-	// 		sim.VD_CD_CU_VU(ts, v, true,  true, false, false, true, false, false, done);
-	// 	});
-	// 	it ('k', (done)=> {
-	// 		sim.VD_CD_CU_VU(k,  v, true,  true, false, false, true, false, false, done);
-	// 	});
-	// 	it ('p', (done)=> {
-	// 		sim.VD_CD_CU_VU(p,  v, true,  true, false, false, true, false, false, done);
-	// 	});
-	// });
+	describe('母音Down→子音Down→子音Up→母音Up', ()=> {
+		it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
+			seq.VD_CD_CU_VU(h,  v, true,  true,  true, true, true, false, false, done);
+		});
+		it ('s', (done)=> {
+			seq.VD_CD_CU_VU(s,  v, true,  true, false, true, false, false, false, done);
+		});
+		it ('sh', (done)=> {
+			seq.VD_CD_CU_VU(sh, v, true,  true, false, true, false, false, false, done);
+		});
+		it ('ts', (done)=> {
+			seq.VD_CD_CU_VU(ts, v, true,  true, false, false, true, false, false, done);
+		});
+		it ('k', (done)=> {
+			seq.VD_CD_CU_VU(k,  v, true,  true, false, false, true, false, false, done);
+		});
+		it ('p', (done)=> {
+			seq.VD_CD_CU_VU(p,  v, true,  true, false, false, true, false, false, done);
+		});
+	});
 
 
 	after(()=> {
@@ -99,7 +99,7 @@ describe('Conso/Vowel', ()=> {
 });
 
 
-class InputSim
+class InputSequence
 {
 	constructor() {
 		this.holdTime = 300;
@@ -115,7 +115,7 @@ class InputSim
 		assert.equal(cdownc, c.isPlaying());
 		c.up();
 		assert.equal(cupc, c.isPlaying());
-		v.down(10,10);
+		v.down(0.5,0.5);
 		assert.equal(vdownc, c.isPlaying());
 		assert.equal(vdownv, v.isPlaying());
 		setTimeout(()=>{
@@ -136,7 +136,7 @@ class InputSim
 		c.down();
 		assert.equal(cdownc, c.isPlaying());
 		setTimeout(()=>{
-			v.down(10, 10);
+			v.down(0.5, 0.5);
 			assert.equal(vdownc, c.isPlaying());
 			assert.equal(vdownv, v.isPlaying());
 			setTimeout(()=>{
@@ -159,10 +159,10 @@ class InputSim
 		console.log('VD_CD_CU_VU start ' + c.char);
 		c.init();
 		v.init();
-		v.down();
+		v.down(0.5, 0.5);
 		assert.equal(v.isPlaying(), vdownv);
 		setTimeout(()=>{
-			c.down(10, 10);
+			c.down();
 			assert.equal(c.isPlaying(), cdownc);
 			assert.equal(v.isPlaying(), cdownv);
 			setTimeout(()=>{

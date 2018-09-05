@@ -58,6 +58,7 @@ class Voice
   constructor(s)
   {
     this.init = false;
+    this.filter = null;
 
     var f0 = 125;
 
@@ -70,6 +71,7 @@ class Voice
         this.gain = audioctx.createGain();
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.gain);
+        this.filter = vowelFilter;
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
         this.level = 0.1;
@@ -99,7 +101,7 @@ class Voice
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;
-      case "sh":
+      case "sy":
         this.osc = noise;
         this.consoFilter = audioctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
@@ -114,7 +116,7 @@ class Voice
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;
-      case "ts":
+      case "t":
         this.osc = noise;
         this.consoFilter = audioctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
@@ -192,21 +194,4 @@ class Voice
     this.gain.gain.value = 0.0000001;
   }
 }
-
-
-window.addEventListener("load", () =>
-{
-
-  synthesizer = new Synthesizer(canvas1);
-  synthesizer.setScale(scale);
-//  synthesizer.set_event();
-
-  background = new Background(canvas1);
-  background.setScale(scale)
-  background.draw();
-
-  trailer = new Trailer(canvas2, 20);
-  trailer.setScale(scale);
-});
-
 

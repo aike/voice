@@ -1,4 +1,4 @@
-class Pad
+class VoicePad
 {
 	constructor(voice) {
 		this.voice = voice;
@@ -19,8 +19,13 @@ class Pad
 
 	down(x, y) {
 		this.downing = true;
-		this.posx = x;
-		this.posy = y;
+		this.posx = Math.min(Math.max(x, 0), 1);
+		this.posy = Math.min(Math.max(y, 0), 1);
+		this.voice.filter.F1.frequency.value = this.posx * 1000;
+		this.voice.filter.F2.frequency.value = this.posy * 3000;
+
+		console.log("freq");
+		console.log((this.posx * 1000) + " " + (this.posy * 3000));
 
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
@@ -32,9 +37,22 @@ class Pad
 	}
 
 	move(x, y) {
-		this.posx = x;
-		this.posy = y;
+		this.posx = Math.min(Math.max(x, 0), 1);
+		this.posy = Math.min(Math.max(y, 0), 1);
+		this.voice.filter.F1.frequency.value = this.posx * 1000;
+		this.voice.filter.F2.frequency.value = this.posy * 3000;
 	}
+
+	downFreq(f1, f2)
+	{
+		this.down(f1 / 1000, f2 / 3000);
+	}
+
+	moveFreq(f1, f2)
+	{
+		this.move(f1 / 1000, f2 / 3000);
+	}
+
 
 	up() {
 		this.downing = false;
@@ -65,7 +83,7 @@ class Pad
 
 }
 
-class Button
+class VoiceButton
 {
 	constructor(s, voice) {
 		this.char = s;
@@ -98,7 +116,7 @@ class Button
 	}
 
 	stop() {
-		this.playing = false;		
+		this.playing = false;
 		this.voice.stop();
 	}
 
@@ -115,7 +133,7 @@ class Button
 	}
 }
 
-class Htype_Button extends Button
+class Htype_VoiceButton extends VoiceButton
 {
 	constructor(s, voice) {
 		super(s, voice);
@@ -146,7 +164,7 @@ class Htype_Button extends Button
 	}
 }
 
-class Ptype_Button extends Button
+class Ptype_VoiceButton extends VoiceButton
 {
 	constructor(s, voice) {
 		super(s, voice);
@@ -174,7 +192,7 @@ class Ptype_Button extends Button
 	}
 }
 
-class Stype_Button extends Button
+class Stype_VoiceButton extends VoiceButton
 {
 	constructor(s, voice) {
 		super(s, voice);
@@ -190,7 +208,7 @@ class Stype_Button extends Button
 
 	up() {
 		this.downing = false;
-		this.stop();		
+		this.stop();
 		if (this.vowel.isDown()) {
 			this.vowel.play();
 		}
