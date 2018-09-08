@@ -62,6 +62,8 @@ class Voice
 
     var f0 = 125;
 
+    this.char = s;
+
     switch (s)
     {
       case "a":
@@ -180,7 +182,8 @@ class Voice
       this.osc.start(0);
       this.init = true;
     }
-    var t0 = this.ctx.currentTime;
+    var t0 = audioctx.currentTime;
+    this.gain.gain.value = 0.0000001;
     for (let i = 0; i < this.eg_t.length - 1; i++) {
       this.gain.gain.setTargetAtTime(
         this.eg_a[i + 1] * this.level,
@@ -191,6 +194,7 @@ class Voice
 
   stop()
   {
+    this.gain.gain.cancelScheduledValues(audioctx.currentTime);
     this.gain.gain.value = 0.0000001;
   }
 }

@@ -19,13 +19,14 @@ class VoicePad
 
 	down(x, y) {
 		this.downing = true;
-		this.posx = Math.min(Math.max(x, 0), 1);
-		this.posy = Math.min(Math.max(y, 0), 1);
+		this.downtime = audioctx.currentTime;
+		this.posx = Math.min(Math.max(x, 0.0), 1.0);
+		this.posy = Math.min(Math.max(y, 0.0), 1.0);
 		this.voice.filter.F1.frequency.value = this.posx * 1000;
 		this.voice.filter.F2.frequency.value = this.posy * 3000;
 
-		console.log("freq");
-		console.log((this.posx * 1000) + " " + (this.posy * 3000));
+		console.log("in = " + x + " " + y);
+		console.log("freq = " + (this.posx * 1000.0) + " " + (this.posy * 3000.0));
 
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
@@ -141,6 +142,7 @@ class Htype_VoiceButton extends VoiceButton
 
 	down() {
 		this.downing = true;
+		this.downtime = audioctx.currentTime;
 		if (this.vowel.isDown()) {
 			this.play();
 		}
@@ -157,7 +159,7 @@ class Htype_VoiceButton extends VoiceButton
 
 	play() {
 		this.playing = true;
-		this.voice.play();
+		this.voice.play_eg();
 		if (!this.vowel.isPlaying()) {
 			this.vowel.play();
 		}
@@ -172,6 +174,7 @@ class Ptype_VoiceButton extends VoiceButton
 
 	down() {
 		this.downing = true;
+		this.downtime = audioctx.currentTime;
 		if (this.vowel.isDown()) {
 			this.vowel.stop();
 			this.play();
@@ -184,7 +187,7 @@ class Ptype_VoiceButton extends VoiceButton
 
 	play() {
 		this.playing = true;
-		this.voice.play();
+		this.voice.play_eg();
 		setTimeout(()=> {
 			this.stop();
 			this.vowel.play();
@@ -200,6 +203,7 @@ class Stype_VoiceButton extends VoiceButton
 
 	down() {
 		this.downing = true;
+		this.downtime = audioctx.currentTime;
 		if (this.vowel.isDown()) {
 			this.vowel.stop();
 		}
@@ -215,15 +219,27 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	onVowelDown() {
-		this.stop();
-		this.vowel.play();
-		console.log('stop ' + this.char)
+		if (Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
+			setTimeout(()=> {
+				this.stop();
+				this.vowel.play();
+			}, this.consotime);
+		} else {
+			this.stop();
+			this.vowel.play();			
+		}
 	}
 
 	play() {
 		this.playing = true;
-		this.voice.play();
-		console.log('play ' + this.char)
+		this.voice.play_eg();
+		if (this.vowel.isDown()
+			&& Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
+			setTimeout(()=> {
+				this.stop();
+				this.vowel.play();
+			}, this.consotime);
+		}
 	}
 }
 

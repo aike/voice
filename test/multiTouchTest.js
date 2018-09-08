@@ -1,27 +1,28 @@
 var assert = chai.assert;
+mocha.timeout(15000);
 
 describe('母音と子音の同時押しテスト', ()=> {
 	var v,h,s,sh,ts,k,p;
 	var seq;
 
 	before(()=> {
-		v = new Pad(new Voice("a"));
-		h = new Htype_Button("h", new Voice("h"));
+		v = new VoicePad(new Voice("a"));
+		h = new Htype_VoiceButton("h", new Voice("h"));
 		v.addConso(h);
 		h.addVowel(v);
-		s = new Stype_Button("s", new Voice("s"));
+		s = new Stype_VoiceButton("s", new Voice("s"));
 		v.addConso(s);
 		s.addVowel(v);
-		sh = new Stype_Button("sy", new Voice("sy"));
+		sh = new Stype_VoiceButton("sy", new Voice("sy"));
 		v.addConso(sh);
 		sh.addVowel(v);
-		ts = new Ptype_Button("t", new Voice("t"));
+		ts = new Ptype_VoiceButton("t", new Voice("t"));
 		v.addConso(ts);
 		ts.addVowel(v);
-		k = new Ptype_Button("k", new Voice("k"));
+		k = new Ptype_VoiceButton("k", new Voice("k"));
 		v.addConso(k);
 		k.addVowel(v);
-		p = new Ptype_Button("p", new Voice("p"));
+		p = new Ptype_VoiceButton("p", new Voice("p"));
 		v.addConso(p);
 		p.addVowel(v);
 
@@ -29,6 +30,7 @@ describe('母音と子音の同時押しテスト', ()=> {
 	});
 
 	describe('子音をDown/Up→母音をDown/Up', ()=> {
+						  //c,  v, cdownc, cupc,vdownc,vdownv,vtimec,vtimev,vupv, done) {
 		it ('h', (done)=> {
 			seq.CD_CU_VD_VU(h,  v, false, false, false, true, false, true, false, done);
 		});
@@ -72,7 +74,8 @@ describe('母音と子音の同時押しテスト', ()=> {
 	});
 
 	describe('母音Down→子音Down→子音Up→母音Up', ()=> {
-		it ('h', (done)=> {     //vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
+							 //   vdownv,cdownc,cdownv,ctimec,ctimev,cupc, vupv
+		it ('h', (done)=> {
 			seq.VD_CD_CU_VU(h,  v, true,  true,  true, true, true, false, false, done);
 		});
 		it ('s', (done)=> {
@@ -102,8 +105,8 @@ describe('母音と子音の同時押しテスト', ()=> {
 class InputSequence
 {
 	constructor() {
-		this.holdTime = 300;
-		this.endInterval = 400;
+		this.holdTime = 200;
+		this.endInterval = 200;
 	}
 
 	// 子音をDown/Up→母音をDown/Up （子音の影響は受けない）

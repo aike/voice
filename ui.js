@@ -148,18 +148,12 @@ class UI {
 
 	checkPad(x, y)
 	{
-		console.log(x + " " + y);
 		x -= this.ox;
 		y -= this.oy;
-		console.log(x + " " + y);
-		console.log(this.x0 + " " + this.y0);
-		console.log(this.x5 + " " + this.y6);
 		if ((x >= this.x0) && (x <= this.x5)
 		&&  (y >= this.y0) && (y <= this.y6)) {
-			console.log("checkpad true");
 			return true;
 		}
-			console.log("checkpad false");
 		return false;
 	}
 
@@ -170,17 +164,14 @@ class UI {
 		var rsize = 30 * this.scale;
 		for (var i in this.buttons)
 		{
-			console.log('======================');
 			if ((x > this.buttons[i].x - rsize) && (x < this.buttons[i].x + rsize)
 			 && (y > this.buttons[i].y - rsize) && (y < this.buttons[i].y + rsize)) {
 				if (found >= 0) {
 					if (this.buttons[i].x < this.buttons[found].x) {
 						found = i;
-						console.log('found:' + this.buttons[i].char);
 					}
 				} else {
 					found = i;
-					console.log('found:' + this.buttons[i].char);
 				}
 			}
 		}
@@ -206,7 +197,6 @@ class UI {
 
 		this.buttons.push(
 			{x:leftX + x * this.scale, y:this.oy + (y-10) * this.scale, char:char, voice:this.conso[char]});
-		console.log(this.buttons);
 	}
 
 }

@@ -41,24 +41,17 @@ class App {
 		var rect = ev.target.getBoundingClientRect();
 		var x = cx - rect.left;
 		var y = cy - rect.top;
-
-		console.log("xy");
-		console.log(x + " " + y);
-		console.log(ui.ox + " " + ui.oy);
-
 		if (ui.checkPad(x, y)) {
-			var px = (x - ui.x0) / ui.xlen;
-			var py = 1.0 - (y - ui.y0) / ui.ylen;
-			console.log("pxy");
-			console.log(px + " " + py);
+			x -= ui.ox;
+			y -= ui.oy;
+			var px = x / ui.xlen;
+			var py = 1.0 - y / ui.ylen;
 			ui.vowel.down(px, py);
 			return;
 		}
 
 		var conso = ui.checkButton(x, y);
-		console.log(conso);
 		if (conso != null) {
-			console.log("pushed:[" + conso.char + "]");
 			conso.voice.down();
 		}
 
@@ -70,18 +63,15 @@ class App {
 		var rect = ev.target.getBoundingClientRect();
 		var x = cx - rect.left;
 		var y = cy - rect.top;
-		var px = (x - ui.x0) / ui.xlen;
-		var py = (y - ui.y0) / ui.ylen;
-		if (ui.checkPad(x, y)) {
-			ui.vowel.up(px, py);
-			return;
-		}
 
 		var conso = ui.checkButton(x, y);
 		if (conso != null) {
-			console.log("pushed:[" + conso.char + "]");
 			conso.voice.up();
+			return;
 		}
+
+		ui.vowel.up();
+
 	}
 
 	moveCallback(ev, cx, cy)
@@ -94,9 +84,11 @@ class App {
 		var rect = ev.target.getBoundingClientRect();
 		var x = cx - rect.left;
 		var y = cy - rect.top;
-		var px = (x - ui.x0) / ui.xlen;
-		var py = 1.0 - (y - ui.y0) / ui.ylen;
 		if (ui.checkPad(x, y)) {
+			x -= ui.ox;
+			y -= ui.oy;
+			var px = x / ui.xlen;
+			var py = 1.0 - y / ui.ylen;
 			ui.vowel.move(px, py);
 		}
 	}

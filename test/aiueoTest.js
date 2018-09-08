@@ -1,5 +1,5 @@
 var assert = chai.assert;
-mocha.timeout(5000);
+mocha.timeout(15000);
 
 describe('母音テストプレイ', ()=> {
 	var v,h,s,sh,ts,k,p;
@@ -29,47 +29,47 @@ describe('母音テストプレイ', ()=> {
 		seq = new InputSequence();
 	});
 
-	// describe('母音を都度切って発音', ()=> {
-	// 	it ('h', (done)=> {
-	// 		seq.aiueoStaccato(h,  v, done);
-	// 	});
-	// 	it ('s', (done)=> {
-	// 		seq.aiueoStaccato(s,  v, done);
-	// 	});
-	// 	it ('sh', (done)=> {
-	// 		seq.aiueoStaccato(sh, v, done);
-	// 	});
-	// 	it ('ts', (done)=> {
-	// 		seq.aiueoStaccato(ts, v, done);
-	// 	});
-	// 	it ('k', (done)=> {
-	// 		seq.aiueoStaccato(k,  v, done);
-	// 	});
-	// 	it ('p', (done)=> {
-	// 		seq.aiueoStaccato(p,  v, done);
-	// 	});
-	// });
+	describe('母音を都度切って発音', ()=> {
+		it ('h', (done)=> {
+			seq.aiueoStaccato(h,  v, done);
+		});
+		it ('s', (done)=> {
+			seq.aiueoStaccato(s,  v, done);
+		});
+		it ('sh', (done)=> {
+			seq.aiueoStaccato(sh, v, done);
+		});
+		it ('ts', (done)=> {
+			seq.aiueoStaccato(ts, v, done);
+		});
+		it ('k', (done)=> {
+			seq.aiueoStaccato(k,  v, done);
+		});
+		it ('p', (done)=> {
+			seq.aiueoStaccato(p,  v, done);
+		});
+	});
 
-	// describe('母音を切らずに発音', ()=> {
-	// 	it ('h', (done)=> {
-	// 		seq.aiueoTenuto(h,  v, done);
-	// 	});
-	// 	it ('s', (done)=> {
-	// 		seq.aiueoTenuto(s,  v, done);
-	// 	});
-	// 	it ('sh', (done)=> {
-	// 		seq.aiueoTenuto(sh, v, done);
-	// 	});
-	// 	it ('ts', (done)=> {
-	// 		seq.aiueoTenuto(ts, v, done);
-	// 	});
-	// 	it ('k', (done)=> {
-	// 		seq.aiueoTenuto(k,  v, done);
-	// 	});
-	// 	it ('p', (done)=> {
-	// 		seq.aiueoTenuto(p,  v, done);
-	// 	});
-	// });
+	describe('母音を切らずに発音', ()=> {
+		it ('h', (done)=> {
+			seq.aiueoTenuto(h,  v, done);
+		});
+		it ('s', (done)=> {
+			seq.aiueoTenuto(s,  v, done);
+		});
+		it ('sh', (done)=> {
+			seq.aiueoTenuto(sh, v, done);
+		});
+		it ('ts', (done)=> {
+			seq.aiueoTenuto(ts, v, done);
+		});
+		it ('k', (done)=> {
+			seq.aiueoTenuto(k,  v, done);
+		});
+		it ('p', (done)=> {
+			seq.aiueoTenuto(p,  v, done);
+		});
+	});
 
 	describe('母音を切らずに発音（座標指定）', ()=> {
 		it ('h', (done)=> {
@@ -101,9 +101,10 @@ describe('母音テストプレイ', ()=> {
 class InputSequence
 {
 	constructor() {
+		this.consoTime = 100;
 		this.holdTime = 200;
-		this.interval = 200;
-		this.endInterval = 500;
+		this.interval = 100;
+		this.endInterval = 200;
 	}
 
 	// 母音を都度切って発音
@@ -116,42 +117,52 @@ class InputSequence
 		v.downFreq(800, 1200);	// a
 		setTimeout(()=>{
 			c.up();
-			v.up();
 			setTimeout(()=>{
-				c.down();
-				v.downFreq(250, 2300);	// i
+				v.up();
 				setTimeout(()=>{
-					c.up();
-					v.up();
+					c.down();
+					v.downFreq(250, 2300);	// i
 					setTimeout(()=>{
-						c.down();
-						v.downFreq(250, 1200);	// u
+						c.up();
 						setTimeout(()=>{
-							c.up();
 							v.up();
 							setTimeout(()=>{
 								c.down();
-								v.downFreq(500, 1900);	// e
+								v.downFreq(250, 1200);	// u
 								setTimeout(()=>{
 									c.up();
-									v.up();
 									setTimeout(()=>{
-										c.down();
-										v.downFreq(500, 800);	// o
+										v.up();
 										setTimeout(()=>{
-											c.up();
-											v.up();
-											console.log('AIUEO done ' + c.char);
-											setTimeout(()=>{done();}, this.endInterval);
-										}, this.holdTime);
-									}, this.interval);
-								}, this.holdTime);
+											c.down();
+											v.downFreq(500, 1900);	// e
+											setTimeout(()=>{
+												c.up();
+												setTimeout(()=>{
+													v.up();
+													setTimeout(()=>{
+														c.down();
+														v.downFreq(500, 800);	// o
+														setTimeout(()=>{
+															c.up();
+															setTimeout(()=>{
+																v.up();
+																console.log('AIUEO done ' + c.char);
+																setTimeout(()=>{done();}, this.endInterval);
+															}, this.holdTime);
+														}, this.consoTime);
+													}, this.interval);
+												}, this.holdTime);
+											}, this.consoTime);
+										}, this.interval);
+									}, this.holdTime);
+								}, this.consoTime);
 							}, this.interval);
 						}, this.holdTime);
-					}, this.interval);
-				}, this.holdTime);
-			}, this.interval);
-		}, this.holdTime);
+					}, this.consoTime);
+				}, this.interval);
+			}, this.holdTime);
+		}, this.consoTime);
 	}
 
 	// 母音を切らずに発音
@@ -210,22 +221,22 @@ class InputSequence
 			c.up();
 			setTimeout(()=>{
 				c.down();
-				v.down(0.3, 0.8);	// i
+				v.move(0.3, 0.8);	// i
 				setTimeout(()=>{
 					c.up();
 					setTimeout(()=>{
 						c.down();
-						v.down(0.2, 0.4);	// u
+						v.move(0.2, 0.4);	// u
 						setTimeout(()=>{
 							c.up();
 							setTimeout(()=>{
 								c.down();
-								v.down(0.5, 0.7);	// e
+								v.move(0.5, 0.7);	// e
 								setTimeout(()=>{
 									c.up();
 									setTimeout(()=>{
 										c.down();
-										v.down(0.6, 0.25);	// o
+										v.move(0.6, 0.25);	// o
 										setTimeout(()=>{
 											c.up();
 											v.up();
