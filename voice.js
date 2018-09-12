@@ -76,7 +76,9 @@ class Voice
         this.filter = vowelFilter;
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
-        this.level = 0.1;
+        this.level = 0.5;
+        this.eg_t=[0, 0.2];
+        this.eg_a=[0, 1  ];
         break;
       case "h":
         this.osc = noise;
@@ -85,7 +87,7 @@ class Voice
         this.osc.connect(this.gain);
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
-        this.level = 0.05;
+        this.level = 0.4;
         this.eg_t=[0, 0.05, 0.1, 0.15];
         this.eg_a=[0,    1,    1,   0];
         break;
@@ -99,7 +101,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.gain);
         this.gain.connect(audioctx.destination);
-        this.level = 0.003;
+        this.level = 0.03;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;
@@ -114,7 +116,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
-        this.level = 0.01;
+        this.level = 0.03;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;
@@ -129,7 +131,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
-        this.level = 0.05;
+        this.level = 0.5;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
         break;
@@ -144,7 +146,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
-        this.level = 0.05;
+        this.level = 0.5;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
         break;
@@ -159,7 +161,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
-        this.level = 0.05;
+        this.level = 0.5;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
         break;
@@ -173,7 +175,8 @@ class Voice
       this.osc.start(0);
       this.init = true;
     }
-    this.gain.gain.value = this.level;
+    this.gain.gain.setValueAtTime(this.level, audioctx.currentTime);
+    //this.gain.gain.value = this.level;
   }
 
   play_eg()
@@ -183,7 +186,8 @@ class Voice
       this.init = true;
     }
     var t0 = audioctx.currentTime;
-    this.gain.gain.value = 0.0000001;
+    this.gain.gain.setValueAtTime(0.0000001, audioctx.currentTime);
+    //this.gain.gain.value = 0.0000001;
     for (let i = 0; i < this.eg_t.length - 1; i++) {
       this.gain.gain.setTargetAtTime(
         this.eg_a[i + 1] * this.level,
@@ -195,7 +199,8 @@ class Voice
   stop()
   {
     this.gain.gain.cancelScheduledValues(audioctx.currentTime);
-    this.gain.gain.value = 0.0000001;
+    this.gain.gain.setValueAtTime(0.0000001, audioctx.currentTime);
+    //this.gain.gain.value = 0.0000001;
   }
 }
 

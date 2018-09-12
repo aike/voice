@@ -18,6 +18,7 @@ class VoicePad
 	}
 
 	down(x, y) {
+console.log('pad down');		
 		this.downing = true;
 		this.downtime = audioctx.currentTime;
 		this.posx = Math.min(Math.max(x, 0.0), 1.0);
@@ -56,13 +57,14 @@ class VoicePad
 
 
 	up() {
+console.log('pad up');		
 		this.downing = false;
 		this.stop();
 	}
 
 	play() {
 		this.playing = true;
-		this.voice.play();
+		this.voice.play_eg();
 	}
 
 	stop() {
@@ -202,6 +204,7 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	down() {
+console.log('S down');
 		this.downing = true;
 		this.downtime = audioctx.currentTime;
 		if (this.vowel.isDown()) {
@@ -211,6 +214,7 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	up() {
+console.log('S up');
 		this.downing = false;
 		this.stop();
 		if (this.vowel.isDown()) {
@@ -219,6 +223,7 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	onVowelDown() {
+console.log('S onVowelDown');
 		if (Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
 			setTimeout(()=> {
 				this.stop();
@@ -231,6 +236,7 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	play() {
+console.log('S play');
 		this.playing = true;
 		this.voice.play_eg();
 		if (this.vowel.isDown()

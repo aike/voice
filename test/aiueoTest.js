@@ -71,26 +71,26 @@ describe('母音テストプレイ', ()=> {
 		});
 	});
 
-	describe('母音を切らずに発音（座標指定）', ()=> {
-		it ('h', (done)=> {
-			seq.aiueoTenutoPos(h,  v, done);
-		});
-		it ('s', (done)=> {
-			seq.aiueoTenutoPos(s,  v, done);
-		});
-		it ('sh', (done)=> {
-			seq.aiueoTenutoPos(sh, v, done);
-		});
-		it ('ts', (done)=> {
-			seq.aiueoTenutoPos(ts, v, done);
-		});
-		it ('k', (done)=> {
-			seq.aiueoTenutoPos(k,  v, done);
-		});
-		it ('p', (done)=> {
-			seq.aiueoTenutoPos(p,  v, done);
-		});
-	});
+	// describe('母音を切らずに発音（座標指定）', ()=> {
+	// 	it ('h', (done)=> {
+	// 		seq.aiueoTenutoPos(h,  v, done);
+	// 	});
+	// 	it ('s', (done)=> {
+	// 		seq.aiueoTenutoPos(s,  v, done);
+	// 	});
+	// 	it ('sh', (done)=> {
+	// 		seq.aiueoTenutoPos(sh, v, done);
+	// 	});
+	// 	it ('ts', (done)=> {
+	// 		seq.aiueoTenutoPos(ts, v, done);
+	// 	});
+	// 	it ('k', (done)=> {
+	// 		seq.aiueoTenutoPos(k,  v, done);
+	// 	});
+	// 	it ('p', (done)=> {
+	// 		seq.aiueoTenutoPos(p,  v, done);
+	// 	});
+	// });
 
 	after(()=> {
 
