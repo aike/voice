@@ -90,7 +90,9 @@ class UI {
 		this.context.stroke();
 
 		// ラベル
-		this.context.font = "16px 'Times New Roman'";
+		console.log('scale=' + this.scale);
+		var fontsize = String(Math.floor(14 * this.scale));
+		this.context.font = fontsize + "px 'Times New Roman'";
 		this.context.fillText("a", 250 * this.scale + this.ox,  184 * this.scale + this.oy);
 		this.context.fillText("i",  75 * this.scale + this.ox,   73 * this.scale + this.oy);
 		this.context.fillText("u",  71 * this.scale + this.ox,  184 * this.scale + this.oy);
