@@ -44,7 +44,7 @@ console.log('pad down');
 			this.posy = Math.min(Math.max(y, 0), 1);
 			this.voice.filter.F1.frequency.value = this.posx * 1000;
 			this.voice.filter.F2.frequency.value = this.posy * 3000;
-		});
+		},100);
 	}
 
 	downFreq(f1, f2)
