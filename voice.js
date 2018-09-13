@@ -77,8 +77,8 @@ class Voice
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
         this.level = 0.5;
-        this.eg_t=[0, 0.01];
-        this.eg_a=[0, 1  ];
+        this.eg_t=[0, 0.09, 0.1];
+        this.eg_a=[0, 0,      1];
         break;
       case "h":
         this.osc = noise;

@@ -64,9 +64,7 @@ console.log('pad up');
 
 	play() {
 		this.playing = true;
-		setTimeout(()=>{
-			this.voice.play_eg();
-		}, 100);
+		this.voice.play_eg();
 	}
 
 	stop() {
