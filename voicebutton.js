@@ -243,6 +243,7 @@ console.log('S onVowelDown');
 
 	play() {
 console.log('S play');
+console.log(this.voice.consoFilter.frequency.value);
 		this.playing = true;
 		this.voice.play_eg();
 		if (this.vowel.isDown()
