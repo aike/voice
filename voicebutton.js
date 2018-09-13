@@ -236,7 +236,7 @@ console.log('S onVowelDown');
 			setTimeout(()=>{
 				console.log('here 2');
 				this.stop();
-			}, 200);
+			}, 300);
 			this.vowel.play();			
 		}
 	}
@@ -250,7 +250,7 @@ console.log('S play');
 			setTimeout(()=> {
 				setTimeout(()=>{
 					this.stop();
-				}, 200);
+				}, 300);
 				this.vowel.play();
 			}, this.consotime);
 		}

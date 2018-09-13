@@ -202,5 +202,17 @@ class Voice
     this.gain.gain.setValueAtTime(0.0000001, audioctx.currentTime);
     //this.gain.gain.value = 0.0000001;
   }
+
+  stop_eg()
+  {
+    var t0 = audioctx.currentTime;
+    this.gain.gain.setValueAtTime(this.level, audioctx.currentTime);
+    for (let i = 0; i < this.eg_t.length - 1; i++) {
+      this.gain.gain.setTargetAtTime(
+        this.eg_a[i + 1] * this.level + 0.0000001,
+        t0 + this.eg_t[i],
+        (this.eg_t[i + 1] - this.eg_t[i]) / 10);
+    }    
+  }
 }
 
