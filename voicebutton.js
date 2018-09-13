@@ -64,7 +64,9 @@ console.log('pad up');
 
 	play() {
 		this.playing = true;
-		this.voice.play_eg();
+		setTimeout(()=>{
+			this.voice.play_eg();
+		}, 100);
 	}
 
 	stop() {
@@ -230,7 +232,11 @@ console.log('S onVowelDown');
 				this.vowel.play();
 			}, this.consotime);
 		} else {
-			this.stop();
+				console.log('here 1');
+			setTimeout(()=>{
+				console.log('here 2');
+				this.stop();
+			}, 200);
 			this.vowel.play();			
 		}
 	}
@@ -242,7 +248,9 @@ console.log('S play');
 		if (this.vowel.isDown()
 			&& Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
 			setTimeout(()=> {
-				this.stop();
+				setTimeout(()=>{
+					this.stop();
+				}, 200);
 				this.vowel.play();
 			}, this.consotime);
 		}
