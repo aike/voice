@@ -102,7 +102,7 @@ class Voice
         this.osc.connect(this.gain);
         this.gain.connect(audioctx.destination);
         this.level = 0.03;
-        this.eg_t=[0, 0.05, 0.20, 0.3];
+        this.eg_t=[0, 0.05, 0.20, 1.5];
         this.eg_a=[0, 0,    1,    1];
         break;
       case "sy":
@@ -117,7 +117,7 @@ class Voice
         this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
         this.level = 0.03;
-        this.eg_t=[0, 0.05, 0.20, 0.3];
+        this.eg_t=[0, 0.05, 0.20, 1.5];
         this.eg_a=[0, 0,    1,    1];
         break;
       case "t":
