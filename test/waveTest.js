@@ -4,8 +4,14 @@ mocha.timeout(15000);
 describe('母音テストプレイ', ()=> {
 	var v,h,s,sh,ts,k,p;
 	var seq;
+	var input, rec;
 
 	before(()=> {
+		rec = new Recorder(input,{numChannels:1})
+		rec.clear();
+		rec.record();
+		rec.stop();
+
 		v = new VoicePad(new Voice("a"));
 		h = new Htype_VoiceButton("h", new Voice("h"));
 		v.addConso(h);
