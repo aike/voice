@@ -18,17 +18,12 @@ class VoicePad
 	}
 
 	down(x, y) {
-console.log('pad down');		
 		this.downing = true;
 		this.downtime = audioctx.currentTime;
 		this.posx = Math.min(Math.max(x, 0.0), 1.0);
 		this.posy = Math.min(Math.max(y, 0.0), 1.0);
-		this.voice.filter.F1.frequency.value = this.posx * 1000;
-		this.voice.filter.F2.frequency.value = this.posy * 3000;
-
-		console.log("in = " + x + " " + y);
-		console.log("freq = " + (this.posx * 1000.0) + " " + (this.posy * 3000.0));
-
+		this.voice.filter.F1.frequency.setValueAtTime(this.posx * 1000, audioctx.currentTime);
+		this.voice.filter.F2.frequency.setValueAtTime(this.posy * 3000, audioctx.currentTime);
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
 				this.consos[i].onVowelDown();
@@ -39,12 +34,10 @@ console.log('pad down');
 	}
 
 	move(x, y) {
-		setTimeout(()=>{
-			this.posx = Math.min(Math.max(x, 0), 1);
-			this.posy = Math.min(Math.max(y, 0), 1);
-			this.voice.filter.F1.frequency.value = this.posx * 1000;
-			this.voice.filter.F2.frequency.value = this.posy * 3000;
-		},100);
+		this.posx = Math.min(Math.max(x, 0), 1);
+		this.posy = Math.min(Math.max(y, 0), 1);
+		this.voice.filter.F1.frequency.setValueAtTime(this.posx * 1000, audioctx.currentTime);
+		this.voice.filter.F2.frequency.setValueAtTime(this.posy * 3000, audioctx.currentTime);
 	}
 
 	downFreq(f1, f2)
@@ -59,14 +52,14 @@ console.log('pad down');
 
 
 	up() {
-console.log('pad up');		
 		this.downing = false;
 		this.stop();
 	}
 
 	play() {
 		this.playing = true;
-		this.voice.play_eg();
+//		this.voice.play_eg();
+		this.voice.play();
 	}
 
 	stop() {
@@ -206,7 +199,6 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	down() {
-console.log('S down');
 		this.downing = true;
 		this.downtime = audioctx.currentTime;
 		if (this.vowel.isDown()) {
@@ -216,7 +208,6 @@ console.log('S down');
 	}
 
 	up() {
-console.log('S up');
 		this.downing = false;
 		this.stop();
 		if (this.vowel.isDown()) {
@@ -225,16 +216,13 @@ console.log('S up');
 	}
 
 	onVowelDown() {
-console.log('S onVowelDown');
 		if (Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
 			setTimeout(()=> {
 				this.stop();
 				this.vowel.play();
 			}, this.consotime);
 		} else {
-				console.log('here 1');
 			setTimeout(()=>{
-				console.log('here 2');
 				this.stop();
 			}, 300);
 			this.vowel.play();			
@@ -242,8 +230,6 @@ console.log('S onVowelDown');
 	}
 
 	play() {
-console.log('S play');
-console.log(this.voice.consoFilter.frequency.value);
 		this.playing = true;
 		this.voice.play_eg();
 		if (this.vowel.isDown()

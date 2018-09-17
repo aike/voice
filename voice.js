@@ -32,6 +32,27 @@ class Noise
 
 var noise = new Noise();
 
+class LPFNoise extends Noise
+{
+  constructor()
+  {
+    super();
+    this.buf = audioctx.createBuffer(1, audioctx.sampleRate, audioctx.sampleRate);
+    var data = this.buf.getChannelData(0);
+    data[0] = Math.random() * 2 - 1;
+    for (var i = 1; i < this.buf.length; i++) {
+      data[i] = ((Math.random() * 2 - 1) + 0.98 * data[i - 1]) * 0.5;
+    }
+    this.osc = audioctx.createBufferSource();
+    this.osc.buffer = this.buf;
+    this.osc.loop = true;
+    this.init = false;
+  }
+}
+
+var lpf_noise = new LPFNoise();
+
+
 class VowelFilter
 {
   constructor(){
@@ -81,7 +102,7 @@ class Voice
         this.eg_a=[0, 0,      1];
         break;
       case "h":
-        this.osc = noise;
+        this.osc = lpf_noise;
         this.gain = audioctx.createGain();
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.gain);
@@ -99,7 +120,8 @@ class Voice
         this.consoFilter.Q.value = 5;
         this.gain = audioctx.createGain();
         this.gain.gain.value = 0.0001;
-        this.osc.connect(this.gain);
+        this.osc.connect(this.consoFilter);
+        this.consoFilter.connect(this.gain);
         this.gain.connect(audioctx.destination);
         this.level = 0.03;
         this.eg_t=[0, 0.05, 0.20, 0.3];
@@ -176,7 +198,6 @@ class Voice
       this.init = true;
     }
     this.gain.gain.setValueAtTime(this.level, audioctx.currentTime);
-    //this.gain.gain.value = this.level;
   }
 
   play_eg()
@@ -187,7 +208,6 @@ class Voice
     }
     var t0 = audioctx.currentTime;
     this.gain.gain.setValueAtTime(0.0000001, audioctx.currentTime);
-    //this.gain.gain.value = 0.0000001;
     for (let i = 0; i < this.eg_t.length - 1; i++) {
       this.gain.gain.setTargetAtTime(
         this.eg_a[i + 1] * this.level,
@@ -200,7 +220,6 @@ class Voice
   {
     this.gain.gain.cancelScheduledValues(audioctx.currentTime);
     this.gain.gain.setValueAtTime(0.0000001, audioctx.currentTime);
-    //this.gain.gain.value = 0.0000001;
   }
 
   stop_eg()
