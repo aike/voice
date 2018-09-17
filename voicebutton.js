@@ -58,8 +58,8 @@ class VoicePad
 
 	play() {
 		this.playing = true;
-//		this.voice.play_eg();
 		this.voice.play();
+		//this.voice.play_eg();
 	}
 
 	stop() {
@@ -196,6 +196,8 @@ class Stype_VoiceButton extends VoiceButton
 {
 	constructor(s, voice) {
 		super(s, voice);
+		this.consotime = 150;
+		this.overwraptime = 0;
 	}
 
 	down() {
@@ -216,7 +218,7 @@ class Stype_VoiceButton extends VoiceButton
 	}
 
 	onVowelDown() {
-		if (Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
+		if (Math.abs(this.vowel.downtime - this.downtime) < 0.05) {
 			setTimeout(()=> {
 				this.stop();
 				this.vowel.play();
@@ -224,7 +226,7 @@ class Stype_VoiceButton extends VoiceButton
 		} else {
 			setTimeout(()=>{
 				this.stop();
-			}, 300);
+			}, this.overwraptime);
 			this.vowel.play();			
 		}
 	}
@@ -233,11 +235,11 @@ class Stype_VoiceButton extends VoiceButton
 		this.playing = true;
 		this.voice.play_eg();
 		if (this.vowel.isDown()
-			&& Math.abs(this.vowel.downtime - this.downtime) < 0.005) {
+			&& Math.abs(this.vowel.downtime - this.downtime) < 0.05) {
 			setTimeout(()=> {
 				setTimeout(()=>{
 					this.stop();
-				}, 300);
+				}, this.overwraptime);
 				this.vowel.play();
 			}, this.consotime);
 		}

@@ -103,8 +103,8 @@ class Voice
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
         this.level = 0.5;
-        this.eg_t=[0, 0.09, 0.1];
-        this.eg_a=[0, 0,      1];
+        this.eg_t=[0, 0.01, 0.1];
+        this.eg_a=[0, 1,      1];
         break;
       case "h":
         this.osc = lpf_noise;
@@ -128,7 +128,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(master_out);
-        this.level = 0.03;
+        this.level = 0.1;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;
@@ -143,7 +143,7 @@ class Voice
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
         this.gain.connect(master_out);
-        this.level = 0.03;
+        this.level = 0.1;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
         break;

@@ -113,12 +113,12 @@ describe('出力波形チェック', ()=> {
 		// it ('h', (done)=> {
 		// 	seq.aiueoTenuto(h,  v, done);
 		// });
-		it ('s', (done)=> {
-			seq.aiueoTenuto(s,  v, done);
-		});
-		// it ('sh', (done)=> {
-		// 	seq.aiueoTenuto(sh, v, done);
+		// it ('s', (done)=> {
+		// 	seq.aiueoTenuto(s,  v, done);
 		// });
+		it ('sh', (done)=> {
+			seq.aiueoTenuto(sh, v, done);
+		});
 		// it ('ts', (done)=> {
 		// 	seq.aiueoTenuto(ts, v, done);
 		// });
