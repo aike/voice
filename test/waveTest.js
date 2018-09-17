@@ -1,16 +1,62 @@
 var assert = chai.assert;
 mocha.timeout(15000);
 
-describe('母音テストプレイ', ()=> {
+function createDownloadLink(blob) {
+ 
+    var url = URL.createObjectURL(blob);
+    var au = document.createElement('audio');
+    var div = document.createElement('div');
+    var link = document.createElement('a');
+ 
+    //add controls to the <audio> element
+    au.controls = true;
+    au.src = url;
+ 
+    //link the a element to the blob
+    link.href = url;
+    link.download = 'aiueo.wav';
+    link.innerHTML = link.download;
+ 
+    //add the new audio and a elements to the li element
+//    div.appendChild(au);
+    div.appendChild(link);
+ 
+    //add the li element to the ordered list
+    document.querySelector('#wavlink').appendChild(div);
+}
+
+function drawWave(buf) {
+	var ch = buf[0];
+
+	var canvas = document.querySelector('#wavecanvas');
+	var canvasContext = canvas.getContext('2d');
+	canvasContext.fillStyle = 'rgb(20, 20, 100)';
+	canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+	canvasContext.strokeStyle = 'rgb(230, 230, 255)';
+    canvasContext.beginPath();
+    for (var i = 0, len = ch.length; i < len; i++) {
+        var x = (i / len) * canvas.width;
+        var y = (1 - ch[i] * 1.5) * canvas.height - canvas.height / 2;
+        if (i === 0) {
+            canvasContext.moveTo(x, y);
+        } else {
+            canvasContext.lineTo(x, y);
+        }
+    }
+    canvasContext.stroke();	
+}
+
+
+describe('出力波形チェック', ()=> {
 	var v,h,s,sh,ts,k,p;
 	var seq;
-	var input, rec;
+	var rec;
 
 	before(()=> {
-		rec = new Recorder(input,{numChannels:1})
+		rec = new Recorder(master_out,{numChannels:1})
 		rec.clear();
 		rec.record();
-		rec.stop();
 
 		v = new VoicePad(new Voice("a"));
 		h = new Htype_VoiceButton("h", new Voice("h"));
@@ -35,72 +81,55 @@ describe('母音テストプレイ', ()=> {
 		seq = new InputSequence();
 	});
 
-	describe('母音を都度切って発音', ()=> {
-		it ('h', (done)=> {
-			seq.aiueoStaccato(h,  v, done);
-		});
-		it ('s', (done)=> {
-			seq.aiueoStaccato(s,  v, done);
-		});
-		it ('sh', (done)=> {
-			seq.aiueoStaccato(sh, v, done);
-		});
-		it ('ts', (done)=> {
-			seq.aiueoStaccato(ts, v, done);
-		});
-		it ('k', (done)=> {
-			seq.aiueoStaccato(k,  v, done);
-		});
-		it ('p', (done)=> {
-			seq.aiueoStaccato(p,  v, done);
-		});
+	after(()=> {
+		rec.stop();
+		rec.getBuffer((buf)=>{ drawWave(buf); });
+	    rec.exportWAV(createDownloadLink);
 	});
 
-	describe('母音を切らずに発音', ()=> {
-		it ('h', (done)=> {
-			seq.aiueoTenuto(h,  v, done);
-		});
-		it ('s', (done)=> {
-			seq.aiueoTenuto(s,  v, done);
-		});
-		it ('sh', (done)=> {
-			seq.aiueoTenuto(sh, v, done);
-		});
-		it ('ts', (done)=> {
-			seq.aiueoTenuto(ts, v, done);
-		});
-		it ('k', (done)=> {
-			seq.aiueoTenuto(k,  v, done);
-		});
-		it ('p', (done)=> {
-			seq.aiueoTenuto(p,  v, done);
-		});
-	});
 
-	// describe('母音を切らずに発音（座標指定）', ()=> {
+	// describe('母音を都度切って発音', ()=> {
 	// 	it ('h', (done)=> {
-	// 		seq.aiueoTenutoPos(h,  v, done);
+	// 		seq.aiueoStaccato(h,  v, done);
 	// 	});
 	// 	it ('s', (done)=> {
-	// 		seq.aiueoTenutoPos(s,  v, done);
+	// 		seq.aiueoStaccato(s,  v, done);
 	// 	});
 	// 	it ('sh', (done)=> {
-	// 		seq.aiueoTenutoPos(sh, v, done);
+	// 		seq.aiueoStaccato(sh, v, done);
 	// 	});
 	// 	it ('ts', (done)=> {
-	// 		seq.aiueoTenutoPos(ts, v, done);
+	// 		seq.aiueoStaccato(ts, v, done);
 	// 	});
 	// 	it ('k', (done)=> {
-	// 		seq.aiueoTenutoPos(k,  v, done);
+	// 		seq.aiueoStaccato(k,  v, done);
 	// 	});
 	// 	it ('p', (done)=> {
-	// 		seq.aiueoTenutoPos(p,  v, done);
+	// 		seq.aiueoStaccato(p,  v, done);
 	// 	});
 	// });
 
-	after(()=> {
-
+	describe('母音を切らずに発音', ()=> {
+		// it ('h', (done)=> {
+		// 	seq.aiueoTenuto(h,  v, done);
+		// });
+		it ('s', (done)=> {
+			seq.aiueoTenuto(s,  v, done);
+		});
+		// it ('sh', (done)=> {
+		// 	seq.aiueoTenuto(sh, v, done);
+		// });
+		// it ('ts', (done)=> {
+		// 	seq.aiueoTenuto(ts, v, done);
+		// });
+		// it ('k', (done)=> {
+		// 	seq.aiueoTenuto(k,  v, done);
+		// });
+		// it ('p', (done)=> {
+		// 	seq.aiueoTenuto(p,  v, done);
+		// });
 	});
+
 });
 
 
@@ -215,48 +244,5 @@ class InputSequence
 		}, this.holdTime);
 	}
 
-	// 母音を切らずに発音(座標指定)
-	aiueoTenutoPos(c, v, done) {
-		console.log('AIUEO start ' + c.char);
-		c.init();
-		v.init();
-
-		c.down();
-		v.down(0.8, 0.4);	// a
-		setTimeout(()=>{
-			c.up();
-			setTimeout(()=>{
-				c.down();
-				v.move(0.3, 0.8);	// i
-				setTimeout(()=>{
-					c.up();
-					setTimeout(()=>{
-						c.down();
-						v.move(0.2, 0.4);	// u
-						setTimeout(()=>{
-							c.up();
-							setTimeout(()=>{
-								c.down();
-								v.move(0.5, 0.7);	// e
-								setTimeout(()=>{
-									c.up();
-									setTimeout(()=>{
-										c.down();
-										v.move(0.6, 0.25);	// o
-										setTimeout(()=>{
-											c.up();
-											v.up();
-											console.log('AIUEO done ' + c.char);
-											setTimeout(()=>{done();}, this.endInterval);
-										}, this.holdTime);
-									}, this.interval);
-								}, this.holdTime);
-							}, this.interval);
-						}, this.holdTime);
-					}, this.interval);
-				}, this.holdTime);
-			}, this.interval);
-		}, this.holdTime);
-	}
 }
 

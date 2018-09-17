@@ -6,6 +6,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.2.5/mocha.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.0.0/chai.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.2.5/mocha.css">
+  <style>
+  #wavlink { margin-left: 100px; }
+  #wavecanvas { margin-left: 100px; }
+  </style>
 </head>
 <body>
   <div id="mocha"></div>
@@ -25,5 +29,7 @@
     mocha.checkLeaks();
     mocha.run();
   </script>
+  <canvas id="wavecanvas" width="800" height="240"></canvas>
+  <div id="wavlink"></div>
 </body>
 </html>

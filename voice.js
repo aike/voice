@@ -1,6 +1,11 @@
 window.AudioContext = window.webkitAudioContext || window.AudioContext;
 var audioctx = new AudioContext();
 
+var master_out = audioctx.createGain();
+master_out.gain.value = 1.0;
+master_out.connect(audioctx.destination);
+
+
 class Noise
 {
   constructor()
@@ -66,8 +71,8 @@ class VowelFilter
     this.F2.frequency.value = 1500;
     this.F2.Q.value = 10;
 
-    this.F1.connect(audioctx.destination);
-    this.F2.connect(audioctx.destination);
+    this.F1.connect(master_out);
+    this.F2.connect(master_out);
   }
 }
 
@@ -122,7 +127,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
-        this.gain.connect(audioctx.destination);
+        this.gain.connect(master_out);
         this.level = 0.03;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
@@ -137,7 +142,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
-        this.gain.connect(audioctx.destination);
+        this.gain.connect(master_out);
         this.level = 0.03;
         this.eg_t=[0, 0.05, 0.20, 0.3];
         this.eg_a=[0, 0,    1,    1];
@@ -152,7 +157,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
-        this.gain.connect(audioctx.destination);
+        this.gain.connect(master_out);
         this.level = 0.8;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
@@ -167,7 +172,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
-        this.gain.connect(audioctx.destination);
+        this.gain.connect(master_out);
         this.level = 0.5;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
@@ -182,7 +187,7 @@ class Voice
         this.gain.gain.value = 0.0001;
         this.osc.connect(this.consoFilter);
         this.consoFilter.connect(this.gain);
-        this.gain.connect(audioctx.destination);
+        this.gain.connect(master_out);
         this.level = 0.8;
         this.eg_t=[0, 0.01, 0.02];
         this.eg_a=[0,    1,    0];
