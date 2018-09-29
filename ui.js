@@ -7,20 +7,86 @@ class UI {
 		this.element = element;
 		this.context = element.getContext('2d');
 
-		this.vowel = new VoicePad(new Voice("a"));
+
+		// setup voice modules
+		window.AudioContext = window.webkitAudioContext || window.AudioContext;
+		this.audioContext = new AudioContext();
+
+		this.out = this.audioContext.createGain();
+		this.out.gain.value = 1.5;
+		this.out.connect(this.audioContext.destination);
+
+		var vf = new VowelFilter(this.audioContext, this.out);
+		var noise = new Noise(this.audioContext);
+		var fnoise = new LPFNoise(this.audioContext);
+
+		this.vowel = new VoicePad(new Voice(this.audioContext, "a", vf, noise, fnoise, this.out));
 		this.conso = {};
-		this.conso["h" ] = new Htype_VoiceButton("h" , new Voice("h" ));
-		this.conso["s" ] = new Stype_VoiceButton("s" , new Voice("s" ));
-		this.conso["sy"] = new Stype_VoiceButton("sy", new Voice("sy"));
-		this.conso["t" ] = new Ptype_VoiceButton("t" , new Voice("t" ));
-		this.conso["k" ] = new Ptype_VoiceButton("k" , new Voice("k" ));
-		this.conso["p" ] = new Ptype_VoiceButton("p" , new Voice("p" ));
+		this.conso["h" ] = new Htype_VoiceButton("h" , new Voice(this.audioContext, "h" ,  vf, noise, fnoise, this.out));
+		this.conso["s" ] = new Stype_VoiceButton("s" , new Voice(this.audioContext, "s" ,  vf, noise, fnoise, this.out));
+		this.conso["sy"] = new Stype_VoiceButton("sy", new Voice(this.audioContext, "sy",  vf, noise, fnoise, this.out));
+		this.conso["t" ] = new Ptype_VoiceButton("t" , new Voice(this.audioContext, "t" ,  vf, noise, fnoise, this.out));
+		this.conso["k" ] = new Ptype_VoiceButton("k" , new Voice(this.audioContext, "k" ,  vf, noise, fnoise, this.out));
+		this.conso["p" ] = new Ptype_VoiceButton("p" , new Voice(this.audioContext, "p" ,  vf, noise, fnoise, this.out));
 
 		for (var c in this.conso) {
 			this.vowel.addConso(this.conso[c]);
 			this.conso[c].addVowel(this.vowel);
 		}
+
+		this.getInitialData();
 	}
+
+	getInitialData()
+	{
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', './voicedata.json');
+		xhr.onload = () => {
+			const v = xhr.response.data.state.vowel_param;
+			this.vowel.voice.level   = v.level;
+			this.vowel.voice.attack  = v.attack;
+			this.vowel.voice.release = v.release;
+
+			const c = xhr.response.data.conso_params;
+			this.conso["h"].voice.level   = c["h"].level;
+			this.conso["h"].voice.attack  = c["h"].attack;
+			this.conso["h"].voice.hold    = c["h"].hold;
+			this.conso["h"].voice.release = c["h"].release;
+			this.conso["h"].voice.vdelay  = c["h"].vdelay;
+
+			this.conso["s"].voice.level   = c["s"].level;
+			this.conso["s"].voice.attack  = c["s"].attack;
+			this.conso["s"].voice.hold    = c["s"].hold;
+			this.conso["s"].voice.release = c["s"].release;
+			this.conso["s"].voice.vdelay  = c["s"].vdelay;
+
+			this.conso["sy"].voice.level   = c["sy"].level;
+			this.conso["sy"].voice.attack  = c["sy"].attack;
+			this.conso["sy"].voice.hold    = c["sy"].hold;
+			this.conso["sy"].voice.release = c["sy"].release;
+			this.conso["sy"].voice.vdelay  = c["sy"].vdelay;
+
+			this.conso["p"].voice.level   = c["p"].level;
+			this.conso["p"].voice.attack  = c["p"].attack;
+			this.conso["p"].voice.hold    = c["p"].hold;
+			this.conso["p"].voice.release = c["p"].release;
+			this.conso["p"].voice.vdelay  = c["p"].vdelay;
+
+			this.conso["k"].voice.level   = c["k"].level;
+			this.conso["k"].voice.attack  = c["k"].attack;
+			this.conso["k"].voice.hold    = c["k"].hold;
+			this.conso["k"].voice.release = c["k"].release;
+			this.conso["k"].voice.vdelay  = c["k"].vdelay;
+
+			this.conso["t"].voice.level   = c["t"].level;
+			this.conso["t"].voice.attack  = c["t"].attack;
+			this.conso["t"].voice.hold    = c["t"].hold;
+			this.conso["t"].voice.release = c["t"].release;
+			this.conso["t"].voice.vdelay  = c["t"].vdelay;
+		};
+		xhr.send();
+	}
+
 
 	setScale(scale)
 	{

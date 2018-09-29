@@ -2,6 +2,7 @@ class VoicePad
 {
 	constructor(voice) {
 		this.voice = voice;
+		this.ctx = voice.ctx;
 		this.downing = false;
 		this.playing = false;
 		this.posx = 0;
@@ -19,11 +20,13 @@ class VoicePad
 
 	down(x, y) {
 		this.downing = true;
-		this.downtime = audioctx.currentTime;
+		this.downtime = this.ctx.currentTime;
 		this.posx = Math.min(Math.max(x, 0.0), 1.0);
 		this.posy = Math.min(Math.max(y, 0.0), 1.0);
-		this.voice.filter.F1.frequency.setValueAtTime(this.posx * 1000, audioctx.currentTime);
-		this.voice.filter.F2.frequency.setValueAtTime(this.posy * 3000, audioctx.currentTime);
+		this.voice.f1 = this.posx * 1000;
+		this.voice.f2 = this.posy * 3000;
+		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
+		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
 				this.consos[i].onVowelDown();
@@ -36,8 +39,17 @@ class VoicePad
 	move(x, y) {
 		this.posx = Math.min(Math.max(x, 0), 1);
 		this.posy = Math.min(Math.max(y, 0), 1);
-		this.voice.filter.F1.frequency.setValueAtTime(this.posx * 1000, audioctx.currentTime);
-		this.voice.filter.F2.frequency.setValueAtTime(this.posy * 3000, audioctx.currentTime);
+		this.voice.f1 = this.posx * 1000;
+		this.voice.f2 = this.posy * 3000;
+		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
+		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
+	}
+
+	setFormantMove(pre_f1, pre_time1, pre_f2, pre_time2) {
+		this.voice.pre_f1 = pre_f1;
+		this.voice.pre_time1 = pre_time1;
+		this.voice.pre_f2 = pre_f2;
+		this.voice.pre_time2 = pre_time2;
 	}
 
 	downFreq(f1, f2)
@@ -58,13 +70,18 @@ class VoicePad
 
 	play() {
 		this.playing = true;
-		this.voice.play();
-		//this.voice.play_eg();
+		//this.voice.play();
+		this.voice.play_eg();
+	}
+
+	delayedPlay(delay) {
+		this.playing = true;
+		this.voice.play_delayed_eg(delay);
 	}
 
 	stop() {
 		this.playing = false;
-		this.voice.stop();
+		this.voice.stop_eg();
 	}
 
 	isDown() {
@@ -85,10 +102,10 @@ class VoiceButton
 {
 	constructor(s, voice) {
 		this.char = s;
+		this.ctx = voice.ctx;
 		this.vowel = null;
 		this.downing = false;
 		this.playing = false;
-		this.consotime = 100;
 		this.voice = voice;
 	}
 
@@ -115,7 +132,7 @@ class VoiceButton
 
 	stop() {
 		this.playing = false;
-		this.voice.stop();
+		this.voice.stop_eg();
 	}
 
 	isDown() {
@@ -129,17 +146,20 @@ class VoiceButton
 	addVowel(v) {
 		this.vowel = v;
 	}
+
+	isSameTimeDown() {
+		if (Math.abs(this.vowel.downtime - this.downtime) < 0.05) {
+			return true;
+		}
+		return false;
+	}
 }
 
 class Htype_VoiceButton extends VoiceButton
 {
-	constructor(s, voice) {
-		super(s, voice);
-	}
-
 	down() {
 		this.downing = true;
-		this.downtime = audioctx.currentTime;
+		this.downtime = this.ctx.currentTime;
 		if (this.vowel.isDown()) {
 			this.play();
 		}
@@ -157,27 +177,26 @@ class Htype_VoiceButton extends VoiceButton
 	play() {
 		this.playing = true;
 		this.voice.play_eg();
-		if (!this.vowel.isPlaying()) {
-			this.vowel.play();
-		}
+		this.vowel.delayedPlay(this.voice.vowel_delay);
 	}
 }
 
 class Ptype_VoiceButton extends VoiceButton
 {
-	constructor(s, voice) {
-		super(s, voice);
-	}
-
 	down() {
 		this.downing = true;
-		this.downtime = audioctx.currentTime;
+		this.downtime = this.ctx.currentTime;
 		if (this.vowel.isDown()) {
 			this.vowel.stop();
 			this.play();
 		}
 	}
 
+	up() {
+		this.downing = false;
+		this.playing = false;
+	}
+
 	onVowelDown() {
 		this.play();
 	}
@@ -185,64 +204,54 @@ class Ptype_VoiceButton extends VoiceButton
 	play() {
 		this.playing = true;
 		this.voice.play_eg();
-		setTimeout(()=> {
-			this.stop();
-			this.vowel.play();
-		}, this.consotime);
+		this.vowel.delayedPlay(this.voice.vowel_delay);
 	}
 }
 
 class Stype_VoiceButton extends VoiceButton
 {
-	constructor(s, voice) {
-		super(s, voice);
-		this.consotime = 150;
-		this.overwraptime = 0;
-	}
-
 	down() {
 		this.downing = true;
-		this.downtime = audioctx.currentTime;
+		this.downtime = this.ctx.currentTime;
 		if (this.vowel.isDown()) {
-			this.vowel.stop();
+			if (this.isSameTimeDown()) {
+				this.one_shot_play();
+			}
+		} else {
+			this.play();
 		}
-		this.play();
 	}
 
 	up() {
 		this.downing = false;
-		this.stop();
-		if (this.vowel.isDown()) {
-			this.vowel.play();
+		if (this.playing) {
+			this.stop();
 		}
 	}
 
 	onVowelDown() {
-		if (Math.abs(this.vowel.downtime - this.downtime) < 0.05) {
-			setTimeout(()=> {
-				this.stop();
-				this.vowel.play();
-			}, this.consotime);
+		if (this.isSameTimeDown()) {
+			this.one_shot_play();
 		} else {
-			setTimeout(()=>{
-				this.stop();
-			}, this.overwraptime);
-			this.vowel.play();			
+			this.stop();
+			this.vowel.delayedPlay(this.voice.vowel_delay);
 		}
 	}
 
 	play() {
 		this.playing = true;
 		this.voice.play_eg();
-		if (this.vowel.isDown()
-			&& Math.abs(this.vowel.downtime - this.downtime) < 0.05) {
-			setTimeout(()=> {
-				setTimeout(()=>{
-					this.stop();
-				}, this.overwraptime);
-				this.vowel.play();
-			}, this.consotime);
-		}
+	}
+
+	one_shot_play() {
+		this.playing = true;
+		this.voice.play_eg();
+		setTimeout(()=> {
+			this.stop();
+			this.vowel.delayedPlay(this.voice.vowel_delay);
+		}, (this.voice.attack + this.voice.hold) * 1000);
 	}
 }
 
+//export default VoiceButton;
+//export { VoicePad, Htype_VoiceButton, Ptype_VoiceButton, Stype_VoiceButton };

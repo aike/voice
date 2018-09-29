@@ -110,6 +110,8 @@ window.addEventListener("load", () =>
 
 	app = new App();
 	app.setEvent(canvas1);
+
+	window.onresize();
 });
 
 
