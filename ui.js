@@ -42,47 +42,50 @@ class UI {
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', './voicedata.json');
 		xhr.onload = () => {
-			const v = xhr.response.data.state.vowel_param;
-			this.vowel.voice.level   = v.level;
-			this.vowel.voice.attack  = v.attack;
-			this.vowel.voice.release = v.release;
+			const json = JSON.parse(xhr.response);
 
-			const c = xhr.response.data.conso_params;
-			this.conso["h"].voice.level   = c["h"].level;
-			this.conso["h"].voice.attack  = c["h"].attack;
-			this.conso["h"].voice.hold    = c["h"].hold;
-			this.conso["h"].voice.release = c["h"].release;
-			this.conso["h"].voice.vdelay  = c["h"].vdelay;
+			const v = json.state.vowel_param;
+			this.vowel.voice.level   = v.level   / 100.0;
+			this.vowel.voice.attack  = v.attack  / 1000.0;
+			this.vowel.voice.release = v.release / 1000.0;
 
-			this.conso["s"].voice.level   = c["s"].level;
-			this.conso["s"].voice.attack  = c["s"].attack;
-			this.conso["s"].voice.hold    = c["s"].hold;
-			this.conso["s"].voice.release = c["s"].release;
-			this.conso["s"].voice.vdelay  = c["s"].vdelay;
+			const c = json.conso_params;
+			this.conso["h"].voice.level   = c["h"].level   / 100.0;
+			this.conso["h"].voice.attack  = c["h"].attack  / 1000.0;
+			this.conso["h"].voice.hold    = c["h"].hold    / 1000.0;
+			this.conso["h"].voice.release = c["h"].release / 1000.0;
+			this.conso["h"].voice.vdelay  = c["h"].vdelay  / 1000.0;
 
-			this.conso["sy"].voice.level   = c["sy"].level;
-			this.conso["sy"].voice.attack  = c["sy"].attack;
-			this.conso["sy"].voice.hold    = c["sy"].hold;
-			this.conso["sy"].voice.release = c["sy"].release;
-			this.conso["sy"].voice.vdelay  = c["sy"].vdelay;
+			this.conso["s"].voice.level   = c["s"].level   / 100.0;
+			this.conso["s"].voice.attack  = c["s"].attack  / 1000.0;
+			this.conso["s"].voice.hold    = c["s"].hold    / 1000.0;
+			this.conso["s"].voice.release = c["s"].release / 1000.0;
+			this.conso["s"].voice.vdelay  = c["s"].vdelay  / 1000.0;
 
-			this.conso["p"].voice.level   = c["p"].level;
-			this.conso["p"].voice.attack  = c["p"].attack;
-			this.conso["p"].voice.hold    = c["p"].hold;
-			this.conso["p"].voice.release = c["p"].release;
-			this.conso["p"].voice.vdelay  = c["p"].vdelay;
+			this.conso["sy"].voice.level   = c["sy"].level   / 100.0;
+			this.conso["sy"].voice.attack  = c["sy"].attack  / 1000.0;
+			this.conso["sy"].voice.hold    = c["sy"].hold    / 1000.0;
+			this.conso["sy"].voice.release = c["sy"].release / 1000.0;
+			this.conso["sy"].voice.vdelay  = c["sy"].vdelay  / 1000.0;
 
-			this.conso["k"].voice.level   = c["k"].level;
-			this.conso["k"].voice.attack  = c["k"].attack;
-			this.conso["k"].voice.hold    = c["k"].hold;
-			this.conso["k"].voice.release = c["k"].release;
-			this.conso["k"].voice.vdelay  = c["k"].vdelay;
+			this.conso["p"].voice.level   = c["p"].level   / 100.0;
+			this.conso["p"].voice.attack  = c["p"].attack  / 1000.0;
+			this.conso["p"].voice.hold    = c["p"].hold    / 1000.0;
+			this.conso["p"].voice.release = c["p"].release / 1000.0;
+			this.conso["p"].voice.vdelay  = c["p"].vdelay  / 1000.0;
 
-			this.conso["t"].voice.level   = c["t"].level;
-			this.conso["t"].voice.attack  = c["t"].attack;
-			this.conso["t"].voice.hold    = c["t"].hold;
-			this.conso["t"].voice.release = c["t"].release;
-			this.conso["t"].voice.vdelay  = c["t"].vdelay;
+			this.conso["k"].voice.level   = c["k"].level   / 100.0;
+			this.conso["k"].voice.attack  = c["k"].attack  / 1000.0;
+			this.conso["k"].voice.hold    = c["k"].hold    / 1000.0;
+			this.conso["k"].voice.release = c["k"].release / 1000.0;
+			this.conso["k"].voice.vdelay  = c["k"].vdelay  / 1000.0;
+
+			this.conso["t"].voice.level   = c["t"].level   / 100.0;
+			this.conso["t"].voice.attack  = c["t"].attack  / 1000.0;
+			this.conso["t"].voice.hold    = c["t"].hold    / 1000.0;
+			this.conso["t"].voice.release = c["t"].release / 1000.0;
+			this.conso["t"].voice.vdelay  = c["t"].vdelay  / 1000.0;
+
 		};
 		xhr.send();
 	}

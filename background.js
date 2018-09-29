@@ -165,23 +165,15 @@ class Background {
 	    var rsize = 30 * this.scale;
 		for (var i in this.buttons)
 		{
-//			console.log(i);
-//			console.log(x + " " + this.buttons[i].x + " " + rsize);
-//			console.log(y + " " + this.buttons[i].y + " " + rsize);
-
-			console.log('======================');
 			if ((x > this.buttons[i].x - rsize) && (x < this.buttons[i].x + rsize)
 			 && (y > this.buttons[i].y - rsize) && (y < this.buttons[i].y + rsize)) {
 			 	if (found >= 0) {
 			 		if (this.buttons[i].x < this.buttons[found].x) {
 				 		found = i;
-				 		console.log('found:' + this.buttons[i].char);
 				 	}
 			 	} else {
 			 		found = i;
-			 		console.log('found:' + this.buttons[i].char);				 		
 				}
-//				return this.buttons[i].char;
 			}
 		}
 		if (found >= 0) {
@@ -207,7 +199,6 @@ class Background {
 	    this.context.stroke();
 
 	    this.buttons.push({x:leftX + x * this.scale, y:this.oy + (y-10) * this.scale, char:char, consotype:consotype});
-	    console.log(this.buttons);
 	}
 
 }
