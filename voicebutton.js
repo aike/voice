@@ -248,7 +248,9 @@ class Stype_VoiceButton extends VoiceButton
 		this.voice.play_eg();
 		setTimeout(()=> {
 			this.stop();
-			this.vowel.delayedPlay(this.voice.vowel_delay);
+			if (this.vowel.isDown()) {
+				this.vowel.delayedPlay(this.voice.vowel_delay);
+			}
 		}, (this.voice.attack + this.voice.hold) * 1000);
 	}
 }
