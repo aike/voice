@@ -2,35 +2,35 @@
   "state": {
     "conso_type": "h",
     "conso_start": 0,
-    "conso_end": 0.5,
-    "vowel_start": 0.2,
-    "vowel_end": 0.8,
+    "conso_end": 0.18,
+    "vowel_start": 0.08,
+    "vowel_end": 0.36,
     "conso_param": {
       "level": 80,
-      "attack": 0,
+      "attack": 52,
       "hold": 40,
       "release": 10,
-      "vdelay": 20
+      "vdelay": 120
     },
     "vowel_param": {
       "level": 80,
       "attack": 10,
       "release": 10,
-      "pre_f1": 600,
       "pre_time1": 50,
-      "pre_f2": 1600,
-      "pre_time2": 100,
+      "pre_f1": 796,
       "f1": 800,
+      "pre_time2": 100,
+      "pre_f2": 1156,
       "f2": 1200
     }
   },
   "conso_params": {
     "h": {
       "level": 80,
-      "attack": 0,
+      "attack": 52,
       "hold": 40,
       "release": 10,
-      "vdelay": 20
+      "vdelay": 120
     },
     "s": {
       "level": 80,
