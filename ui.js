@@ -100,7 +100,7 @@ class UI {
 	{
 		this.buttons = [];
 
-		this.ox = 350 * this.scale;
+		this.ox = 400 * this.scale;
 		this.oy = 80 * this.scale;
 		this.gridx = 60 * this.scale;
 		this.gridy = 50 * this.scale;
@@ -212,6 +212,8 @@ class UI {
 		this.addButton( 110,  90, "s");
 		this.addButton( 180,  90, "sy");
 		this.addButton( 110, 160, "t");
+		this.addButton( 180, 160, "c");
+		this.addButton( 250, 160, "ts");
 		this.addButton( 110, 230, "h");
 		this.addButton( 110, 300, "p");
 	}
