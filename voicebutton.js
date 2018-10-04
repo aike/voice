@@ -27,6 +27,8 @@ class VoicePad
 		this.voice.f2 = this.posy * 3000;
 		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
+		this.voice.filter.F1.Q.setValueAtTime(this.voice.f1 * 0.02, this.ctx.currentTime);
+		this.voice.filter.F2.Q.setValueAtTime(this.voice.f2 * 0.02, this.ctx.currentTime);
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
 				this.consos[i].onVowelDown();
@@ -43,6 +45,8 @@ class VoicePad
 		this.voice.f2 = this.posy * 3000;
 		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
+		this.voice.filter.F1.Q.setValueAtTime(this.voice.f1 * 0.02, this.ctx.currentTime);
+		this.voice.filter.F2.Q.setValueAtTime(this.voice.f2 * 0.02, this.ctx.currentTime);
 	}
 
 	setFormantMove(pre_f1, pre_time1, pre_f2, pre_time2) {

@@ -51,12 +51,12 @@ class VowelFilter
     this.F1 = ctx.createBiquadFilter();
     this.F1.type = "bandpass";
     this.F1.frequency.value = 500;
-    this.F1.Q.value = 10;
+    this.F1.Q.value = this.F1.frequency.value * 0.02;
 
     this.F2 = ctx.createBiquadFilter();
     this.F2.type = "bandpass";
     this.F2.frequency.value = 1500;
-    this.F2.Q.value = 10;
+    this.F2.Q.value = this.F2.frequency.value * 0.02;
 
     this.F1.connect(dest);
     this.F2.connect(dest);
@@ -231,11 +231,15 @@ class Voice
     const t0 = this.ctx.currentTime + offset;
     if ((this.pre_time1 != null) && (this.pre_time1 > 0)) {
       this.filter.F1.frequency.setValueAtTime(this.pre_f1, t0);
+      this.filter.F1.Q.setValueAtTime(this.pre_f1 * 0.02, t0);
       this.filter.F1.frequency.setTargetAtTime(this.f1, t0, this.pre_time1);
+      this.filter.F1.Q.setTargetAtTime(this.f1 * 0.02, t0, this.pre_time1);
     }
     if ((this.pre_time2 != null) && (this.pre_time2 > 0)) {
       this.filter.F2.frequency.setValueAtTime(this.pre_f2, t0);
+      this.filter.F2.Q.setValueAtTime(this.pre_f2 * 0.02, t0);
       this.filter.F2.frequency.setTargetAtTime(this.f2, t0, this.pre_time2);
+      this.filter.F2.Q.setTargetAtTime(this.f2 * 0.02, t0, this.pre_time2);
     }
   }
 
