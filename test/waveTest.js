@@ -2,25 +2,25 @@ var assert = chai.assert;
 mocha.timeout(15000);
 
 function createDownloadLink(blob) {
- 
+
     var url = URL.createObjectURL(blob);
     var au = document.createElement('audio');
     var div = document.createElement('div');
     var link = document.createElement('a');
- 
+
     //add controls to the <audio> element
     au.controls = true;
     au.src = url;
- 
+
     //link the a element to the blob
     link.href = url;
     link.download = 'aiueo.wav';
     link.innerHTML = link.download;
- 
+
     //add the new audio and a elements to the li element
 //    div.appendChild(au);
     div.appendChild(link);
- 
+
     //add the li element to the ordered list
     document.querySelector('#wavlink').appendChild(div);
 }
@@ -44,7 +44,7 @@ function drawWave(buf) {
             canvasContext.lineTo(x, y);
         }
     }
-    canvasContext.stroke();	
+    canvasContext.stroke();
 }
 
 

@@ -102,6 +102,7 @@ class Voice
         this.pre_time = 0;
         this.f1 = 800;
         this.f2 = 1200;
+        this.short_conso = false;
         break;
       case "h":
         this.osc = lpf_noise;
@@ -117,6 +118,7 @@ class Voice
         this.hold    = 0.1;
         this.release = 0.05;
         this.vowel_delay = 0.01;
+        this.short_conso = false;
         break;
       case "s":
         this.osc = noise;
@@ -136,6 +138,7 @@ class Voice
         this.hold    = -1;
         this.release = 0.01;
         this.vowel_delay = 0.01;
+        this.short_conso = false;
         break;
       case "sy":
         this.osc = noise;
@@ -155,28 +158,7 @@ class Voice
         this.hold    = -1;
         this.release = 0.01;
         this.vowel_delay = 0.01;
-        break;
-      case "t":
-        this.osc = noise;
-        this.consoFilter = ctx.createBiquadFilter();
-        this.consoFilter.type = "bandpass";
-        this.consoFilter.frequency.value = 200;
-        this.consoFilter.Q.value = 5;
-        this.boost = ctx.createGain();
-        this.boost.gain.value = 6.0;
-        this.gain = ctx.createGain();
-        this.gain.gain.value = this.zero;
-        this.osc.connect(this.consoFilter);
-        this.consoFilter.connect(this.boost);
-        this.boost.connect(this.gain);
-        this.gain.connect(dest);
-        this.level = 0.8;
-        this.eg_t=[0, 0.01, 0.02];
-        this.eg_a=[0,    1,    0];
-        this.attack  = 0.01;
-        this.hold    = 0.0;
-        this.release = 0.01;
-        this.vowel_delay = 0.01;
+        this.short_conso = false;
         break;
       case "k":
         this.osc = noise;
@@ -199,6 +181,7 @@ class Voice
         this.hold    = 0.0;
         this.release = 0.01;
         this.vowel_delay = 0.01;
+        this.short_conso = true;
         break;
       case "p":
         this.osc = noise;
@@ -221,6 +204,32 @@ class Voice
         this.hold    = 0.0;
         this.release = 0.01;
         this.vowel_delay = 0.01;
+        this.short_conso = true;
+        break;
+      case "t":
+      case "c":
+      case "ts":
+        this.osc = noise;
+        this.consoFilter = ctx.createBiquadFilter();
+        this.consoFilter.type = "bandpass";
+        this.consoFilter.frequency.value = 200;
+        this.consoFilter.Q.value = 5;
+        this.boost = ctx.createGain();
+        this.boost.gain.value = 6.0;
+        this.gain = ctx.createGain();
+        this.gain.gain.value = this.zero;
+        this.osc.connect(this.consoFilter);
+        this.consoFilter.connect(this.boost);
+        this.boost.connect(this.gain);
+        this.gain.connect(dest);
+        this.level = 0.8;
+        this.eg_t=[0, 0.01, 0.02];
+        this.eg_a=[0,    1,    0];
+        this.attack  = 0.01;
+        this.hold    = 0.0;
+        this.release = 0.01;
+        this.vowel_delay = 0.01;
+        this.short_conso = true;
         break;
       default:
         break;
@@ -264,7 +273,7 @@ class Voice
     this.gain.gain.setValueAtTime(this.zero, t0);
     this.formant_move(0);
     this.gain.gain.setTargetAtTime(this.level, t0, this.attack);
-    if ((this.char === 'p') || (this.char === 'k') || (this.char === 't')) {
+    if (this.short_conso) {
       this.gain.gain.setTargetAtTime(this.level, t0 + this.attack, this.hold);
       this.gain.gain.setTargetAtTime(this.zero, t0 + this.attack + this.hold, this.release);
     }
@@ -281,7 +290,7 @@ class Voice
     this.gain.gain.setTargetAtTime(this.zero, t0, delay);
     this.formant_move(delay);
     this.gain.gain.setTargetAtTime(this.level, t0 + delay, this.attack);
-    if ((this.char === 'p') || (this.char === 'k') || (this.char === 't')) {
+    if (this.short_conso) {
       this.gain.gain.setTargetAtTime(this.level, t0 + delay + this.attack, this.hold);
       this.gain.gain.setTargetAtTime(this.zero, t0 + delay + this.attack + this.hold, this.release);
     }

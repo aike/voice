@@ -28,6 +28,8 @@ class UI {
 		this.conso["t" ] = new Ptype_VoiceButton("t" , new Voice(this.audioContext, "t" ,  vf, noise, fnoise, this.out));
 		this.conso["k" ] = new Ptype_VoiceButton("k" , new Voice(this.audioContext, "k" ,  vf, noise, fnoise, this.out));
 		this.conso["p" ] = new Ptype_VoiceButton("p" , new Voice(this.audioContext, "p" ,  vf, noise, fnoise, this.out));
+		this.conso["c" ] = new Ptype_VoiceButton("c" , new Voice(this.audioContext, "c" ,  vf, noise, fnoise, this.out));
+		this.conso["ts"] = new Ptype_VoiceButton("ts", new Voice(this.audioContext, "ts",  vf, noise, fnoise, this.out));
 
 		for (var c in this.conso) {
 			this.vowel.addConso(this.conso[c]);
@@ -35,6 +37,17 @@ class UI {
 		}
 
 		this.getInitialData();
+	}
+
+	setConso(ch, data)
+	{
+		this.conso[ch].voice.level   = data.level   / 100.0;
+		this.conso[ch].voice.attack  = data.attack  / 1000.0;
+		this.conso[ch].voice.hold    = data.hold    / 1000.0;
+		this.conso[ch].voice.release = data.release / 1000.0;
+		this.conso[ch].voice.vdelay  = data.vdelay  / 1000.0;
+		this.conso[ch].voice.bpf_freq= data.bpf_freq/ 1000.0;
+		this.conso[ch].voice.bpf_q   = data.bpf_q   / 1000.0;
 	}
 
 	getInitialData()
@@ -50,42 +63,14 @@ class UI {
 			this.vowel.voice.release = v.release / 1000.0;
 
 			const c = json.conso_params;
-			this.conso["h"].voice.level   = c["h"].level   / 100.0;
-			this.conso["h"].voice.attack  = c["h"].attack  / 1000.0;
-			this.conso["h"].voice.hold    = c["h"].hold    / 1000.0;
-			this.conso["h"].voice.release = c["h"].release / 1000.0;
-			this.conso["h"].voice.vdelay  = c["h"].vdelay  / 1000.0;
-
-			this.conso["s"].voice.level   = c["s"].level   / 100.0;
-			this.conso["s"].voice.attack  = c["s"].attack  / 1000.0;
-			this.conso["s"].voice.hold    = c["s"].hold    / 1000.0;
-			this.conso["s"].voice.release = c["s"].release / 1000.0;
-			this.conso["s"].voice.vdelay  = c["s"].vdelay  / 1000.0;
-
-			this.conso["sy"].voice.level   = c["sy"].level   / 100.0;
-			this.conso["sy"].voice.attack  = c["sy"].attack  / 1000.0;
-			this.conso["sy"].voice.hold    = c["sy"].hold    / 1000.0;
-			this.conso["sy"].voice.release = c["sy"].release / 1000.0;
-			this.conso["sy"].voice.vdelay  = c["sy"].vdelay  / 1000.0;
-
-			this.conso["p"].voice.level   = c["p"].level   / 100.0;
-			this.conso["p"].voice.attack  = c["p"].attack  / 1000.0;
-			this.conso["p"].voice.hold    = c["p"].hold    / 1000.0;
-			this.conso["p"].voice.release = c["p"].release / 1000.0;
-			this.conso["p"].voice.vdelay  = c["p"].vdelay  / 1000.0;
-
-			this.conso["k"].voice.level   = c["k"].level   / 100.0;
-			this.conso["k"].voice.attack  = c["k"].attack  / 1000.0;
-			this.conso["k"].voice.hold    = c["k"].hold    / 1000.0;
-			this.conso["k"].voice.release = c["k"].release / 1000.0;
-			this.conso["k"].voice.vdelay  = c["k"].vdelay  / 1000.0;
-
-			this.conso["t"].voice.level   = c["t"].level   / 100.0;
-			this.conso["t"].voice.attack  = c["t"].attack  / 1000.0;
-			this.conso["t"].voice.hold    = c["t"].hold    / 1000.0;
-			this.conso["t"].voice.release = c["t"].release / 1000.0;
-			this.conso["t"].voice.vdelay  = c["t"].vdelay  / 1000.0;
-
+			setConso('h', c['h']);
+			setConso('s', c['s']);
+			setConso('sy',c['sy']);
+			setConso('p', c['p']);
+			setConso('k', c['k']);
+			setConso('t', c['t']);
+			setConso('c', c['c']);
+			setConso('ts',c['ts']);
 		};
 		xhr.send();
 	}
