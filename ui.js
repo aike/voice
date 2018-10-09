@@ -63,14 +63,16 @@ class UI {
 			this.vowel.voice.release = v.release / 1000.0;
 
 			const c = json.conso_params;
-			setConso('h', c['h']);
-			setConso('s', c['s']);
-			setConso('sy',c['sy']);
-			setConso('p', c['p']);
-			setConso('k', c['k']);
-			setConso('t', c['t']);
-			setConso('c', c['c']);
-			setConso('ts',c['ts']);
+			this.setConso('h', c['h']);
+			this.setConso('s', c['s']);
+			this.setConso('sy',c['sy']);
+			this.setConso('p', c['p']);
+			this.setConso('k', c['k']);
+			this.setConso('t', c['t']);
+			this.setConso('c', c['c']);
+			this.setConso('ts',c['ts']);
+
+			document.querySelector('#timestamp').innerText = 'data update: ' + json.state.timestamp;
 		};
 		xhr.send();
 	}
