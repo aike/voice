@@ -1,12 +1,26 @@
 {
   "state": {
+<<<<<<< HEAD
+    "timestamp": "20181018144906",
+    "conso_type": "c",
+=======
     "timestamp": "20181009104547",
     "conso_type": "h",
+>>>>>>> origin/master
     "conso_start": 0,
     "conso_end": 0.18,
     "vowel_start": 0.08,
-    "vowel_end": 0.36,
+    "vowel_end": 0.28,
     "conso_param": {
+<<<<<<< HEAD
+      "level": 38,
+      "attack": 50,
+      "hold": 12,
+      "release": 25,
+      "vdelay": 20,
+      "bpf_freq": 8000,
+      "bpf_q": 5
+=======
       "level": 80,
       "attack": 52,
       "hold": 0,
@@ -14,17 +28,18 @@
       "vdelay": 120,
       "bpf_freq": 0,
       "bpf_q": 0
+>>>>>>> origin/master
     },
     "vowel_param": {
       "level": 80,
-      "attack": 10,
+      "attack": 54,
       "release": 10,
       "pre_time1": 50,
-      "pre_f1": 796,
-      "f1": 800,
+      "pre_f1": 200,
+      "f1": 300,
       "pre_time2": 100,
-      "pre_f2": 1156,
-      "f2": 1200
+      "pre_f2": 2000,
+      "f2": 2300
     }
   },
   "conso_params": {
@@ -52,7 +67,11 @@
       "hold": 40,
       "release": 10,
       "vdelay": 20,
+<<<<<<< HEAD
+      "bpf_freq": 8000,
+=======
       "bpf_freq": 4000,
+>>>>>>> origin/master
       "bpf_q": 5
     },
     "p": {
@@ -70,7 +89,11 @@
       "hold": 40,
       "release": 10,
       "vdelay": 20,
+<<<<<<< HEAD
+      "bpf_freq": 8000,
+=======
       "bpf_freq": 500,
+>>>>>>> origin/master
       "bpf_q": 2
     },
     "t": {
@@ -83,12 +106,21 @@
       "bpf_q": 5
     },
     "c": {
+<<<<<<< HEAD
+      "level": 38,
+      "attack": 50,
+      "hold": 12,
+      "release": 25,
+      "vdelay": 20,
+      "bpf_freq": 8000,
+=======
       "level": 85,
       "attack": 19,
       "hold": 12,
       "release": 6,
       "vdelay": 20,
       "bpf_freq": 1633,
+>>>>>>> origin/master
       "bpf_q": 5
     },
     "ts": {
