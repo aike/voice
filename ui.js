@@ -69,7 +69,7 @@ class UI {
 			this.setConso('p', c['p']);
 			this.setConso('k', c['k']);
 			this.setConso('t', c['t']);
-			this.setConso('c', c['c']);
+			this.setConso('cy',c['cy']);
 			this.setConso('ts',c['ts']);
 
 			document.querySelector('#timestamp').innerText = 'data update: ' + json.state.timestamp;
