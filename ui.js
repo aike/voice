@@ -199,7 +199,7 @@ class UI {
 		this.addButton( 110,  90, "s");
 		this.addButton( 180,  90, "sy");
 		this.addButton( 110, 160, "t");
-		this.addButton( 180, 160, "c");
+		this.addButton( 180, 160, "cy");
 		this.addButton( 250, 160, "ts");
 		this.addButton( 110, 230, "h");
 		this.addButton( 110, 300, "p");
