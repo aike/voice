@@ -28,7 +28,7 @@ class UI {
 		this.conso["t" ] = new Ptype_VoiceButton("t" , new Voice(this.audioContext, "t" ,  vf, noise, fnoise, this.out));
 		this.conso["k" ] = new Ptype_VoiceButton("k" , new Voice(this.audioContext, "k" ,  vf, noise, fnoise, this.out));
 		this.conso["p" ] = new Ptype_VoiceButton("p" , new Voice(this.audioContext, "p" ,  vf, noise, fnoise, this.out));
-		this.conso["c" ] = new Ptype_VoiceButton("c" , new Voice(this.audioContext, "c" ,  vf, noise, fnoise, this.out));
+		this.conso["cy"] = new Ptype_VoiceButton("cy", new Voice(this.audioContext, "cy",  vf, noise, fnoise, this.out));
 		this.conso["ts"] = new Ptype_VoiceButton("ts", new Voice(this.audioContext, "ts",  vf, noise, fnoise, this.out));
 
 		for (var c in this.conso) {

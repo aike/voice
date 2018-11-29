@@ -1,30 +1,30 @@
 {
   "state": {
-    "timestamp": "20181018150450",
-    "conso_type": "c",
+    "timestamp": "20181129104547",
+    "conso_type": "h",
     "conso_start": 0,
     "conso_end": 0.18,
     "vowel_start": 0.08,
-    "vowel_end": 0.28,
+    "vowel_end": 0.36,
     "conso_param": {
-      "level": 38,
-      "attack": 50,
-      "hold": 12,
-      "release": 25,
-      "vdelay": 20,
-      "bpf_freq": 8000,
-      "bpf_q": 5
+      "level": 80,
+      "attack": 52,
+      "hold": 0,
+      "release": 10,
+      "vdelay": 120,
+      "bpf_freq": 0,
+      "bpf_q": 0
     },
     "vowel_param": {
       "level": 80,
-      "attack": 54,
+      "attack": 10,
       "release": 10,
       "pre_time1": 50,
-      "pre_f1": 200,
-      "f1": 300,
+      "pre_f1": 796,
+      "f1": 800,
       "pre_time2": 100,
-      "pre_f2": 2000,
-      "f2": 2300
+      "pre_f2": 1156,
+      "f2": 1200
     }
   },
   "conso_params": {
@@ -52,43 +52,43 @@
       "hold": 40,
       "release": 10,
       "vdelay": 20,
-      "bpf_freq": 8000,
+      "bpf_freq": 4000,
       "bpf_q": 5
     },
     "p": {
-      "level": 90,
+      "level": 100,
       "attack": 0,
-      "hold": 10,
+      "hold": 5,
       "release": 10,
-      "vdelay": 20,
-      "bpf_freq": 200,
-      "bpf_q": 5
+      "vdelay": 50,
+      "bpf_freq": 50,
+      "bpf_q": 10
     },
     "k": {
-      "level": 80,
-      "attack": 10,
-      "hold": 40,
+      "level": 100,
+      "attack": 0,
+      "hold": 5,
       "release": 10,
-      "vdelay": 20,
-      "bpf_freq": 8000,
-      "bpf_q": 2
+      "vdelay": 50,
+      "bpf_freq": 50,
+      "bpf_q": 10
     },
     "t": {
+      "level": 100,
+      "attack": 0,
+      "hold": 5,
+      "release": 10,
+      "vdelay": 50,
+      "bpf_freq": 50,
+      "bpf_q": 10
+    },
+    "cy": {
       "level": 85,
       "attack": 0,
       "hold": 12,
       "release": 6,
       "vdelay": 20,
-      "bpf_freq": 200,
-      "bpf_q": 5
-    },
-    "c": {
-      "level": 38,
-      "attack": 50,
-      "hold": 12,
-      "release": 25,
-      "vdelay": 20,
-      "bpf_freq": 8000,
+      "bpf_freq": 4000,
       "bpf_q": 5
     },
     "ts": {
