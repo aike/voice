@@ -259,5 +259,5 @@ class Stype_VoiceButton extends VoiceButton
 	}
 }
 
-//export default VoiceButton;
-//export { VoicePad, Htype_VoiceButton, Ptype_VoiceButton, Stype_VoiceButton };
+// export default VoiceButton;
+// export { VoicePad, Htype_VoiceButton, Ptype_VoiceButton, Stype_VoiceButton };

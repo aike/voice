@@ -67,7 +67,7 @@ class VowelFilter
 
 class Voice
 {
-  constructor(ctx, s, vowelFilter, noise, lpf_noise, dest)
+  constructor(ctx, s, vowelFilter, white_noise, brown_noise, dest)
   {
     this.zero = 0.0000001;
 
@@ -92,8 +92,6 @@ class Voice
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
         this.level = 0.5;
-        this.eg_t=[0, 0.01];
-        this.eg_a=[0, 1   ];
         this.attack = 0.01;
         this.hold    = -1;
         this.release = 0.01;
@@ -105,15 +103,13 @@ class Voice
         this.short_conso = false;
         break;
       case "h":
-        this.osc = lpf_noise;
+        this.osc = brown_noise;
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;
         this.osc.connect(this.gain);
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
         this.level = 0.4;
-        this.eg_t=[0, 0.05, 0.1, 0.15];
-        this.eg_a=[0,    1,    1,   0];
         this.attack  = 0.05;
         this.hold    = 0.1;
         this.release = 0.05;
@@ -121,7 +117,7 @@ class Voice
         this.short_conso = false;
         break;
       case "s":
-        this.osc = noise;
+        this.osc = white_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 8000;
@@ -132,8 +128,6 @@ class Voice
         this.consoFilter.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.1;
-        this.eg_t=[0, 0.1, 0.3];
-        this.eg_a=[0, 1,     1];
         this.attack  = 0.1;
         this.hold    = -1;
         this.release = 0.01;
@@ -141,7 +135,7 @@ class Voice
         this.short_conso = false;
         break;
       case "sy":
-        this.osc = noise;
+        this.osc = white_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 4000;
@@ -152,8 +146,6 @@ class Voice
         this.consoFilter.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.1;
-        this.eg_t=[0, 0.1, 0.3];
-        this.eg_a=[0, 1,     1];
         this.attack  = 0.1;
         this.hold    = -1;
         this.release = 0.01;
@@ -161,7 +153,7 @@ class Voice
         this.short_conso = false;
         break;
       case "k":
-        this.osc = noise;
+        this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 500;
@@ -175,8 +167,6 @@ class Voice
         this.boost.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.5;
-        this.eg_t=[0, 0.01, 0.02];
-        this.eg_a=[0,    1,    0];
         this.attack  = 0.01;
         this.hold    = 0.0;
         this.release = 0.01;
@@ -184,7 +174,7 @@ class Voice
         this.short_conso = true;
         break;
       case "p":
-        this.osc = noise;
+        this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 200;
@@ -198,8 +188,6 @@ class Voice
         this.boost.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.8;
-        this.eg_t=[0, 0.01, 0.02];
-        this.eg_a=[0,    1,    0];
         this.attack  = 0.01;
         this.hold    = 0.0;
         this.release = 0.01;
@@ -208,7 +196,7 @@ class Voice
         break;
       case "t":
       case "cy":
-        this.osc = noise;
+        this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 4000;
@@ -219,8 +207,6 @@ class Voice
         this.consoFilter.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.1;
-        this.eg_t=[0, 0.1, 0.3];
-        this.eg_a=[0, 1,     1];
         this.attack  = 0.0;
         this.hold    = -1;
         this.release = 0.01;
@@ -228,7 +214,7 @@ class Voice
         this.short_conso = true;
         break;
       case "ts":
-        this.osc = noise;
+        this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 8000;
@@ -239,8 +225,6 @@ class Voice
         this.consoFilter.connect(this.gain);
         this.gain.connect(dest);
         this.level = 0.1;
-        this.eg_t=[0, 0.1, 0.3];
-        this.eg_a=[0, 1,     1];
         this.attack  = 0.0;
         this.hold    = -1;
         this.release = 0.01;
@@ -331,5 +315,5 @@ class Voice
 
 }
 
-//export default Voice;
-//export { Noise, LPFNoise, VowelFilter };
+// export default Voice;
+// export { Noise, LPFNoise, VowelFilter };
