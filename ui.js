@@ -195,14 +195,17 @@ class UI {
 		this.context.arc((500 / 1000 * 300) * this.scale + this.ox, (300 -  800 / 3000 * 300) * this.scale + this.oy, size, 0, 2 * Math.PI);
 		this.context.fill();
 
-		this.addButton( 110,  20, "k");
-		this.addButton( 110,  90, "s");
-		this.addButton( 180,  90, "sy");
-		this.addButton( 110, 160, "t");
-		this.addButton( 180, 160, "cy");
-		this.addButton( 250, 160, "ts");
-		this.addButton( 110, 230, "h");
-		this.addButton( 110, 300, "p");
+
+		this.addButton(  80, 40, "p");
+		this.addButton( 165, 40, "t");
+		this.addButton( 250, 40, "k");
+
+		this.addButton( 110, 140, "s");
+		this.addButton( 180, 140, "sy");
+		this.addButton( 250, 140, "h");
+
+		this.addButton( 110, 240, "cy");
+		this.addButton( 180, 240, "ts");
 	}
 
 	checkPad(x, y)
