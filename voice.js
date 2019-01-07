@@ -195,7 +195,6 @@ class Voice
         this.short_conso = true;
         break;
       case "t":
-      case "cy":
         this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();
         this.consoFilter.type = "bandpass";
@@ -216,6 +215,7 @@ class Voice
         this.vowel_delay = 0.01;
         this.short_conso = true;
         break;
+      case "cy":
       case "ts":
         this.osc = brown_noise;
         this.consoFilter = ctx.createBiquadFilter();

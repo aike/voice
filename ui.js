@@ -196,16 +196,17 @@ class UI {
 		this.context.fill();
 
 
-		this.addButton(  80, 40, "p");
-		this.addButton( 165, 40, "t");
-		this.addButton( 250, 40, "k");
+		this.addButton(  75, 40, "p");
+		this.addButton( 140, 40, "t");
+		this.addButton( 205, 40, "k");
 
-		this.addButton( 110, 140, "s");
-		this.addButton( 180, 140, "sy");
-		this.addButton( 250, 140, "h");
+		this.addButton( 140, 140, "s");
+		this.addButton( 205, 140, "sy");
+		this.addButton( 270, 140, "h");
 
-		this.addButton( 110, 240, "cy");
-		this.addButton( 180, 240, "ts");
+		this.addButton( 140, 240, "ts");
+		this.addButton( 205, 240, "cy");
+
 	}
 
 	checkPad(x, y)
