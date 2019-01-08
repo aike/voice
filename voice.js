@@ -229,7 +229,7 @@ class Voice
         this.gain.connect(dest);
         this.level = 0.1;
         this.attack  = 0.0;
-        this.hold    = -1;
+        this.hold    = 0.0;
         this.release = 0.01;
         this.vowel_delay = 0.01;
         this.short_conso = true;
