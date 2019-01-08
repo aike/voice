@@ -222,12 +222,15 @@ class Voice
         this.consoFilter.type = "bandpass";
         this.consoFilter.frequency.value = 8000;
         this.consoFilter.Q.value = 5;
+        this.boost = ctx.createGain();
+        this.boost.gain.value = 2.0;
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;
         this.osc.connect(this.consoFilter);
-        this.consoFilter.connect(this.gain);
+        this.consoFilter.connect(this.boost);
+        this.boost.connect(this.gain);
         this.gain.connect(dest);
-        this.level = 0.1;
+        this.level = 0.5;
         this.attack  = 0.0;
         this.hold    = 0.0;
         this.release = 0.01;
