@@ -18,3 +18,11 @@ canvas{
   font-size: 10px;
   color: #ccc;
 }
+
+#init {
+	position: absolute;
+	top: 200px;
+	font-size: 25px;
+	width: 100%;
+	text-align: center;
+}

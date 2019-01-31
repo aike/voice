@@ -7,7 +7,6 @@ class UI {
 		this.element = element;
 		this.context = element.getContext('2d');
 
-
 		// setup voice modules
 		window.AudioContext = window.webkitAudioContext || window.AudioContext;
 		this.audioContext = new AudioContext();
@@ -28,8 +27,8 @@ class UI {
 		this.conso["t" ] = new Ptype_VoiceButton("t" , new Voice(this.audioContext, "t" ,  vf, noise, fnoise, this.out));
 		this.conso["k" ] = new Ptype_VoiceButton("k" , new Voice(this.audioContext, "k" ,  vf, noise, fnoise, this.out));
 		this.conso["p" ] = new Ptype_VoiceButton("p" , new Voice(this.audioContext, "p" ,  vf, noise, fnoise, this.out));
-		this.conso["cy"] = new Ptype_VoiceButton("cy", new Voice(this.audioContext, "cy",  vf, noise, fnoise, this.out));
-		this.conso["ts"] = new Ptype_VoiceButton("ts", new Voice(this.audioContext, "ts",  vf, noise, fnoise, this.out));
+		this.conso["cy"] = new Stype_VoiceButton("cy", new Voice(this.audioContext, "cy",  vf, noise, fnoise, this.out));
+		this.conso["ts"] = new Stype_VoiceButton("ts", new Voice(this.audioContext, "ts",  vf, noise, fnoise, this.out));
 
 		for (var c in this.conso) {
 			this.vowel.addConso(this.conso[c]);
@@ -41,13 +40,18 @@ class UI {
 
 	setConso(ch, data)
 	{
-		this.conso[ch].voice.level   = data.level   / 100.0;
-		this.conso[ch].voice.attack  = data.attack  / 1000.0;
-		this.conso[ch].voice.hold    = data.hold    / 1000.0;
-		this.conso[ch].voice.release = data.release / 1000.0;
-		this.conso[ch].voice.vdelay  = data.vdelay  / 1000.0;
-		this.conso[ch].voice.bpf_freq= data.bpf_freq/ 1000.0;
-		this.conso[ch].voice.bpf_q   = data.bpf_q   / 1000.0;
+		this.conso[ch].voice.level       = data.level   / 100.0;
+		this.conso[ch].voice.attack      = data.attack  / 1000.0;
+		this.conso[ch].voice.hold        = data.hold    / 1000.0;
+		this.conso[ch].voice.release     = data.release / 1000.0;
+		this.conso[ch].voice.vdelay      = data.vdelay  / 1000.0;
+
+		this.conso[ch].voice.boost.gain.value = data.boost;
+	    if (this.conso[ch].voice.consoFilter != null) {
+			this.conso[ch].voice.consoFilter.type = data.filter_type;
+			this.conso[ch].voice.consoFilter.frequency.value = data.filter_freq;
+			this.conso[ch].voice.consoFilter.Q.value = data.filter_q;
+	    }
 	}
 
 	getInitialData()

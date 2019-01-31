@@ -2,12 +2,15 @@ var ui;
 var canvas1;
 var canvas2;
 var app;
+var init = false;
+var isTouchDevice = false;
 
 class App {
 	setEvent(elem)
 	{
 		elem.addEventListener('mousemove', ev =>
 		{
+			if (isTouchDevice) return;
 			this.moveCallback(ev, ev.clientX, ev.clientY);
 		});
 		elem.addEventListener('touchmove', ev =>
@@ -18,15 +21,18 @@ class App {
 
 		elem.addEventListener('mousedown', ev =>
 		{
+			if (isTouchDevice) return;
 			this.downCallback(ev, ev.clientX, ev.clientY);
 		});
 		elem.addEventListener('touchstart', ev =>
 		{
+			isTouchDevice = true;
 			this.downCallback(ev, ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
 		});
 
 		elem.addEventListener('mouseup', ev =>
 		{
+			if (isTouchDevice) return;
 			this.upCallback(ev, ev.clientX, ev.clientY);
 		});
 		elem.addEventListener('touchend', ev =>
@@ -95,23 +101,31 @@ class App {
 
 }
 
-window.addEventListener("load", () =>
+
+document.addEventListener('touchstart', ev =>
 {
-	canvas1 = document.getElementById('canvas1');
-	canvas2 = document.getElementById('canvas2');
+	if (!init)
+	{
+		init = true;
 
-	var scaleX = window.innerWidth / 800;
-	var scaleY = window.innerHeight / 500;
-	var scale = Math.min(scaleX, scaleY);
+		document.getElementById('init').style.display = 'none';
 
-	ui = new UI(canvas1);
-	ui.setScale(scale)
-	ui.draw();
+		canvas1 = document.getElementById('canvas1');
+		canvas2 = document.getElementById('canvas2');
 
-	app = new App();
-	app.setEvent(canvas1);
+		var scaleX = window.innerWidth / 800;
+		var scaleY = window.innerHeight / 500;
+		var scale = Math.min(scaleX, scaleY);
 
-	window.onresize();
+		ui = new UI(canvas1);
+		ui.setScale(scale)
+		ui.draw();
+
+		app = new App();
+		app.setEvent(canvas1);
+
+		window.onresize();
+	}
 });
 
 

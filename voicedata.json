@@ -1,6 +1,6 @@
 {
   "state": {
-    "timestamp": "20181129104547",
+    "timestamp": "20190129004000",
     "conso_type": "h",
     "conso_start": 0,
     "conso_end": 0.18,
@@ -8,97 +8,115 @@
     "vowel_end": 0.36,
     "conso_param": {
       "level": 80,
+      "boost": 1,
       "attack": 52,
       "hold": 0,
       "release": 10,
       "vdelay": 120,
-      "bpf_freq": 0,
-      "bpf_q": 0
+      "filter_type": "other",
+      "filter_freq": 0,
+      "filter_q": 0
     },
     "vowel_param": {
       "level": 80,
       "attack": 10,
       "release": 10,
       "pre_time1": 50,
-      "pre_f1": 796,
-      "f1": 800,
+      "pre_f1": 300,
+      "f1": 300,
       "pre_time2": 100,
-      "pre_f2": 1156,
-      "f2": 1200
+      "pre_f2": 2300,
+      "f2": 2300
     }
   },
   "conso_params": {
     "h": {
       "level": 80,
+      "boost": 1,
       "attack": 52,
       "hold": 0,
       "release": 10,
       "vdelay": 120,
-      "bpf_freq": 0,
-      "bpf_q": 0
+      "filter_type": "other",
+      "filter_freq": 0,
+      "filter_q": 0
     },
     "s": {
       "level": 80,
+      "boost": 1,
       "attack": 10,
       "hold": 40,
       "release": 10,
       "vdelay": 20,
-      "bpf_freq": 8000,
-      "bpf_q": 5
+      "filter_type": "bandpass",
+      "filter_freq": 8000,
+      "filter_q": 5
     },
     "sy": {
       "level": 80,
+      "boost": 1,
       "attack": 10,
       "hold": 40,
       "release": 10,
       "vdelay": 20,
-      "bpf_freq": 4000,
-      "bpf_q": 5
+      "filter_type": "bandpass",
+      "filter_freq": 4000,
+      "filter_q": 5
     },
     "p": {
       "level": 100,
+      "boost": 1,
       "attack": 0,
       "hold": 5,
-      "release": 10,
-      "vdelay": 50,
-      "bpf_freq": 50,
-      "bpf_q": 10
+      "release": 25,
+      "vdelay": 25,
+      "filter_type": "lowpass",
+      "filter_freq": 800,
+      "filter_q": 0.7071
     },
     "k": {
       "level": 100,
+      "boost": 1,
       "attack": 0,
       "hold": 5,
-      "release": 10,
-      "vdelay": 50,
-      "bpf_freq": 50,
-      "bpf_q": 10
+      "release": 25,
+      "vdelay": 25,
+      "filter_type": "lowpass",
+      "filter_freq": 800,
+      "filter_q": 0.7071
     },
     "t": {
       "level": 100,
+      "boost": 1,
       "attack": 0,
       "hold": 5,
-      "release": 10,
-      "vdelay": 50,
-      "bpf_freq": 50,
-      "bpf_q": 10
+      "release": 25,
+      "vdelay": 25,
+      "filter_type": "lowpass",
+      "filter_freq": 800,
+      "filter_q": 0.7071
     },
     "cy": {
       "level": 85,
+      "boost": 1,
       "attack": 0,
       "hold": 12,
       "release": 6,
       "vdelay": 20,
-      "bpf_freq": 4000,
-      "bpf_q": 5
+      "filter_type": "bandpass",
+      "filter_freq": 4000,
+      "filter_q": 5
     },
     "ts": {
       "level": 85,
-      "attack": 26,
+      "boost": 1,
+      "attack": 0,
       "hold": 12,
       "release": 6,
       "vdelay": 20,
-      "bpf_freq": 200,
-      "bpf_q": 5
+      "filter_type": "bandpass",
+      "filter_freq": 8000,
+      "filter_q": 5
     }
   }
 }
