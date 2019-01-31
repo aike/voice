@@ -40,6 +40,7 @@ class UI {
 
 	setConso(ch, data)
 	{
+<<<<<<< HEAD
 		this.conso[ch].voice.level       = data.level   / 100.0;
 		this.conso[ch].voice.attack      = data.attack  / 1000.0;
 		this.conso[ch].voice.hold        = data.hold    / 1000.0;
@@ -52,6 +53,17 @@ class UI {
 			this.conso[ch].voice.consoFilter.frequency.value = data.filter_freq;
 			this.conso[ch].voice.consoFilter.Q.value = data.filter_q;
 	    }
+=======
+		this.voice.conso[ch].voice.level   = data.level / 100.0;
+		this.voice.conso[ch].voice.attack  = data.attack / 1000.0;
+		this.voice.conso[ch].voice.hold    = data.hold / 1000.0;
+		this.voice.conso[ch].voice.release = data.release / 1000.0;
+		this.voice.conso[ch].voice.vowel_delay = data.vdelay / 1000.0;
+		if (this.voice.conso[ch].voice.consoFilter != null) {
+			this.voice.conso[ch].voice.consoFilter.frequency.value = data.bpf_freq;
+			this.voice.conso[ch].voice.consoFilter.Q.value = data.bpf_q;
+		}
+>>>>>>> origin/master
 	}
 
 	getInitialData()
@@ -199,14 +211,18 @@ class UI {
 		this.context.arc((500 / 1000 * 300) * this.scale + this.ox, (300 -  800 / 3000 * 300) * this.scale + this.oy, size, 0, 2 * Math.PI);
 		this.context.fill();
 
-		this.addButton( 110,  20, "k");
-		this.addButton( 110,  90, "s");
-		this.addButton( 180,  90, "sy");
-		this.addButton( 110, 160, "t");
-		this.addButton( 180, 160, "cy");
-		this.addButton( 250, 160, "ts");
-		this.addButton( 110, 230, "h");
-		this.addButton( 110, 300, "p");
+
+		this.addButton(  60, 40, "p");
+		this.addButton( 130, 40, "t");
+		this.addButton( 270, 40, "k");
+
+		this.addButton( 130, 140, "ts");
+		this.addButton( 200, 140, "cy");
+
+		this.addButton( 130, 240, "s");
+		this.addButton( 200, 240, "sy");
+		this.addButton( 270, 240, "h");
+
 	}
 
 	checkPad(x, y)
