@@ -40,30 +40,16 @@ class UI {
 
 	setConso(ch, data)
 	{
-<<<<<<< HEAD
-		this.conso[ch].voice.level       = data.level   / 100.0;
-		this.conso[ch].voice.attack      = data.attack  / 1000.0;
-		this.conso[ch].voice.hold        = data.hold    / 1000.0;
-		this.conso[ch].voice.release     = data.release / 1000.0;
-		this.conso[ch].voice.vdelay      = data.vdelay  / 1000.0;
-
-		this.conso[ch].voice.boost.gain.value = data.boost;
-	    if (this.conso[ch].voice.consoFilter != null) {
-			this.conso[ch].voice.consoFilter.type = data.filter_type;
+		this.conso[ch].voice.level   = data.level / 100.0;
+		this.conso[ch].voice.attack  = data.attack / 1000.0;
+		this.conso[ch].voice.hold    = data.hold / 1000.0;
+		this.conso[ch].voice.release = data.release / 1000.0;
+		this.conso[ch].voice.vowel_delay = data.vdelay / 1000.0;
+		if (this.conso[ch].voice.consoFilter != null) {
+			this.conso[ch].voice.consoFilter.frequency.type = data.filter_type;
 			this.conso[ch].voice.consoFilter.frequency.value = data.filter_freq;
 			this.conso[ch].voice.consoFilter.Q.value = data.filter_q;
-	    }
-=======
-		this.voice.conso[ch].voice.level   = data.level / 100.0;
-		this.voice.conso[ch].voice.attack  = data.attack / 1000.0;
-		this.voice.conso[ch].voice.hold    = data.hold / 1000.0;
-		this.voice.conso[ch].voice.release = data.release / 1000.0;
-		this.voice.conso[ch].voice.vowel_delay = data.vdelay / 1000.0;
-		if (this.voice.conso[ch].voice.consoFilter != null) {
-			this.voice.conso[ch].voice.consoFilter.frequency.value = data.bpf_freq;
-			this.voice.conso[ch].voice.consoFilter.Q.value = data.bpf_q;
 		}
->>>>>>> origin/master
 	}
 
 	getInitialData()

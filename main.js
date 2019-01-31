@@ -104,6 +104,16 @@ class App {
 
 document.addEventListener('touchstart', ev =>
 {
+	touchToStart();
+});
+
+document.addEventListener('mousedown', ev =>
+{
+	touchToStart();
+});
+
+function touchToStart()
+{
 	if (!init)
 	{
 		init = true;
@@ -126,7 +136,7 @@ document.addEventListener('touchstart', ev =>
 
 		window.onresize();
 	}
-});
+};
 
 
 var timer;
