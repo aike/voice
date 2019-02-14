@@ -1,6 +1,6 @@
 {
   "state": {
-    "timestamp": "20190129004000",
+    "timestamp": "20190214004000",
     "conso_type": "h",
     "conso_start": 0,
     "conso_end": 0.18,
@@ -71,7 +71,7 @@
       "release": 25,
       "vdelay": 25,
       "filter_type": "lowpass",
-      "filter_freq": 800,
+      "filter_freq": 500,
       "filter_q": 0.7071
     },
     "k": {
@@ -82,7 +82,7 @@
       "release": 25,
       "vdelay": 25,
       "filter_type": "lowpass",
-      "filter_freq": 800,
+      "filter_freq": 500,
       "filter_q": 0.7071
     },
     "t": {
@@ -93,7 +93,7 @@
       "release": 25,
       "vdelay": 25,
       "filter_type": "lowpass",
-      "filter_freq": 800,
+      "filter_freq": 500,
       "filter_q": 0.7071
     },
     "cy": {
