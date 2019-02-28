@@ -83,7 +83,7 @@
       "vdelay": 4,
       "filter_type": "bandpass",
       "filter_freq": 200,
-      "filter_q": 0.7071
+      "filter_q": 10
     },
     "t": {
       "level": 100,
