@@ -65,7 +65,7 @@
     },
     "p": {
       "level": 100,
-      "boost": 1,
+      "boost": 2,
       "attack": 0,
       "hold": 1,
       "release": 2,
@@ -87,7 +87,7 @@
     },
     "t": {
       "level": 100,
-      "boost": 1,
+      "boost": 2,
       "attack": 0,
       "hold": 1,
       "release": 2,
