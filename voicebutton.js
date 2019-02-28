@@ -25,10 +25,9 @@ class VoicePad
 		this.posy = Math.min(Math.max(y, 0.0), 1.0);
 		this.voice.f1 = this.posx * 1000;
 		this.voice.f2 = this.posy * 3000;
+
 		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
-		//this.voice.filter.F1.Q.setValueAtTime(this.voice.f1 * 0.02, this.ctx.currentTime);
-		//this.voice.filter.F2.Q.setValueAtTime(this.voice.f2 * 0.02, this.ctx.currentTime);
 		for (var i = 0; i < this.consos.length; i++) {
 			if (this.consos[i].isDown()) {
 				this.consos[i].onVowelDown();
@@ -45,8 +44,6 @@ class VoicePad
 		this.voice.f2 = this.posy * 3000;
 		this.voice.filter.F1.frequency.setValueAtTime(this.voice.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.voice.f2, this.ctx.currentTime);
-		//this.voice.filter.F1.Q.setValueAtTime(this.voice.f1 * 0.02, this.ctx.currentTime);
-		//this.voice.filter.F2.Q.setValueAtTime(this.voice.f2 * 0.02, this.ctx.currentTime);
 	}
 
 	setFormantMove(pre_f1, pre_time1, pre_f2, pre_time2) {
@@ -211,6 +208,36 @@ class Ptype_VoiceButton extends VoiceButton
 		this.vowel.delayedPlay(this.voice.vowel_delay);
 	}
 }
+
+class Ktype_VoiceButton extends VoiceButton
+{
+	down() {
+		this.downing = true;
+		this.downtime = this.ctx.currentTime;
+		if (this.vowel.isDown()) {
+			this.vowel.stop();
+			this.play();
+		}
+	}
+
+	up() {
+		this.downing = false;
+		this.playing = false;
+	}
+
+	onVowelDown() {
+		// freqをF2のfreqに設定する
+		this.voice.consoFilter.frequency.setValueAtTime(this.vowel.voice.f2, this.ctx.currentTime);
+		this.play();
+	}
+
+	play() {
+		this.playing = true;
+		this.voice.play_eg();
+		this.vowel.delayedPlay(this.voice.vowel_delay);
+	}
+}
+
 
 class Stype_VoiceButton extends VoiceButton
 {

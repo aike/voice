@@ -81,7 +81,7 @@
       "hold": 1,
       "release": 2,
       "vdelay": 4,
-      "filter_type": "lowpass",
+      "filter_type": "bandpass",
       "filter_freq": 200,
       "filter_q": 0.7071
     },
