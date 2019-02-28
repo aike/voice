@@ -71,7 +71,7 @@
       "release": 2,
       "vdelay": 4,
       "filter_type": "lowpass",
-      "filter_freq": 200,
+      "filter_freq": 100,
       "filter_q": 0.7071
     },
     "k": {
@@ -93,7 +93,7 @@
       "release": 2,
       "vdelay": 4,
       "filter_type": "lowpass",
-      "filter_freq": 200,
+      "filter_freq": 100,
       "filter_q": 0.7071
     },
     "cy": {
