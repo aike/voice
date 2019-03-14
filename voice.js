@@ -51,13 +51,13 @@ class VowelFilter
     this.F1 = ctx.createBiquadFilter();
     this.F1.type = "bandpass";
     this.F1.frequency.value = 500;
-    this.F1.Q.value = 10;
+    this.F1.Q.value = 40;
     //this.F1.Q.value = this.F1.frequency.value * 0.02;
 
     this.F2 = ctx.createBiquadFilter();
     this.F2.type = "bandpass";
     this.F2.frequency.value = 1500;
-    this.F2.Q.value = 10;
+    this.F2.Q.value = 40;
     //this.F2.Q.value = this.F2.frequency.value * 0.02;
 
     this.F1.connect(dest);
