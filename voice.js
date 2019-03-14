@@ -134,6 +134,7 @@ class Voice
         this.boost.connect(this.gain);
         this.gain.connect(vowelFilter.F1);
         this.gain.connect(vowelFilter.F2);
+        this.short_conso = true;
         break;
       default:
         break;
