@@ -129,6 +129,7 @@ class Voice
         this.boost = ctx.createGain();
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;
+        this.filter = vowelFilter;
         this.osc.connect(this.boost);
         this.boost.connect(this.gain);
         this.gain.connect(vowelFilter.F1);
