@@ -227,7 +227,7 @@ class Ktype_VoiceButton extends VoiceButton
 
 	onVowelDown() {
 		// freqをF2のfreqに設定する
-		this.voice.consoFilter.frequency.setValueAtTime(this.vowel.voice.f2, this.ctx.currentTime);
+		// this.voice.consoFilter.frequency.setValueAtTime(this.vowel.voice.f2, this.ctx.currentTime);
 		this.play();
 	}
 

@@ -124,16 +124,15 @@ class Voice
       case "p":
       case "t":
         this.osc = white_noise;
-        this.consoFilter = ctx.createBiquadFilter();
-        this.consoFilter.type = "bandpass";
+        //this.consoFilter = ctx.createBiquadFilter();
+        //this.consoFilter.type = "bandpass";
         this.boost = ctx.createGain();
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;
-        this.osc.connect(this.consoFilter);
-        this.consoFilter.connect(this.boost);
+        this.osc.connect(this.boost);
         this.boost.connect(this.gain);
-        this.gain.connect(dest);
-        this.short_conso = true;
+        this.gain.connect(vowelFilter.F1);
+        this.gain.connect(vowelFilter.F2);
         break;
       default:
         break;
