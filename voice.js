@@ -145,7 +145,7 @@ class Voice
         this.gain.connect(vowelFilter.F2);
         this.gain.connect(this.F3);
         this.F3.connect(this.F3Gain);
-        this.F3Gain.connect(dest);
+        this.F3Gain.connect(this.gain);
         this.short_conso = true;
         break;
       case "p":
@@ -167,16 +167,30 @@ class Voice
 
   }
 
+  formant_pre()
+  {
+    const t = this.ctx.currentTime;
+    if ((this.pre_time1 != null) && (this.pre_time1 > 0)) {
+      this.filter.F1.frequency.setValueAtTime(this.pre_f1, t);
+    }
+    if ((this.pre_time2 != null) && (this.pre_time2 > 0)) {
+      this.filter.F2.frequency.setValueAtTime(this.pre_f2, t);
+    }
+  }
+
+
   formant_move(offset)
   {
     const t0 = this.ctx.currentTime + offset;
     if ((this.pre_time1 != null) && (this.pre_time1 > 0)) {
       this.filter.F1.frequency.setValueAtTime(this.pre_f1, t0);
-      this.filter.F1.frequency.setTargetAtTime(this.f1, t0, this.pre_time1);
+      //this.filter.F1.frequency.setTargetAtTime(this.f1, t0, this.pre_time1);
+      this.filter.F1.frequency.linearRampToValueAtTime(this.f1, t0 + this.pre_time1);
     }
     if ((this.pre_time2 != null) && (this.pre_time2 > 0)) {
       this.filter.F2.frequency.setValueAtTime(this.pre_f2, t0);
-      this.filter.F2.frequency.setTargetAtTime(this.f2, t0, this.pre_time2);
+      //this.filter.F2.frequency.setTargetAtTime(this.f2, t0, this.pre_time2);
+      this.filter.F2.frequency.linearRampToValueAtTime(this.f2, t0 + this.pre_time2);
     }
   }
 
@@ -196,6 +210,7 @@ class Voice
       this.init = true;
     }
     var t0 = this.ctx.currentTime;
+    this.formant_pre();
     this.gain.gain.setValueAtTime(this.zero, t0);
     this.formant_move(0);
     this.gain.gain.setTargetAtTime(this.level, t0, this.attack);
@@ -213,6 +228,7 @@ class Voice
       this.init = true;
     }
     var t0 = this.ctx.currentTime;
+    this.formant_pre();
     this.gain.gain.setValueAtTime(this.zero, t0);
     this.gain.gain.setTargetAtTime(this.zero, t0, delay);
     this.formant_move(delay);
