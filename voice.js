@@ -138,7 +138,7 @@ class Voice
         this.F3.frequency.value = 4000;
         this.F3.Q.value = 2;
         this.F3Gain = ctx.createGain();
-        this.F3Gain.gain.value = 0.1;
+        this.F3Gain.gain.value = 0.4;
         this.osc.connect(this.boost);
         this.boost.connect(this.gain);
         this.gain.connect(vowelFilter.F1);
