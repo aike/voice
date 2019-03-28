@@ -136,7 +136,7 @@ class Voice
         this.F3 = ctx.createBiquadFilter();
         this.F3.type = "bandpass";
         this.F3.frequency.value = 4000;
-        this.F3.Q.value = 40;
+        this.F3.Q.value = 2;
         this.F3Gain = ctx.createGain();
         this.F3Gain.gain.value = 0.5;
         this.osc.connect(this.boost);
