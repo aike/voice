@@ -5,7 +5,7 @@ class Noise
     this.buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
     var data = this.buf.getChannelData(0);
     for (var i = 0; i < this.buf.length; i++) {
-      data[i] = Math.random() * 2 - 1;
+      data[i] = (Math.random() > 0.5) ? 1.0 : -1.0;
     }
     this.osc = ctx.createBufferSource();
     this.osc.buffer = this.buf;
