@@ -202,16 +202,16 @@ class UI {
 		this.context.fill();
 
 
-		this.addButton(  60, 40, "p");
-		this.addButton( 130, 40, "t");
-		this.addButton( 270, 40, "k");
+		this.addButton(  30, 40, "p");
+		this.addButton( 100, 40, "t");
+		this.addButton( 230, 40, "k");
 
-		this.addButton( 130, 140, "ts");
-		this.addButton( 200, 140, "cy");
+		this.addButton( 100, 140, "ts");
+		this.addButton( 170, 140, "cy");
 
-		this.addButton( 130, 240, "s");
-		this.addButton( 200, 240, "sy");
-		this.addButton( 270, 240, "h");
+		this.addButton( 100, 240, "s");
+		this.addButton( 170, 240, "sy");
+		this.addButton( 280, 240, "h");
 
 	}
 
