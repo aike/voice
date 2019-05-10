@@ -104,10 +104,11 @@ class Voice
         this.boost = ctx.createGain();
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;
-        this.osc.connect(this.boost);
+        this.filter = new VowelFilter(ctx, this.boost);
+        this.osc.connect(this.filter.F1);
+        this.osc.connect(this.filter.F2);
         this.boost.connect(this.gain);
-        this.gain.connect(vowelFilter.F1);
-        this.gain.connect(vowelFilter.F2);
+        this.gain.connect(dest);
         this.short_conso = false;
         break;
       case "s":
