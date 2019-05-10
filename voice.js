@@ -101,7 +101,6 @@ class Voice
         break;
       case "h":
         this.osc = brown_noise;
-        this.F1 = 
         this.boost = ctx.createGain();
         this.gain = ctx.createGain();
         this.gain.gain.value = this.zero;

@@ -180,6 +180,7 @@ class Htype_VoiceButton extends VoiceButton
 	}
 
 	onVowelDown() {
+		console.log(this.vowel);
 		this.voice.filter.F1.frequency.setValueAtTime(this.vowel.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.vowel.f2, this.ctx.currentTime);
 		this.play();
@@ -214,6 +215,7 @@ class Ptype_VoiceButton extends VoiceButton
 	}
 
 	onVowelDown() {
+		console.log(this.vowel);
 		this.voice.filter.F1.frequency.setValueAtTime(this.vowel.f1, this.ctx.currentTime);
 		this.voice.filter.F2.frequency.setValueAtTime(this.vowel.f2, this.ctx.currentTime);
 		this.play();
